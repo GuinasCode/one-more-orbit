@@ -66,11 +66,11 @@ const getSectorTuning = (tier: number): SectorTuning => {
   const extraTiers = tier - SECTOR_TUNING.length;
 
   return {
-    baseAngularSpeed: lastPreset.baseAngularSpeed + extraTiers * 0.03,
+    baseAngularSpeed: lastPreset.baseAngularSpeed + extraTiers * 0.05,
     gravityPull: lastPreset.gravityPull + extraTiers * 8,
     boostAcceleration: lastPreset.boostAcceleration + extraTiers * 12,
     hazardCount: Math.min(lastPreset.hazardCount + Math.ceil(extraTiers / 3), MAX_HAZARD_COUNT),
-    targetOrbits: lastPreset.targetOrbits + Math.ceil(extraTiers / 2),
+    targetOrbits: lastPreset.targetOrbits + Math.floor(extraTiers / 3),
   };
 };
 

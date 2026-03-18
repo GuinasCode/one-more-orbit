@@ -84,10 +84,10 @@ describe('runModel', () => {
     expect(getNearestHazardGap(state)).toBe(-1 * (initial.balance.shipRadius + hazard.size));
   });
 
-  it('keeps the launch lane clear of immediate mine contact across the first 12 sectors', () => {
+  it('keeps the launch lane clear of immediate mine contact across the first 24 sectors', () => {
     const minimumEdgeClearance = 28;
 
-    for (let tier = 1; tier <= 12; tier += 1) {
+    for (let tier = 1; tier <= 24; tier += 1) {
       const state = createRunState(tier);
 
       state.hazards.forEach((hazard) => {
@@ -100,10 +100,10 @@ describe('runModel', () => {
     }
   });
 
-  it('keeps the full launch corridor passable across the first 12 sectors', () => {
+  it('keeps the full launch corridor passable across the first 24 sectors', () => {
     const minimumEdgeClearance = 28;
 
-    for (let tier = 1; tier <= 12; tier += 1) {
+    for (let tier = 1; tier <= 24; tier += 1) {
       const state = createRunState(tier);
       const laneMinRadius = state.balance.coreRadius + state.balance.shipRadius + 4;
       const laneMaxRadius = state.balance.maxRadius - state.balance.shipRadius;

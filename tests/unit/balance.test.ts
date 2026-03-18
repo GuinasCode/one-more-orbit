@@ -10,7 +10,7 @@ const estimateClearSeconds = (tier: number): number => {
 
 describe('balance fairness guardrails', () => {
   it('keeps every checked sector passable with a recoverable lane', () => {
-    for (let tier = 1; tier <= 12; tier += 1) {
+    for (let tier = 1; tier <= 24; tier += 1) {
       const balance = getTierBalance(tier);
       const boostAdvantage = balance.boostAcceleration - balance.gravityPull;
       const startRadiusBuffer = balance.startRadius - balance.coreRadius - balance.shipRadius;
@@ -24,7 +24,7 @@ describe('balance fairness guardrails', () => {
   });
 
   it('ramps sector pressure gradually without impossible spikes', () => {
-    for (let tier = 2; tier <= 12; tier += 1) {
+    for (let tier = 2; tier <= 24; tier += 1) {
       const previous = getTierBalance(tier - 1);
       const current = getTierBalance(tier);
 
@@ -41,7 +41,7 @@ describe('balance fairness guardrails', () => {
   });
 
   it('keeps sector clear-time demands short and smoothly stepped', () => {
-    for (let tier = 1; tier <= 12; tier += 1) {
+    for (let tier = 1; tier <= 24; tier += 1) {
       const estimatedClearSeconds = estimateClearSeconds(tier);
 
       expect(estimatedClearSeconds).toBeLessThanOrEqual(balanceGuardrails.maximumEstimatedClearSeconds);
