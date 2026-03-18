@@ -23,6 +23,9 @@ import {
   getScoreChaseCopy,
   getSectorBriefing,
   getSectorSelectorHelper,
+  getSelectedSectorGoalChip,
+  getSelectedSectorHazardChip,
+  getSelectedSectorLaneChip,
   renderShell,
 } from './renderShell';
 import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runRecap';
@@ -241,6 +244,9 @@ export class OneMoreOrbitApp {
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
     const sectorSelectorHelperValue = this.requireElement<HTMLElement>('[data-field="sector-selector-helper"]');
     const selectedSectorChipValue = this.requireElement<HTMLElement>('[data-field="selected-sector-chip"]');
+    const selectedSectorGoalValue = this.requireElement<HTMLElement>('[data-field="selected-sector-goal"]');
+    const selectedSectorHazardsValue = this.requireElement<HTMLElement>('[data-field="selected-sector-hazards"]');
+    const selectedSectorLaneValue = this.requireElement<HTMLElement>('[data-field="selected-sector-lane"]');
     const previousSectorButton = this.requireElement<HTMLButtonElement>('[data-action="previous-sector"]');
     const nextSectorButton = this.requireElement<HTMLButtonElement>('[data-action="next-sector"]');
     const scoreChaseValue = this.requireElement<HTMLElement>('[data-field="score-chase-helper"]');
@@ -291,6 +297,9 @@ export class OneMoreOrbitApp {
         : `${targetOrbits} clean orbits`;
     sectorSelectorHelperValue.textContent = getSectorSelectorHelper(this.state);
     selectedSectorChipValue.textContent = `Sector ${this.progression.lastPlayedTier}`;
+    selectedSectorGoalValue.textContent = getSelectedSectorGoalChip(this.state);
+    selectedSectorHazardsValue.textContent = getSelectedSectorHazardChip(this.state);
+    selectedSectorLaneValue.textContent = getSelectedSectorLaneChip(this.state);
     previousSectorButton.disabled = this.state.screen === 'running' || this.progression.lastPlayedTier <= 1;
     nextSectorButton.disabled =
       this.state.screen === 'running' || this.progression.lastPlayedTier >= this.progression.highestUnlockedTier;

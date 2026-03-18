@@ -5,6 +5,8 @@ import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runReca
 
 const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
 
+const getSelectedSectorPreview = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
+
 export const getLaneBalance = (state: AppState) => getTierBalance(state.run?.tier ?? state.progression.lastPlayedTier);
 
 export const getLaneCurrentRadius = (state: AppState): number => state.run?.radius ?? getLaneBalance(state).startRadius;
@@ -133,6 +135,21 @@ export const getSectorSelectorHelper = (state: AppState): string => {
   }
 
   return `Browsing unlocked sectors 1-${state.progression.highestUnlockedTier}. Sector ${selectedTier} asks for ${balance.targetOrbits} clean laps through ${balance.hazardCount} rotating mines.`;
+};
+
+export const getSelectedSectorGoalChip = (state: AppState): string => {
+  const previewBalance = getSelectedSectorPreview(state);
+  return `${previewBalance.targetOrbits} laps to clear`;
+};
+
+export const getSelectedSectorHazardChip = (state: AppState): string => {
+  const previewBalance = getSelectedSectorPreview(state);
+  return `${previewBalance.hazardCount} rotating mine${previewBalance.hazardCount === 1 ? '' : 's'}`;
+};
+
+export const getSelectedSectorLaneChip = (state: AppState): string => {
+  const previewBalance = getSelectedSectorPreview(state);
+  return `Safe lane ${previewBalance.coreRadius}-${previewBalance.maxRadius}`;
 };
 
 export const getLaneWindowHelper = (state: AppState): string => {
@@ -451,6 +468,11 @@ export const renderShell = (state: AppState): string => {
           <button class="sector-selector-button" type="button" data-action="next-sector" ${canSelectNext ? '' : 'disabled'}>
             Next →
           </button>
+        </div>
+        <div class="sector-selector-preview" aria-label="Selected sector preview">
+          <span class="sector-selector-preview-chip" data-field="selected-sector-goal">${getSelectedSectorGoalChip(state)}</span>
+          <span class="sector-selector-preview-chip" data-field="selected-sector-hazards">${getSelectedSectorHazardChip(state)}</span>
+          <span class="sector-selector-preview-chip" data-field="selected-sector-lane">${getSelectedSectorLaneChip(state)}</span>
         </div>
       </section>
       <section class="score-chase" aria-label="Best score chase">

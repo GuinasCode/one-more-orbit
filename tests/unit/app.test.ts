@@ -79,6 +79,9 @@ describe('OneMoreOrbitApp', () => {
     nextButton.click();
 
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 3');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('8 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('6 rotating mines');
+    expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
       'Ready check: press Enter or click Launch Sector 3. Browse unlocked sectors before launch if you want a different target.',
     );
@@ -93,6 +96,9 @@ describe('OneMoreOrbitApp', () => {
     previousButton.click();
 
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('7 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('5 rotating mines');
+    expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
     expect(root.querySelector('[data-field="sector-selector-helper"]')?.textContent).toBe(
       'Browsing unlocked sectors 1-3. Sector 2 asks for 7 clean laps through 5 rotating mines.',
     );
@@ -150,6 +156,9 @@ describe('OneMoreOrbitApp', () => {
       '7 clean laps unlock the next sector pressure spike.',
     );
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('7 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('5 rotating mines');
+    expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
   });
 
   it('shows a failure-specific recovery prompt after a lost run', () => {
