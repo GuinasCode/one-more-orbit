@@ -22,6 +22,19 @@ export class OneMoreOrbitApp {
 
   private readonly root: HTMLDivElement;
 
+  private readonly handlePrimaryActionKeydown = (event: KeyboardEvent): void => {
+    if (this.state.screen === 'running') {
+      return;
+    }
+
+    if (event.key !== 'Enter' && event.key !== 'NumpadEnter') {
+      return;
+    }
+
+    event.preventDefault();
+    this.startRun(this.progression.lastPlayedTier);
+  };
+
   constructor(root: HTMLDivElement) {
     this.root = root;
     this.progression = loadProgression(this.getStorage());
@@ -46,6 +59,8 @@ export class OneMoreOrbitApp {
     primaryButton.addEventListener('click', () => {
       this.startRun(this.progression.lastPlayedTier);
     });
+
+    window.addEventListener('keydown', this.handlePrimaryActionKeydown);
   }
 
   private startRun(tier: number): void {
@@ -179,6 +194,10 @@ export class OneMoreOrbitApp {
         : this.state.screen === 'failed' && this.state.run
           ? (this.state.run.endReason ?? 'Orbit instability detected')
           : 'Launch a run to log a recap';
+
+    if (this.state.screen !== 'running') {
+      primaryButton.focus();
+    }
   }
 
   private getStorage(): Storage | undefined {
