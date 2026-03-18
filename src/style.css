@@ -160,6 +160,46 @@ h1 {
   font-size: 0.95rem;
 }
 
+.danger-legend {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(152, 168, 255, 0.18);
+  background: rgba(143, 166, 255, 0.05);
+}
+
+.danger-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #d9e2ff;
+  font-size: 0.95rem;
+}
+
+.danger-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  box-shadow: 0 0 16px currentColor;
+}
+
+.danger-dot--core {
+  color: #ffcf7c;
+  background: #ffcf7c;
+}
+
+.danger-dot--ring {
+  color: #ff6b7d;
+  background: #ff6b7d;
+}
+
+.danger-dot--mine {
+  color: #ff7ef6;
+  background: #ff7ef6;
+}
+
 .launch-button {
   width: fit-content;
   padding: 14px 20px;

@@ -13,6 +13,10 @@ describe('renderShell', () => {
     expect(html).toContain('id="game-root"');
     expect(html).toContain('Boost: Space / W / ↑ / Mouse / Touch');
     expect(html).toContain('6 clean orbits');
+    expect(html).toContain('Arena danger legend');
+    expect(html).toContain('Amber core pulls inward hard');
+    expect(html).toContain('Red ring marks the drift-out fail line');
+    expect(html).toContain('Pink mines punish greedy boost lines');
   });
 
   it('previews the next sector goal after a completed run', () => {
