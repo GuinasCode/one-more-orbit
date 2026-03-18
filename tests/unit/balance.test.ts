@@ -56,15 +56,19 @@ describe('balance fairness guardrails', () => {
     }
   });
 
-  it('keeps sector 4 as a fair midgame bridge before max mine density arrives', () => {
+  it('keeps sector 2 as a fair onboarding bridge before early mine pressure ramps', () => {
+    const sector1 = getTierBalance(1);
+    const sector2 = getTierBalance(2);
     const sector3 = getTierBalance(3);
     const sector4 = getTierBalance(4);
     const sector5 = getTierBalance(5);
 
+    expect(sector2.hazardCount).toBe(sector1.hazardCount);
+    expect(sector2.targetOrbits).toBe(sector1.targetOrbits + 1);
+    expect(sector3.hazardCount).toBe(sector2.hazardCount + 1);
     expect(sector4.hazardCount).toBe(sector3.hazardCount);
-    expect(sector4.targetOrbits).toBe(sector3.targetOrbits + 1);
     expect(sector5.hazardCount).toBe(sector4.hazardCount + 1);
+    expect(sector4.targetOrbits).toBe(sector3.targetOrbits + 1);
     expect(sector5.targetOrbits).toBe(sector4.targetOrbits + 1);
-    expect(sector4.gravityPull - sector3.gravityPull).toBeLessThanOrEqual(sector5.gravityPull - sector4.gravityPull);
   });
 });

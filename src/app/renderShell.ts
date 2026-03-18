@@ -114,7 +114,19 @@ export const formatNextPressureDelta = (state: AppState): string => {
   const mineDelta = Math.max(0, nextBalance.hazardCount - currentBalance.hazardCount);
   const orbitDelta = Math.max(0, nextBalance.targetOrbits - currentBalance.targetOrbits);
 
-  return `+${mineDelta} mine${mineDelta === 1 ? '' : 's'} · +${orbitDelta} lap${orbitDelta === 1 ? '' : 's'}`;
+  if (mineDelta > 0 && orbitDelta > 0) {
+    return `+${mineDelta} mine${mineDelta === 1 ? '' : 's'} · +${orbitDelta} lap${orbitDelta === 1 ? '' : 's'}`;
+  }
+
+  if (mineDelta > 0) {
+    return `+${mineDelta} mine${mineDelta === 1 ? '' : 's'}`;
+  }
+
+  if (orbitDelta > 0) {
+    return `+${orbitDelta} lap${orbitDelta === 1 ? '' : 's'}`;
+  }
+
+  return 'steady';
 };
 
 export const getNextPressureHelper = (state: AppState): string => {
