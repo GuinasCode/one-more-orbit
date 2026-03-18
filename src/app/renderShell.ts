@@ -3,12 +3,14 @@ import { gameConfig } from '../game/config';
 import type { AppState } from './appState';
 import { getRunRecapNote } from './runRecap';
 
+const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
+
 const formatGoal = (state: AppState): string => {
   if (state.screen === 'running' && state.run) {
     return `${state.run.completedOrbits}/${state.run.targetOrbits} orbits`;
   }
 
-  const previewBalance = getTierBalance(state.progression.lastPlayedTier);
+  const previewBalance = getPreviewBalance(state);
   return `${previewBalance.targetOrbits} clean orbits`;
 };
 
@@ -30,8 +32,24 @@ const getGoalHelper = (state: AppState): string => {
       : `${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} left to clear this sector.`;
   }
 
-  const previewBalance = getTierBalance(state.progression.lastPlayedTier);
+  const previewBalance = getPreviewBalance(state);
   return `${previewBalance.targetOrbits} clean laps unlock the next sector pressure spike.`;
+};
+
+const getSectorBriefing = (state: AppState): string => {
+  const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
+  const balance = getTierBalance(activeTier);
+  const unlockTier = Math.max(state.progression.highestUnlockedTier, activeTier + 1);
+
+  if (state.screen === 'won') {
+    return `Sector ${unlockTier} is now unlocked with ${getTierBalance(unlockTier).hazardCount} rotating mines waiting.`;
+  }
+
+  if (state.screen === 'failed') {
+    return `Sector ${activeTier} still needs ${balance.targetOrbits} clean laps. Clear it to unlock Sector ${unlockTier}.`;
+  }
+
+  return `Clear ${balance.targetOrbits} clean laps while dodging ${balance.hazardCount} rotating mines to unlock Sector ${unlockTier}.`;
 };
 
 const formatRunResult = (state: AppState): string => {
@@ -141,6 +159,12 @@ export const renderShell = (state: AppState): string => `
           aria-valuenow="${getGoalProgress(state)}"
         >
           <span class="goal-track-fill" data-field="goal-progress-fill" style="width: ${getGoalProgress(state)}%"></span>
+        </div>
+      </section>
+      <section class="sector-briefing" aria-label="Sector briefing">
+        <div class="sector-briefing-copy">
+          <p class="sector-briefing-label">Sector briefing</p>
+          <p class="sector-briefing-helper" data-field="sector-briefing-helper">${getSectorBriefing(state)}</p>
         </div>
       </section>
       <ul class="pill-list" aria-label="How to play">

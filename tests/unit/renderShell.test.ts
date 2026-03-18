@@ -16,6 +16,8 @@ describe('renderShell', () => {
     expect(html).toContain('Arena danger legend');
     expect(html).toContain('Goal track');
     expect(html).toContain('6 clean laps unlock the next sector pressure spike.');
+    expect(html).toContain('Sector briefing');
+    expect(html).toContain('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.');
     expect(html).toContain('aria-valuenow="0"');
     expect(html).toContain('Amber core pulls inward hard');
     expect(html).toContain('Red ring marks the drift-out fail line');
@@ -56,6 +58,7 @@ describe('renderShell', () => {
     expect(html).toContain('Sector cleared');
     expect(html).toContain('20.0s');
     expect(html).toContain('Sector 3 ready');
+    expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
   });
 
   it('renders failure recap details for a lost run', () => {
@@ -84,6 +87,7 @@ describe('renderShell', () => {
     expect(html).toContain('Run lost');
     expect(html).toContain('12.4s');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
+    expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
   });
 
