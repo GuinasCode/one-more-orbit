@@ -109,6 +109,17 @@ export const getNextPressureHelper = (state: AppState): string => {
   return `Next unlock is Sector ${nextTier}: ${nextBalance.targetOrbits} clean laps, ${nextBalance.hazardCount} rotating mines.`;
 };
 
+export const getSectorSelectorHelper = (state: AppState): string => {
+  const selectedTier = state.progression.lastPlayedTier;
+  const balance = getTierBalance(selectedTier);
+
+  if (state.screen === 'running' && state.run) {
+    return `Sector ${state.run.tier} is live. Finish or fail this run before switching sectors.`;
+  }
+
+  return `Browsing unlocked sectors 1-${state.progression.highestUnlockedTier}. Sector ${selectedTier} asks for ${balance.targetOrbits} clean laps through ${balance.hazardCount} rotating mines.`;
+};
+
 const formatRunResult = (state: AppState): string => {
   if (state.screen === 'won') {
     return 'Sector cleared';
@@ -178,7 +189,13 @@ export const getFlightCoachCopy = (state: AppState): string => {
   return 'Flight coach: Stable lane. Feather boost to stay mid-ring and keep clean orbit progress.';
 };
 
-export const renderShell = (state: AppState): string => `
+export const renderShell = (state: AppState): string => {
+  const selectedTier = state.progression.lastPlayedTier;
+  const selectionLocked = state.screen === 'running';
+  const canSelectPrevious = !selectionLocked && selectedTier > 1;
+  const canSelectNext = !selectionLocked && selectedTier < state.progression.highestUnlockedTier;
+
+  return `
   <div class="shell" data-screen="${state.screen}">
     <section class="marketing-panel">
       <p class="eyebrow">Fast-restart browser arcade MVP</p>
@@ -202,6 +219,21 @@ export const renderShell = (state: AppState): string => `
           <strong class="stat-value" data-field="goal">${formatGoal(state)}</strong>
         </article>
       </div>
+      <section class="sector-selector" aria-label="Sector selector">
+        <div class="sector-selector-copy">
+          <p class="sector-selector-label">Sector select</p>
+          <p class="sector-selector-helper" data-field="sector-selector-helper">${getSectorSelectorHelper(state)}</p>
+        </div>
+        <div class="sector-selector-controls">
+          <button class="sector-selector-button" type="button" data-action="previous-sector" ${canSelectPrevious ? '' : 'disabled'}>
+            ← Prev
+          </button>
+          <strong class="sector-selector-chip" data-field="selected-sector-chip">Sector ${selectedTier}</strong>
+          <button class="sector-selector-button" type="button" data-action="next-sector" ${canSelectNext ? '' : 'disabled'}>
+            Next →
+          </button>
+        </div>
+      </section>
       <section class="score-chase" aria-label="Best score chase">
         <div class="score-chase-copy">
           <p class="score-chase-label">Best score chase</p>
@@ -297,3 +329,4 @@ export const renderShell = (state: AppState): string => `
     </section>
   </div>
 `;
+};

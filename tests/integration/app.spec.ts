@@ -5,6 +5,10 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
 
   await expect(page.getByRole('heading', { name: 'One More Orbit' })).toBeVisible();
   await expect(page.getByText('Awaiting launch command. Sector 1 is calibrated and ready.')).toBeVisible();
+  await expect(page.getByText('Sector select')).toBeVisible();
+  await expect(page.getByText('Browsing unlocked sectors 1-1. Sector 1 asks for 6 clean laps through 4 rotating mines.')).toBeVisible();
+  await expect(page.getByRole('button', { name: '← Prev' })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Next →' })).toBeDisabled();
   await expect(page.getByText('Amber core pulls inward hard')).toBeVisible();
   await expect(page.getByText('Red ring marks the drift-out fail line')).toBeVisible();
   await expect(page.getByText('Pink mines punish greedy boost lines')).toBeVisible();
@@ -23,6 +27,7 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
   await expect(page.locator('.pitch')).toHaveText('Sector 1');
   await expect(page.locator('.shell')).toHaveAttribute('data-screen', 'running');
   await expect(page.locator('.goal-track-meter')).toHaveAttribute('aria-valuenow', '0');
+  await expect(page.getByText('Sector 1 is live. Finish or fail this run before switching sectors.')).toBeVisible();
   await expect(page.getByText('6 clean laps left to clear this sector.')).toBeVisible();
   await expect(page.getByText('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.')).toBeVisible();
   await expect(page.getByText('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.')).toBeVisible();

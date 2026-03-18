@@ -142,6 +142,7 @@ h1 {
   grid-column: 1 / -1;
 }
 
+.sector-selector,
 .score-chase,
 .goal-track,
 .sector-briefing,
@@ -154,6 +155,7 @@ h1 {
   background: rgba(143, 166, 255, 0.05);
 }
 
+.sector-selector-copy,
 .score-chase-copy,
 .goal-track-copy,
 .sector-briefing-copy,
@@ -162,6 +164,7 @@ h1 {
   gap: 6px;
 }
 
+.sector-selector-label,
 .score-chase-label,
 .goal-track-label,
 .sector-briefing-label,
@@ -173,12 +176,55 @@ h1 {
   color: #8da2d8;
 }
 
+.sector-selector-helper,
 .score-chase-helper,
 .goal-track-helper,
 .sector-briefing-helper,
 .next-pressure-helper {
   margin: 0;
   color: #eef4ff;
+}
+
+.sector-selector-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sector-selector-button,
+.sector-selector-chip {
+  min-height: 40px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(152, 168, 255, 0.2);
+  background: rgba(143, 166, 255, 0.08);
+  color: #eef4ff;
+}
+
+.sector-selector-button {
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    opacity 120ms ease;
+}
+
+.sector-selector-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(139, 243, 255, 0.4);
+}
+
+.sector-selector-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.sector-selector-chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .next-pressure-chips {
