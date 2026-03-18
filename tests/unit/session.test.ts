@@ -10,6 +10,22 @@ const getPolarDistance = (radiusA: number, angleA: number, radiusB: number, angl
   return Math.hypot(xA - xB, yA - yB);
 };
 
+const getLaunchLaneEdgeClearance = (
+  laneMinRadius: number,
+  laneMaxRadius: number,
+  shipRadius: number,
+  hazardRadius: number,
+  hazardAngle: number,
+  hazardSize: number,
+): number => {
+  const hazardX = Math.cos(hazardAngle) * hazardRadius;
+  const hazardY = Math.sin(hazardAngle) * hazardRadius;
+  const clampedX = Math.min(Math.max(hazardX, laneMinRadius), laneMaxRadius);
+  const laneGap = Math.hypot(hazardX - clampedX, hazardY);
+
+  return laneGap - (shipRadius + hazardSize);
+};
+
 describe('runModel', () => {
   it('starts a running sector with score and goals wired', () => {
     const state = createRunState(2);
@@ -78,6 +94,29 @@ describe('runModel', () => {
         const edgeClearance =
           getPolarDistance(state.balance.startRadius, 0, hazard.radius, hazard.angle) -
           (state.balance.shipRadius + hazard.size);
+
+        expect(edgeClearance).toBeGreaterThanOrEqual(minimumEdgeClearance);
+      });
+    }
+  });
+
+  it('keeps the full launch corridor passable across the first 12 sectors', () => {
+    const minimumEdgeClearance = 28;
+
+    for (let tier = 1; tier <= 12; tier += 1) {
+      const state = createRunState(tier);
+      const laneMinRadius = state.balance.coreRadius + state.balance.shipRadius + 4;
+      const laneMaxRadius = state.balance.maxRadius - state.balance.shipRadius;
+
+      state.hazards.forEach((hazard) => {
+        const edgeClearance = getLaunchLaneEdgeClearance(
+          laneMinRadius,
+          laneMaxRadius,
+          state.balance.shipRadius,
+          hazard.radius,
+          hazard.angle,
+          hazard.size,
+        );
 
         expect(edgeClearance).toBeGreaterThanOrEqual(minimumEdgeClearance);
       });

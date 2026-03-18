@@ -3,7 +3,7 @@ import { getTierBalance, type TierBalance } from './balance';
 const TAU = Math.PI * 2;
 const START_LANE_CLEARANCE = 28;
 const START_LANE_ARC_SHIFT = 0.52;
-const START_LANE_ADJUSTMENT_ATTEMPTS = 12;
+const START_LANE_ADJUSTMENT_ATTEMPTS = 18;
 
 export type RunPhase = 'idle' | 'running' | 'won' | 'failed';
 
@@ -53,6 +53,17 @@ export interface RunState {
   endReason?: string;
 }
 
+const getLaunchLaneEdgeClearance = (balance: TierBalance, hazardRadius: number, hazardAngle: number, hazardSize: number): number => {
+  const laneMinRadius = balance.coreRadius + balance.shipRadius + 4;
+  const laneMaxRadius = balance.maxRadius - balance.shipRadius;
+  const hazardX = Math.cos(hazardAngle) * hazardRadius;
+  const hazardY = Math.sin(hazardAngle) * hazardRadius;
+  const clampedX = Math.min(Math.max(hazardX, laneMinRadius), laneMaxRadius);
+  const laneGap = Math.hypot(hazardX - clampedX, hazardY);
+
+  return laneGap - (balance.shipRadius + hazardSize);
+};
+
 const createHazards = (balance: TierBalance): HazardState[] => {
   const laneRadii = [116, 148, 182, 214, 238];
   const startX = Math.cos(0) * balance.startRadius;
@@ -68,9 +79,10 @@ const createHazards = (balance: TierBalance): HazardState[] => {
     for (let attempt = 0; attempt < START_LANE_ADJUSTMENT_ATTEMPTS; attempt += 1) {
       const hazardX = Math.cos(angle) * radius;
       const hazardY = Math.sin(angle) * radius;
-      const laneGap = Math.hypot(startX - hazardX, startY - hazardY) - (balance.shipRadius + size);
+      const startGap = Math.hypot(startX - hazardX, startY - hazardY) - (balance.shipRadius + size);
+      const launchLaneGap = getLaunchLaneEdgeClearance(balance, radius, angle, size);
 
-      if (laneGap >= START_LANE_CLEARANCE) {
+      if (startGap >= START_LANE_CLEARANCE && launchLaneGap >= START_LANE_CLEARANCE) {
         break;
       }
 
