@@ -45,6 +45,13 @@ Web-first arcade survival game built for fast restarts, readable action, and a p
 - Publish checklist: `docs/publish-checklist.md`
 - Store copy draft: `docs/store-copy.md`
 
+## CI / CD
+
+- GitHub Actions runs on every `push` and `pull_request`.
+- CI is split into three jobs: `Lint + build`, `Unit tests`, and `Integration tests`.
+- `npm run test:unit` is the fast gate for core logic, while Playwright covers browser smoke/integration flow.
+- GitHub Pages deploys from `main` via `.github/workflows/deploy-pages.yml` after CI passes and changes are merged.
+
 ## Project Structure
 
 - `src/app` — DOM shell, persistence wiring, app-level orchestration
