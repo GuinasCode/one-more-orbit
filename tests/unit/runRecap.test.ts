@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { initialAppState } from '../../src/app/appState';
-import { getRunRecapImpact, getRunRecapNote } from '../../src/app/runRecap';
+import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from '../../src/app/runRecap';
 import { defaultProgressionState } from '../../src/game/core/progression';
 
 describe('getRunRecapNote', () => {
@@ -35,6 +35,7 @@ describe('getRunRecapNote', () => {
 
     expect(getRunRecapNote(state)).toBe('Sector 3 ready');
     expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 8 laps');
+    expect(getRunRecapAction(state)).toBe('Launch Sector 3 next · 8 clean laps through 6 rotating mines.');
   });
 
   it('adds a personal-best callout and coaching tip after a mine collision', () => {
@@ -67,6 +68,9 @@ describe('getRunRecapNote', () => {
       'New best locked · +60 over your previous benchmark. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
     );
     expect(getRunRecapImpact(state)).toBe('New best 180 · 4 laps still needed');
+    expect(getRunRecapAction(state)).toBe(
+      'Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.',
+    );
   });
 
   it('adds a safe-ring recovery tip after drifting too far out', () => {

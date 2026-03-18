@@ -89,6 +89,7 @@ describe('renderShell', () => {
     expect(html).toContain('20.0s');
     expect(html).toContain('New best 420 · next goal 8 laps');
     expect(html).toContain('New best locked · +60 over your previous benchmark');
+    expect(html).toContain('Launch Sector 3 next · 8 clean laps through 6 rotating mines.');
     expect(html).toContain('Next move: press Enter or click Launch Sector 3 to test the new pressure spike.');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
     expect(html).toContain('Sector 2 win / fail rules');
@@ -134,6 +135,7 @@ describe('renderShell', () => {
     expect(html).toContain('Retry Sector 1 · 4 laps still needed');
     expect(html).toContain('180 more points beats your best score of 360.');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
+    expect(html).toContain('Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.');
     expect(html).toContain('Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.');
     expect(html).toContain('Sector 1 win / fail rules');
     expect(html).toContain('Fail: any of the 4 rotating mines can break the hull on contact.');

@@ -25,7 +25,7 @@ import {
   getSectorSelectorHelper,
   renderShell,
 } from './renderShell';
-import { getRunRecapImpact, getRunRecapNote } from './runRecap';
+import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runRecap';
 import { getResultMessaging } from './runMessaging';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
@@ -270,6 +270,7 @@ export class OneMoreOrbitApp {
     const runTimeValue = this.requireElement<HTMLElement>('[data-field="run-time"]');
     const runImpactValue = this.requireElement<HTMLElement>('[data-field="run-impact"]');
     const runNoteValue = this.requireElement<HTMLElement>('[data-field="run-note"]');
+    const runActionValue = this.requireElement<HTMLElement>('[data-field="run-action"]');
 
     shell.dataset.screen = this.state.screen;
     pitch.textContent = this.state.headline;
@@ -322,6 +323,7 @@ export class OneMoreOrbitApp {
     runTimeValue.textContent = this.state.run ? `${this.state.run.elapsedSeconds.toFixed(1)}s` : '0.0s';
     runImpactValue.textContent = getRunRecapImpact(this.state);
     runNoteValue.textContent = getRunRecapNote(this.state);
+    runActionValue.textContent = getRunRecapAction(this.state);
 
     if (this.state.screen !== 'running') {
       primaryButton.focus();
