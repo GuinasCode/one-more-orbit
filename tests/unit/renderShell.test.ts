@@ -65,6 +65,7 @@ describe('renderShell', () => {
     expect(html).toContain('Sector cleared');
     expect(html).toContain('Best score matched. One more point sets a new benchmark.');
     expect(html).toContain('20.0s');
+    expect(html).toContain('Unlocked Sector 3 · next goal 8 laps');
     expect(html).toContain('Sector 3 ready');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
@@ -99,6 +100,7 @@ describe('renderShell', () => {
 
     expect(html).toContain('Run lost');
     expect(html).toContain('12.4s');
+    expect(html).toContain('Retry Sector 1 · 4 laps still needed');
     expect(html).toContain('180 more points beats your best score of 360.');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');

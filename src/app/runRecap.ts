@@ -1,3 +1,4 @@
+import { getTierBalance } from '../game/core/balance';
 import type { AppState } from './appState';
 
 const getFailureTip = (endReason?: string): string => {
@@ -18,6 +19,25 @@ const getFailureTip = (endReason?: string): string => {
   }
 
   return 'Retry immediately and look for a calmer lane before committing to a full boost.';
+};
+
+export const getRunRecapImpact = (state: AppState): string => {
+  if (!state.run) {
+    return 'No run logged';
+  }
+
+  if (state.screen === 'won') {
+    const unlockedTier = Math.min(state.progression.highestUnlockedTier, state.run.tier + 1);
+    const unlockedBalance = getTierBalance(unlockedTier);
+    return `Unlocked Sector ${unlockedTier} · next goal ${unlockedBalance.targetOrbits} laps`;
+  }
+
+  if (state.screen === 'failed') {
+    const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+    return `Retry Sector ${state.run.tier} · ${lapsRemaining} lap${lapsRemaining === 1 ? '' : 's'} still needed`;
+  }
+
+  return 'Run in progress';
 };
 
 export const getRunRecapNote = (state: AppState): string => {

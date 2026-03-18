@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { initialAppState } from '../../src/app/appState';
-import { getRunRecapNote } from '../../src/app/runRecap';
+import { getRunRecapImpact, getRunRecapNote } from '../../src/app/runRecap';
 import { defaultProgressionState } from '../../src/game/core/progression';
 
 describe('getRunRecapNote', () => {
@@ -11,11 +11,11 @@ describe('getRunRecapNote', () => {
       lastPlayedTier: 3,
     };
 
-    const note = getRunRecapNote({
+    const state = {
       ...initialAppState(progression),
-      screen: 'won',
+      screen: 'won' as const,
       run: {
-        phase: 'won',
+        phase: 'won' as const,
         tier: 2,
         score: 420,
         elapsedMs: 20000,
@@ -29,17 +29,18 @@ describe('getRunRecapNote', () => {
         headline: 'Sector Cleared',
         summary: 'Next sector unlocked.',
       },
-    });
+    };
 
-    expect(note).toBe('Sector 3 ready');
+    expect(getRunRecapNote(state)).toBe('Sector 3 ready');
+    expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 8 laps');
   });
 
   it('adds a contextual coaching tip after a mine collision', () => {
-    const note = getRunRecapNote({
+    const state = {
       ...initialAppState(defaultProgressionState()),
-      screen: 'failed',
+      screen: 'failed' as const,
       run: {
-        phase: 'failed',
+        phase: 'failed' as const,
         tier: 1,
         score: 180,
         elapsedMs: 12400,
@@ -54,11 +55,12 @@ describe('getRunRecapNote', () => {
         summary: 'Fast restart ready.',
         endReason: 'a rotating mine clipped the hull',
       },
-    });
+    };
 
-    expect(note).toBe(
+    expect(getRunRecapNote(state)).toBe(
       'a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
     );
+    expect(getRunRecapImpact(state)).toBe('Retry Sector 1 · 4 laps still needed');
   });
 
   it('adds a safe-ring recovery tip after drifting too far out', () => {

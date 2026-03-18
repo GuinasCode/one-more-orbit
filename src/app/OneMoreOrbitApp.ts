@@ -11,7 +11,7 @@ import {
   getSectorBriefing,
   renderShell,
 } from './renderShell';
-import { getRunRecapNote } from './runRecap';
+import { getRunRecapImpact, getRunRecapNote } from './runRecap';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
   applyRunResolution,
@@ -188,6 +188,7 @@ export class OneMoreOrbitApp {
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
     const runTimeValue = this.requireElement<HTMLElement>('[data-field="run-time"]');
+    const runImpactValue = this.requireElement<HTMLElement>('[data-field="run-impact"]');
     const runNoteValue = this.requireElement<HTMLElement>('[data-field="run-note"]');
 
     shell.dataset.screen = this.state.screen;
@@ -220,6 +221,7 @@ export class OneMoreOrbitApp {
     runRecap.toggleAttribute('hidden', !shouldShowRecap);
     runResultValue.textContent = this.state.screen === 'won' ? 'Sector cleared' : shouldShowRecap ? 'Run lost' : 'Stand by';
     runTimeValue.textContent = this.state.run ? `${this.state.run.elapsedSeconds.toFixed(1)}s` : '0.0s';
+    runImpactValue.textContent = getRunRecapImpact(this.state);
     runNoteValue.textContent = getRunRecapNote(this.state);
 
     if (this.state.screen !== 'running') {
