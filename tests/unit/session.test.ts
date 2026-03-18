@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createRunState, toRunSnapshot, updateRunState } from '../../src/game/core/runModel';
+import { createRunState, getNearestHazardGap, toRunSnapshot, updateRunState } from '../../src/game/core/runModel';
 
 const getPolarDistance = (radiusA: number, angleA: number, radiusB: number, angleB: number): number => {
   const xA = Math.cos(angleA) * radiusA;
@@ -19,6 +19,7 @@ describe('runModel', () => {
     expect(snapshot.tier).toBe(2);
     expect(snapshot.targetOrbits).toBeGreaterThan(0);
     expect(snapshot.hazardCount).toBeGreaterThan(0);
+    expect(snapshot.nearestHazardGap).not.toBeNull();
   });
 
   it('widens the orbit while boost is held', () => {
@@ -53,6 +54,18 @@ describe('runModel', () => {
 
     expect(next.phase).toBe('won');
     expect(next.completedOrbits).toBe(initial.balance.targetOrbits);
+  });
+
+  it('reports the closest mine gap for danger telegraphing', () => {
+    const initial = createRunState(1);
+    const hazard = initial.hazards[0];
+    const state = {
+      ...initial,
+      radius: hazard.radius,
+      displayedAngle: hazard.angle,
+    };
+
+    expect(getNearestHazardGap(state)).toBe(-1 * (initial.balance.shipRadius + hazard.size));
   });
 
   it('keeps the launch lane clear of immediate mine contact across the first 12 sectors', () => {
