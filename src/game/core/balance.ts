@@ -22,6 +22,13 @@ interface SectorTuning {
   targetOrbits: number;
 }
 
+interface SectorDifficultyStep {
+  baseAngularSpeed: number;
+  gravityPull: number;
+  boostAcceleration: number;
+  targetOrbits: number;
+}
+
 const BASE_START_RADIUS = 168;
 const BASE_MAX_RADIUS = 252;
 const BASE_CORE_RADIUS = 62;
@@ -30,6 +37,11 @@ const BASE_RADIAL_DAMPING = 0.92;
 const MAX_HAZARD_COUNT = 7;
 const SCORE_PER_SECOND = 18;
 const SCORE_PER_ORBIT = 140;
+const POST_PRESET_BALANCE_STEPS: SectorDifficultyStep[] = [
+  { baseAngularSpeed: 0.045, gravityPull: 6, boostAcceleration: 10, targetOrbits: 0 },
+  { baseAngularSpeed: 0.05, gravityPull: 7, boostAcceleration: 11, targetOrbits: 0 },
+  { baseAngularSpeed: 0.055, gravityPull: 8, boostAcceleration: 12, targetOrbits: 1 },
+];
 const SECTOR_TUNING: SectorTuning[] = [
   { baseAngularSpeed: 1.5, gravityPull: 96, boostAcceleration: 196, hazardCount: 4, targetOrbits: 6 },
   { baseAngularSpeed: 1.55, gravityPull: 104, boostAcceleration: 208, hazardCount: 4, targetOrbits: 7 },
@@ -53,6 +65,7 @@ export const balanceGuardrails = {
   maximumTargetOrbitStepPerTier: 1,
   maximumEstimatedClearSeconds: 43,
   maximumEstimatedClearStepSeconds: 4,
+  maximumDifficultyStepPerTier: 34,
 } as const;
 
 const getSectorTuning = (tier: number): SectorTuning => {
@@ -65,13 +78,17 @@ const getSectorTuning = (tier: number): SectorTuning => {
   const lastPreset = SECTOR_TUNING[SECTOR_TUNING.length - 1];
   const extraTiers = tier - SECTOR_TUNING.length;
 
-  return {
-    baseAngularSpeed: lastPreset.baseAngularSpeed + extraTiers * 0.05,
-    gravityPull: lastPreset.gravityPull + extraTiers * 8,
-    boostAcceleration: lastPreset.boostAcceleration + extraTiers * 12,
-    hazardCount: Math.min(lastPreset.hazardCount + Math.ceil(extraTiers / 3), MAX_HAZARD_COUNT),
-    targetOrbits: lastPreset.targetOrbits + Math.floor(extraTiers / 3),
-  };
+  return Array.from({ length: extraTiers }).reduce<SectorTuning>((tuning, _, index) => {
+    const step = POST_PRESET_BALANCE_STEPS[index % POST_PRESET_BALANCE_STEPS.length];
+
+    return {
+      baseAngularSpeed: Number((tuning.baseAngularSpeed + step.baseAngularSpeed).toFixed(3)),
+      gravityPull: tuning.gravityPull + step.gravityPull,
+      boostAcceleration: tuning.boostAcceleration + step.boostAcceleration,
+      hazardCount: Math.min(tuning.hazardCount, MAX_HAZARD_COUNT),
+      targetOrbits: tuning.targetOrbits + step.targetOrbits,
+    };
+  }, lastPreset);
 };
 
 export const getTierBalance = (tier: number): TierBalance => {
@@ -93,4 +110,14 @@ export const getTierBalance = (tier: number): TierBalance => {
     scorePerSecond: SCORE_PER_SECOND,
     scorePerOrbit: SCORE_PER_ORBIT,
   };
+};
+
+export const getTierDifficultyRating = (tier: number): number => {
+  const balance = getTierBalance(tier);
+  const hazardPressure = (balance.hazardCount - 3) * 15;
+  const endurancePressure = (balance.targetOrbits - 5) * 8;
+  const gravityPressure = (balance.gravityPull - 96) * 0.6;
+  const speedPressure = (balance.baseAngularSpeed - 1.5) * 100;
+
+  return Number((hazardPressure + endurancePressure + gravityPressure + speedPressure).toFixed(2));
 };
