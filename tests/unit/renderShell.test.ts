@@ -77,6 +77,7 @@ describe('renderShell', () => {
         targetOrbits: 7,
         radius: 180,
         hazardCount: 5,
+        nearestHazardGap: null,
         boostActive: false,
         status: 'Sector 2 cleared.',
         headline: 'Sector Cleared',
@@ -130,6 +131,7 @@ describe('renderShell', () => {
         targetOrbits: 6,
         radius: 110,
         hazardCount: 4,
+        nearestHazardGap: null,
         boostActive: false,
         status: 'Run collapsed.',
         headline: 'Run Lost',
@@ -175,6 +177,7 @@ describe('renderShell', () => {
         targetOrbits: 6,
         radius: 238,
         hazardCount: 4,
+        nearestHazardGap: null,
         boostActive: true,
         status: 'Boosting outward.',
         headline: 'Sector 1',
@@ -197,5 +200,33 @@ describe('renderShell', () => {
     expect(html).toContain('aria-valuenow="93"');
     expect(html).toContain('Drift risk');
     expect(html).toContain('Release boost now before the orbit spills through the red ring.');
+  });
+
+  it('prioritizes mine danger telegraphing when a hazard is about to clip the hull', () => {
+    const html = renderShell({
+      ...initialAppState(defaultProgressionState()),
+      screen: 'running',
+      primaryActionLabel: 'Restart Run',
+      run: {
+        phase: 'running',
+        tier: 1,
+        score: 180,
+        elapsedMs: 7600,
+        elapsedSeconds: 7.6,
+        completedOrbits: 2,
+        targetOrbits: 6,
+        radius: 180,
+        hazardCount: 4,
+        nearestHazardGap: 14,
+        boostActive: false,
+        status: 'Gravity is pulling inward.',
+        headline: 'Sector 1',
+        summary: 'Stay alive.',
+      },
+    });
+
+    expect(html).toContain('Mine danger');
+    expect(html).toContain('Mine proximity alert: only 14 radius units of hull clearance left. Feather boost and slip behind the nearest mine.');
+    expect(html).toContain('Flight coach: Mine danger. The nearest mine is only 14 radius units off the hull — feather boost and let it rotate past.');
   });
 });

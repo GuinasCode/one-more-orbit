@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import { gameConfig } from '../config';
 import { gameBridgeRegistryKey, type GameBridge } from '../bridge';
-import { createRunState, toRunSnapshot, updateRunState, type RunState } from '../core/runModel';
+import { createRunState, getNearestHazardGap, toRunSnapshot, updateRunState, type RunState } from '../core/runModel';
 
 const centerX = gameConfig.width / 2;
 const centerY = gameConfig.height / 2;
+const MINE_DANGER_GAP = 20;
 
 export class OrbitArenaScene extends Phaser.Scene {
   static key = 'orbit-arena';
@@ -221,6 +222,25 @@ export class OrbitArenaScene extends Phaser.Scene {
       return;
     }
 
+    const nearestHazardGap = getNearestHazardGap(state);
+    const shipX = centerX + Math.cos(state.displayedAngle) * state.radius;
+    const shipY = centerY + Math.sin(state.displayedAngle) * state.radius;
+    const nearestHazardIndex = state.hazards.reduce((closestIndex, hazard, index, hazards) => {
+      const currentDistance = Math.hypot(shipX - (centerX + Math.cos(hazard.angle) * hazard.radius), shipY - (centerY + Math.sin(hazard.angle) * hazard.radius));
+
+      if (closestIndex < 0) {
+        return index;
+      }
+
+      const closestHazard = hazards[closestIndex];
+      const closestDistance = Math.hypot(
+        shipX - (centerX + Math.cos(closestHazard.angle) * closestHazard.radius),
+        shipY - (centerY + Math.sin(closestHazard.angle) * closestHazard.radius),
+      );
+
+      return currentDistance < closestDistance ? index : closestIndex;
+    }, -1);
+
     this.drawOrbitRings(state.radius, state.balance.maxRadius);
     this.positionShip(state.displayedAngle, state.radius, state.boostActive);
 
@@ -231,11 +251,16 @@ export class OrbitArenaScene extends Phaser.Scene {
         return;
       }
 
+      const isNearestDanger = index === nearestHazardIndex && nearestHazardGap !== null && nearestHazardGap <= MINE_DANGER_GAP;
+
       sprite.setRadius(hazard.size);
       sprite.setPosition(
         centerX + Math.cos(hazard.angle) * hazard.radius,
         centerY + Math.sin(hazard.angle) * hazard.radius,
       );
+      sprite.setFillStyle(0xff6b7d, isNearestDanger ? 1 : 0.95);
+      sprite.setStrokeStyle(isNearestDanger ? 3 : 0, 0xfff1a8, 0.92);
+      sprite.setScale(isNearestDanger ? 1.12 : 1);
     });
 
     if (state.phase === 'running') {
@@ -243,9 +268,11 @@ export class OrbitArenaScene extends Phaser.Scene {
         `Sector ${state.balance.tier} · ${state.completedOrbits}/${state.balance.targetOrbits} orbits · ${state.score} score`,
       );
       this.hudBody?.setText(
-        state.boostActive
-          ? 'Boost held: orbit widening. Ease off before you slip beyond the safe ring.'
-          : 'Gravity is pulling you inward. Feather boost to line up around the mines.',
+        nearestHazardGap !== null && nearestHazardGap <= MINE_DANGER_GAP
+          ? `Mine danger close: ${Math.max(0, Math.round(nearestHazardGap))} units of hull clearance. Feather boost and let the nearest mine rotate past.`
+          : state.boostActive
+            ? 'Boost held: orbit widening. Ease off before you slip beyond the safe ring.'
+            : 'Gravity is pulling you inward. Feather boost to line up around the mines.',
       );
       return;
     }

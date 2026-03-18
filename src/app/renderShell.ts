@@ -3,6 +3,8 @@ import { gameConfig } from '../game/config';
 import type { AppState } from './appState';
 import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runRecap';
 
+const MINE_DANGER_GAP = 20;
+
 const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
 
 const getSelectedSectorPreview = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
@@ -273,6 +275,11 @@ const getFailureRecoveryPrompt = (endReason?: string): string => {
   return 'Reset fast and rebuild a calmer lane.';
 };
 
+const isMineDangerState = (state: AppState): boolean =>
+  Boolean(state.screen === 'running' && state.run && state.run.nearestHazardGap !== null && state.run.nearestHazardGap <= MINE_DANGER_GAP);
+
+const formatMineDangerGap = (gap: number | null | undefined): string => `${Math.max(0, Math.round(gap ?? 0))}`;
+
 export const getArenaSignalTone = (state: AppState): 'neutral' | 'warning' | 'success' | 'danger' => {
   if (state.screen === 'won') {
     return 'success';
@@ -284,6 +291,10 @@ export const getArenaSignalTone = (state: AppState): 'neutral' | 'warning' | 'su
 
   if (state.screen === 'running' && state.run) {
     const balance = getTierBalance(state.run.tier);
+
+    if (isMineDangerState(state)) {
+      return 'warning';
+    }
 
     if (state.run.completedOrbits >= state.run.targetOrbits - 1) {
       return 'success';
@@ -324,6 +335,10 @@ export const getArenaSignalLabel = (state: AppState): string => {
 
   const balance = getTierBalance(state.run.tier);
   const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (isMineDangerState(state)) {
+    return 'Mine danger';
+  }
 
   if (lapsRemaining <= 1) {
     return 'Final lap';
@@ -371,6 +386,10 @@ export const getArenaSignalHelper = (state: AppState): string => {
 
   const balance = getTierBalance(state.run.tier);
   const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (isMineDangerState(state)) {
+    return `Mine proximity alert: only ${formatMineDangerGap(state.run.nearestHazardGap)} radius units of hull clearance left. Feather boost and slip behind the nearest mine.`;
+  }
 
   if (lapsRemaining <= 1) {
     return 'One clean orbit left. Protect the line and ignore any greedy late boost.';
@@ -436,6 +455,10 @@ export const getFlightCoachCopy = (state: AppState): string => {
 
   const balance = getTierBalance(state.run.tier);
   const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (isMineDangerState(state)) {
+    return `Flight coach: Mine danger. The nearest mine is only ${formatMineDangerGap(state.run.nearestHazardGap)} radius units off the hull — feather boost and let it rotate past.`;
+  }
 
   if (lapsRemaining <= 1) {
     return 'Flight coach: Final lap. Stay patient and protect the clean line to the finish.';

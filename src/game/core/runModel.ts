@@ -29,6 +29,7 @@ export interface RunSnapshot {
   targetOrbits: number;
   radius: number;
   hazardCount: number;
+  nearestHazardGap: number | null;
   boostActive: boolean;
   status: string;
   headline: string;
@@ -144,6 +145,7 @@ export const toRunSnapshot = (state: RunState): RunSnapshot => ({
   targetOrbits: state.balance.targetOrbits,
   radius: Math.round(state.radius),
   hazardCount: state.hazards.length,
+  nearestHazardGap: getNearestHazardGap(state),
   boostActive: state.boostActive,
   ...createStatus(state),
   endReason: state.endReason,
@@ -156,6 +158,23 @@ const distanceBetweenPolar = (radiusA: number, angleA: number, radiusB: number, 
   const yB = Math.sin(angleB) * radiusB;
 
   return Math.hypot(xA - xB, yA - yB);
+};
+
+export const getNearestHazardGap = (state: Pick<RunState, 'radius' | 'displayedAngle' | 'balance' | 'hazards'>): number | null => {
+  if (state.hazards.length === 0) {
+    return null;
+  }
+
+  return state.hazards.reduce<number | null>((closestGap, hazard) => {
+    const gap = distanceBetweenPolar(state.radius, state.displayedAngle, hazard.radius, hazard.angle) -
+      (state.balance.shipRadius + hazard.size);
+
+    if (closestGap === null) {
+      return gap;
+    }
+
+    return Math.min(closestGap, gap);
+  }, null);
 };
 
 export const updateRunState = (previous: RunState, input: RunInput, deltaMs: number): RunState => {
