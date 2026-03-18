@@ -3,6 +3,7 @@ import { initialAppState, type AppState, type AppScreenState } from './appState'
 import { createPhaserGame } from '../game/createPhaserGame';
 import {
   formatNextPressureDelta,
+  getActionPrompt,
   getFlightCoachCopy,
   getGoalHelper,
   getNextPressureHelper,
@@ -218,6 +219,7 @@ export class OneMoreOrbitApp {
   private syncUi(): void {
     const shell = this.requireElement<HTMLDivElement>('.shell');
     const pitch = this.requireElement<HTMLParagraphElement>('.pitch');
+    const actionPromptLine = this.requireElement<HTMLParagraphElement>('[data-field="action-prompt"]');
     const statusLine = this.requireElement<HTMLParagraphElement>('.status-line');
     const summaryLine = this.requireElement<HTMLParagraphElement>('[data-field="summary"]');
     const primaryButton = this.requireElement<HTMLButtonElement>('[data-action="primary-run-action"]');
@@ -246,6 +248,7 @@ export class OneMoreOrbitApp {
 
     shell.dataset.screen = this.state.screen;
     pitch.textContent = this.state.headline;
+    actionPromptLine.textContent = getActionPrompt(this.state);
     statusLine.textContent = this.state.status;
     summaryLine.textContent = this.state.summary;
     primaryButton.textContent = this.state.primaryActionLabel;

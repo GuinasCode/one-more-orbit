@@ -142,6 +142,44 @@ const formatRunTime = (state: AppState): string => {
 
 const formatRunNote = (state: AppState): string => getRunRecapNote(state);
 
+const getFailureRecoveryPrompt = (endReason?: string): string => {
+  if (!endReason) {
+    return 'Reset fast and rebuild a calmer lane.';
+  }
+
+  if (endReason.includes('core')) {
+    return 'Boost a beat earlier to stay out of the core.';
+  }
+
+  if (endReason.includes('safe ring')) {
+    return 'Release boost sooner near the outer warning ring.';
+  }
+
+  if (endReason.includes('mine')) {
+    return 'Feather boost through mine lanes instead of holding it down.';
+  }
+
+  return 'Reset fast and rebuild a calmer lane.';
+};
+
+export const getActionPrompt = (state: AppState): string => {
+  const targetTier = state.progression.lastPlayedTier;
+
+  if (state.screen === 'running') {
+    return 'Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.';
+  }
+
+  if (state.screen === 'won') {
+    return `Next move: press Enter or click Launch Sector ${targetTier} to test the new pressure spike.`;
+  }
+
+  if (state.screen === 'failed') {
+    return `Recovery lane: press Enter or click Retry Sector ${targetTier}. ${getFailureRecoveryPrompt(state.run?.endReason)}`;
+  }
+
+  return `Ready check: press Enter or click Launch Sector ${targetTier}. Browse unlocked sectors before launch if you want a different target.`;
+};
+
 export const getFlightCoachCopy = (state: AppState): string => {
   if (!state.run) {
     return 'Flight coach: Launch, then hold boost only when gravity starts dragging you inward.';
@@ -298,6 +336,7 @@ export const renderShell = (state: AppState): string => {
       <button class="launch-button" type="button" data-action="primary-run-action">
         ${state.primaryActionLabel}
       </button>
+      <p class="action-prompt" data-field="action-prompt">${getActionPrompt(state)}</p>
       <p class="status-line" aria-live="polite">${state.status}</p>
       <p class="summary-line" data-field="summary">${state.summary}</p>
       <section class="run-recap" data-field="run-recap" ${state.screen === 'won' || state.screen === 'failed' ? '' : 'hidden'}>

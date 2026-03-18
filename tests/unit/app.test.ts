@@ -49,6 +49,9 @@ describe('OneMoreOrbitApp', () => {
 
     expect(startRunSpy).toHaveBeenCalledWith(1);
     expect(root.querySelector('.shell')?.getAttribute('data-screen')).toBe('running');
+    expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
+      'Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.',
+    );
     expect(root.querySelector('.status-line')?.textContent).toBe('Sector 1 engaged. Hold boost and stabilize the orbit.');
   });
 
@@ -76,6 +79,9 @@ describe('OneMoreOrbitApp', () => {
     nextButton.click();
 
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 3');
+    expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
+      'Ready check: press Enter or click Launch Sector 3. Browse unlocked sectors before launch if you want a different target.',
+    );
     expect(root.querySelector('.status-line')?.textContent).toBe('Awaiting launch command. Sector 3 is calibrated and ready.');
     expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Launch Sector 3');
     expect(nextButton.disabled).toBe(true);
@@ -120,6 +126,9 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="score-chase-helper"]')?.textContent).toBe(
       'First benchmark locked: 560 points banked. Beat it next run.',
     );
+    expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
+      'Next move: press Enter or click Launch Sector 2 to test the new pressure spike.',
+    );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
     expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(
@@ -156,6 +165,9 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
       'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
+    );
+    expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
+      'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.',
     );
     expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Retry Sector 1');
   });
