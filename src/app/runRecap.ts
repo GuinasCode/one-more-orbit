@@ -72,3 +72,17 @@ export const getRunRecapNote = (state: AppState): string => {
 
   return 'Launch a run to log a recap';
 };
+
+export const getRunRecapAction = (state: AppState): string => {
+  if (state.screen === 'won' && state.run) {
+    const nextTier = Math.min(state.progression.highestUnlockedTier, state.run.tier + 1);
+    const nextBalance = getTierBalance(nextTier);
+    return `Launch Sector ${nextTier} next · ${nextBalance.targetOrbits} clean laps through ${nextBalance.hazardCount} rotating mines.`;
+  }
+
+  if (state.screen === 'failed' && state.run) {
+    return `Retry Sector ${state.run.tier} next · ${getFailureTip(state.run.endReason)}`;
+  }
+
+  return 'Launch a run to surface the next action.';
+};

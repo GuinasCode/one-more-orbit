@@ -1,7 +1,7 @@
 import { getTierBalance } from '../game/core/balance';
 import { gameConfig } from '../game/config';
 import type { AppState } from './appState';
-import { getRunRecapImpact, getRunRecapNote } from './runRecap';
+import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runRecap';
 
 const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
 
@@ -571,6 +571,10 @@ export const renderShell = (state: AppState): string => {
           <article class="stat-card stat-card--wide">
             <span class="stat-label">Note</span>
             <strong class="stat-value stat-value--compact" data-field="run-note">${formatRunNote(state)}</strong>
+          </article>
+          <article class="stat-card stat-card--wide">
+            <span class="stat-label">Next action</span>
+            <strong class="stat-value stat-value--compact" data-field="run-action">${getRunRecapAction(state)}</strong>
           </article>
         </div>
       </section>

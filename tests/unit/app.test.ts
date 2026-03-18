@@ -133,6 +133,9 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
       'Next move: press Enter or click Launch Sector 2 to test the new pressure spike.',
     );
+    expect(root.querySelector('[data-field="run-action"]')?.textContent).toBe(
+      'Launch Sector 2 next · 7 clean laps through 5 rotating mines.',
+    );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
     expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
     expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
@@ -187,6 +190,9 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
       'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.',
+    );
+    expect(root.querySelector('[data-field="run-action"]')?.textContent).toBe(
+      'Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.',
     );
     expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Retry Sector 1');
   });
