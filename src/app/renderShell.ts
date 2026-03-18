@@ -14,6 +14,26 @@ const formatGoal = (state: AppState): string => {
 
 const formatScore = (state: AppState): string => `${state.run?.score ?? 0}`;
 
+const getGoalProgress = (state: AppState): number => {
+  if (!state.run || state.run.targetOrbits <= 0) {
+    return 0;
+  }
+
+  return Math.min(100, Math.round((state.run.completedOrbits / state.run.targetOrbits) * 100));
+};
+
+const getGoalHelper = (state: AppState): string => {
+  if (state.screen === 'running' && state.run) {
+    const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+    return lapsRemaining === 0
+      ? 'Final orbit banked. Hold the lane until the sector resolves.'
+      : `${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} left to clear this sector.`;
+  }
+
+  const previewBalance = getTierBalance(state.progression.lastPlayedTier);
+  return `${previewBalance.targetOrbits} clean laps unlock the next sector pressure spike.`;
+};
+
 const formatRunResult = (state: AppState): string => {
   if (state.screen === 'won') {
     return 'Sector cleared';
@@ -107,6 +127,22 @@ export const renderShell = (state: AppState): string => `
           <strong class="stat-value" data-field="goal">${formatGoal(state)}</strong>
         </article>
       </div>
+      <section class="goal-track" aria-label="Sector goal progress">
+        <div class="goal-track-copy">
+          <p class="goal-track-label">Goal track</p>
+          <p class="goal-track-helper" data-field="goal-helper">${getGoalHelper(state)}</p>
+        </div>
+        <div
+          class="goal-track-meter"
+          role="progressbar"
+          aria-label="Sector goal completion"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="${getGoalProgress(state)}"
+        >
+          <span class="goal-track-fill" data-field="goal-progress-fill" style="width: ${getGoalProgress(state)}%"></span>
+        </div>
+      </section>
       <ul class="pill-list" aria-label="How to play">
         <li>Hold boost to widen your orbit</li>
         <li>Dodge rotating mines</li>
