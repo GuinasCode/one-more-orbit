@@ -14,22 +14,36 @@ export interface TierBalance {
   scorePerOrbit: number;
 }
 
+interface SectorTuning {
+  baseAngularSpeed: number;
+  gravityPull: number;
+  boostAcceleration: number;
+  hazardCount: number;
+  targetOrbits: number;
+}
+
 const BASE_START_RADIUS = 168;
 const BASE_MAX_RADIUS = 252;
 const BASE_CORE_RADIUS = 62;
 const BASE_SHIP_RADIUS = 10;
-const BASE_ANGULAR_SPEED = 1.45;
-const ANGULAR_SPEED_STEP = 0.05;
-const BASE_GRAVITY_PULL = 88;
-const GRAVITY_PULL_STEP = 8;
-const BASE_BOOST_ACCELERATION = 184;
-const BOOST_ACCELERATION_STEP = 12;
 const BASE_RADIAL_DAMPING = 0.92;
-const BASE_HAZARD_COUNT = 4;
 const MAX_HAZARD_COUNT = 7;
-const BASE_TARGET_ORBITS = 6;
 const SCORE_PER_SECOND = 18;
 const SCORE_PER_ORBIT = 140;
+const SECTOR_TUNING: SectorTuning[] = [
+  { baseAngularSpeed: 1.5, gravityPull: 96, boostAcceleration: 196, hazardCount: 4, targetOrbits: 6 },
+  { baseAngularSpeed: 1.55, gravityPull: 104, boostAcceleration: 208, hazardCount: 5, targetOrbits: 7 },
+  { baseAngularSpeed: 1.6, gravityPull: 112, boostAcceleration: 220, hazardCount: 6, targetOrbits: 8 },
+  { baseAngularSpeed: 1.65, gravityPull: 120, boostAcceleration: 232, hazardCount: 7, targetOrbits: 9 },
+  { baseAngularSpeed: 1.69, gravityPull: 128, boostAcceleration: 244, hazardCount: 7, targetOrbits: 10 },
+  { baseAngularSpeed: 1.73, gravityPull: 136, boostAcceleration: 256, hazardCount: 7, targetOrbits: 10 },
+  { baseAngularSpeed: 1.77, gravityPull: 144, boostAcceleration: 268, hazardCount: 7, targetOrbits: 11 },
+  { baseAngularSpeed: 1.81, gravityPull: 152, boostAcceleration: 280, hazardCount: 7, targetOrbits: 11 },
+  { baseAngularSpeed: 1.84, gravityPull: 160, boostAcceleration: 292, hazardCount: 7, targetOrbits: 12 },
+  { baseAngularSpeed: 1.87, gravityPull: 168, boostAcceleration: 304, hazardCount: 7, targetOrbits: 12 },
+  { baseAngularSpeed: 1.9, gravityPull: 176, boostAcceleration: 316, hazardCount: 7, targetOrbits: 13 },
+  { baseAngularSpeed: 1.93, gravityPull: 184, boostAcceleration: 328, hazardCount: 7, targetOrbits: 13 },
+];
 
 export const balanceGuardrails = {
   minimumBoostAdvantage: 20,
@@ -37,10 +51,32 @@ export const balanceGuardrails = {
   minimumSafeLaneWidth: 150,
   maximumHazardStepPerTier: 1,
   maximumTargetOrbitStepPerTier: 1,
+  maximumEstimatedClearSeconds: 43,
+  maximumEstimatedClearStepSeconds: 4,
 } as const;
+
+const getSectorTuning = (tier: number): SectorTuning => {
+  const preset = SECTOR_TUNING[tier - 1];
+
+  if (preset) {
+    return preset;
+  }
+
+  const lastPreset = SECTOR_TUNING[SECTOR_TUNING.length - 1];
+  const extraTiers = tier - SECTOR_TUNING.length;
+
+  return {
+    baseAngularSpeed: lastPreset.baseAngularSpeed + extraTiers * 0.03,
+    gravityPull: lastPreset.gravityPull + extraTiers * 8,
+    boostAcceleration: lastPreset.boostAcceleration + extraTiers * 12,
+    hazardCount: Math.min(lastPreset.hazardCount + Math.ceil(extraTiers / 3), MAX_HAZARD_COUNT),
+    targetOrbits: lastPreset.targetOrbits + Math.ceil(extraTiers / 2),
+  };
+};
 
 export const getTierBalance = (tier: number): TierBalance => {
   const normalizedTier = Math.max(1, Math.floor(tier));
+  const tuning = getSectorTuning(normalizedTier);
 
   return {
     tier: normalizedTier,
@@ -48,12 +84,12 @@ export const getTierBalance = (tier: number): TierBalance => {
     maxRadius: BASE_MAX_RADIUS,
     coreRadius: BASE_CORE_RADIUS,
     shipRadius: BASE_SHIP_RADIUS,
-    baseAngularSpeed: BASE_ANGULAR_SPEED + normalizedTier * ANGULAR_SPEED_STEP,
-    gravityPull: BASE_GRAVITY_PULL + normalizedTier * GRAVITY_PULL_STEP,
-    boostAcceleration: BASE_BOOST_ACCELERATION + normalizedTier * BOOST_ACCELERATION_STEP,
+    baseAngularSpeed: tuning.baseAngularSpeed,
+    gravityPull: tuning.gravityPull,
+    boostAcceleration: tuning.boostAcceleration,
     radialDamping: BASE_RADIAL_DAMPING,
-    hazardCount: Math.min(BASE_HAZARD_COUNT + normalizedTier - 1, MAX_HAZARD_COUNT),
-    targetOrbits: BASE_TARGET_ORBITS + normalizedTier - 1,
+    hazardCount: tuning.hazardCount,
+    targetOrbits: tuning.targetOrbits,
     scorePerSecond: SCORE_PER_SECOND,
     scorePerOrbit: SCORE_PER_ORBIT,
   };
