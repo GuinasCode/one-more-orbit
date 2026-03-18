@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { createRunState, toRunSnapshot, updateRunState } from '../../src/game/core/runModel';
 
+const getPolarDistance = (radiusA: number, angleA: number, radiusB: number, angleB: number): number => {
+  const xA = Math.cos(angleA) * radiusA;
+  const yA = Math.sin(angleA) * radiusA;
+  const xB = Math.cos(angleB) * radiusB;
+  const yB = Math.sin(angleB) * radiusB;
+
+  return Math.hypot(xA - xB, yA - yB);
+};
+
 describe('runModel', () => {
   it('starts a running sector with score and goals wired', () => {
     const state = createRunState(2);
@@ -44,5 +53,21 @@ describe('runModel', () => {
 
     expect(next.phase).toBe('won');
     expect(next.completedOrbits).toBe(initial.balance.targetOrbits);
+  });
+
+  it('keeps the launch lane clear of immediate mine contact across the first 12 sectors', () => {
+    const minimumEdgeClearance = 28;
+
+    for (let tier = 1; tier <= 12; tier += 1) {
+      const state = createRunState(tier);
+
+      state.hazards.forEach((hazard) => {
+        const edgeClearance =
+          getPolarDistance(state.balance.startRadius, 0, hazard.radius, hazard.angle) -
+          (state.balance.shipRadius + hazard.size);
+
+        expect(edgeClearance).toBeGreaterThanOrEqual(minimumEdgeClearance);
+      });
+    }
   });
 });

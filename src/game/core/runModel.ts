@@ -1,6 +1,9 @@
 import { getTierBalance, type TierBalance } from './balance';
 
 const TAU = Math.PI * 2;
+const START_LANE_CLEARANCE = 28;
+const START_LANE_ARC_SHIFT = 0.52;
+const START_LANE_ADJUSTMENT_ATTEMPTS = 12;
 
 export type RunPhase = 'idle' | 'running' | 'won' | 'failed';
 
@@ -51,18 +54,34 @@ export interface RunState {
 
 const createHazards = (balance: TierBalance): HazardState[] => {
   const laneRadii = [116, 148, 182, 214, 238];
+  const startX = Math.cos(0) * balance.startRadius;
+  const startY = Math.sin(0) * balance.startRadius;
 
   return Array.from({ length: balance.hazardCount }, (_, index) => {
     const lane = laneRadii[index % laneRadii.length];
-    const angle = ((index * 1.37) + 1.8 + balance.tier * 0.41) % TAU;
+    const radius = lane + ((index % 3) - 1) * 6;
+    const size = 12 + (index % 3) * 2;
+    let angle = ((index * 1.37) + 1.8 + balance.tier * 0.41) % TAU;
     const direction = index % 2 === 0 ? 1 : -1;
+
+    for (let attempt = 0; attempt < START_LANE_ADJUSTMENT_ATTEMPTS; attempt += 1) {
+      const hazardX = Math.cos(angle) * radius;
+      const hazardY = Math.sin(angle) * radius;
+      const laneGap = Math.hypot(startX - hazardX, startY - hazardY) - (balance.shipRadius + size);
+
+      if (laneGap >= START_LANE_CLEARANCE) {
+        break;
+      }
+
+      angle = (angle + START_LANE_ARC_SHIFT + index * 0.04) % TAU;
+    }
 
     return {
       id: index,
-      radius: lane + ((index % 3) - 1) * 6,
+      radius,
       angle,
       spin: direction * (0.48 + index * 0.07 + balance.tier * 0.03),
-      size: 12 + (index % 3) * 2,
+      size,
     };
   });
 };
