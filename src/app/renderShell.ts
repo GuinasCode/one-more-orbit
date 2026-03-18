@@ -152,6 +152,37 @@ export const getSelectedSectorLaneChip = (state: AppState): string => {
   return `Safe lane ${previewBalance.coreRadius}-${previewBalance.maxRadius}`;
 };
 
+export const getSelectedSectorPressureChip = (state: AppState): string => {
+  const previewBalance = getSelectedSectorPreview(state);
+
+  if (previewBalance.tier <= 1) {
+    return 'Focus: launch rhythm';
+  }
+
+  const previousBalance = getTierBalance(previewBalance.tier - 1);
+  const mineDelta = Math.max(0, previewBalance.hazardCount - previousBalance.hazardCount);
+  const lapDelta = Math.max(0, previewBalance.targetOrbits - previousBalance.targetOrbits);
+  const gravityDelta = Math.max(0, previewBalance.gravityPull - previousBalance.gravityPull);
+
+  if (mineDelta > 0 && lapDelta > 0) {
+    return `Focus: +${mineDelta} mine · +${lapDelta} lap`;
+  }
+
+  if (mineDelta > 0) {
+    return `Focus: +${mineDelta} mine pressure`;
+  }
+
+  if (lapDelta > 0) {
+    return `Focus: +${lapDelta} lap endurance`;
+  }
+
+  if (gravityDelta > 0) {
+    return 'Focus: tighter gravity';
+  }
+
+  return 'Focus: steady pressure';
+};
+
 export const getLaneWindowHelper = (state: AppState): string => {
   const balance = getLaneBalance(state);
   const currentRadius = Math.round(getLaneCurrentRadius(state));
@@ -473,6 +504,7 @@ export const renderShell = (state: AppState): string => {
           <span class="sector-selector-preview-chip" data-field="selected-sector-goal">${getSelectedSectorGoalChip(state)}</span>
           <span class="sector-selector-preview-chip" data-field="selected-sector-hazards">${getSelectedSectorHazardChip(state)}</span>
           <span class="sector-selector-preview-chip" data-field="selected-sector-lane">${getSelectedSectorLaneChip(state)}</span>
+          <span class="sector-selector-preview-chip" data-field="selected-sector-pressure">${getSelectedSectorPressureChip(state)}</span>
         </div>
       </section>
       <section class="score-chase" aria-label="Best score chase">
