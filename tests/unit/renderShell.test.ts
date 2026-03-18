@@ -22,6 +22,7 @@ describe('renderShell', () => {
     expect(html).toContain('No benchmark yet. Finish a run to set the first score target.');
     expect(html).toContain('Goal track');
     expect(html).toContain('6 clean laps unlock the next sector pressure spike.');
+    expect(html).toContain('Ready check: press Enter or click Launch Sector 1. Browse unlocked sectors before launch if you want a different target.');
     expect(html).toContain('Sector briefing');
     expect(html).toContain('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.');
     expect(html).toContain('Next pressure');
@@ -73,6 +74,7 @@ describe('renderShell', () => {
     expect(html).toContain('20.0s');
     expect(html).toContain('New best 420 · next goal 8 laps');
     expect(html).toContain('New best locked · +60 over your previous benchmark');
+    expect(html).toContain('Next move: press Enter or click Launch Sector 3 to test the new pressure spike.');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');
@@ -109,6 +111,7 @@ describe('renderShell', () => {
     expect(html).toContain('Retry Sector 1 · 4 laps still needed');
     expect(html).toContain('180 more points beats your best score of 360.');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
+    expect(html).toContain('Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.');
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
   });
@@ -141,6 +144,7 @@ describe('renderShell', () => {
 
     expect(html).toContain('Flight coach: Drift risk. Release boost now before you cross the red ring.');
     expect(html).toContain('Record pace: +40 over your best. Keep the lane clean and bank it.');
+    expect(html).toContain('Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.');
     expect(html).toContain('3 clean laps left to clear this sector.');
     expect(html).toContain('Sector 1 is live. Finish or fail this run before switching sectors.');
     expect(html).toContain('data-action="previous-sector" disabled');
