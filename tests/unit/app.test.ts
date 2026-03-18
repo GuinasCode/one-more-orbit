@@ -76,6 +76,9 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="next-pressure-helper"]')?.textContent).toBe(
       'Sector 2 is live: 7 clean laps and 5 rotating mines.',
     );
+    expect(root.querySelector('[data-field="score-chase-helper"]')?.textContent).toBe(
+      'Best score matched. One more point sets a new benchmark.',
+    );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
     expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(

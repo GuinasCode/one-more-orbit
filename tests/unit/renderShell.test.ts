@@ -14,6 +14,8 @@ describe('renderShell', () => {
     expect(html).toContain('Boost: Space / W / ↑ / Mouse / Touch');
     expect(html).toContain('6 clean orbits');
     expect(html).toContain('Arena danger legend');
+    expect(html).toContain('Best score chase');
+    expect(html).toContain('No benchmark yet. Finish a run to set the first score target.');
     expect(html).toContain('Goal track');
     expect(html).toContain('6 clean laps unlock the next sector pressure spike.');
     expect(html).toContain('Sector briefing');
@@ -32,6 +34,7 @@ describe('renderShell', () => {
   it('previews the next sector goal after a completed run', () => {
     const progression = {
       ...defaultProgressionState(),
+      bestScore: 420,
       highestUnlockedTier: 3,
       lastPlayedTier: 3,
     };
@@ -60,6 +63,7 @@ describe('renderShell', () => {
     expect(html).not.toContain('7/7 orbits');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
+    expect(html).toContain('Best score matched. One more point sets a new benchmark.');
     expect(html).toContain('20.0s');
     expect(html).toContain('Sector 3 ready');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
@@ -69,7 +73,10 @@ describe('renderShell', () => {
 
   it('renders failure recap details for a lost run', () => {
     const html = renderShell({
-      ...initialAppState(defaultProgressionState()),
+      ...initialAppState({
+        ...defaultProgressionState(),
+        bestScore: 360,
+      }),
       screen: 'failed',
       primaryActionLabel: 'Retry Sector 1',
       run: {
@@ -92,6 +99,7 @@ describe('renderShell', () => {
 
     expect(html).toContain('Run lost');
     expect(html).toContain('12.4s');
+    expect(html).toContain('180 more points beats your best score of 360.');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
@@ -99,7 +107,10 @@ describe('renderShell', () => {
 
   it('surfaces drift-risk flight coach messaging during a live run', () => {
     const html = renderShell({
-      ...initialAppState(defaultProgressionState()),
+      ...initialAppState({
+        ...defaultProgressionState(),
+        bestScore: 200,
+      }),
       screen: 'running',
       primaryActionLabel: 'Restart Run',
       run: {
@@ -120,6 +131,7 @@ describe('renderShell', () => {
     });
 
     expect(html).toContain('Flight coach: Drift risk. Release boost now before you cross the red ring.');
+    expect(html).toContain('Record pace: +40 over your best. Keep the lane clean and bank it.');
     expect(html).toContain('3 clean laps left to clear this sector.');
     expect(html).toContain('aria-valuenow="50"');
     expect(html).toContain('width: 50%');
