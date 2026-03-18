@@ -34,6 +34,9 @@ describe('renderShell', () => {
     expect(html).toContain('Red ring marks the drift-out fail line');
     expect(html).toContain('Pink mines punish greedy boost lines');
     expect(html).toContain('Flight coach: Launch, then hold boost only when gravity starts dragging you inward.');
+    expect(html).toContain('Arena signal');
+    expect(html).toContain('Stand by');
+    expect(html).toContain('Launch Sector 1 to establish a safe lane between the core and red ring.');
   });
 
   it('previews the next sector goal after a completed run', () => {
@@ -78,6 +81,8 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');
+    expect(html).toContain('Sector clear');
+    expect(html).toContain('Sector 3 is unlocked and ready. Relaunch when you want the next pressure spike.');
   });
 
   it('renders failure recap details for a lost run', () => {
@@ -114,6 +119,8 @@ describe('renderShell', () => {
     expect(html).toContain('Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.');
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
+    expect(html).toContain('Mine strike');
+    expect(html).toContain('A mine clipped the hull. Feather boost through hazard lanes instead of forcing the arc.');
   });
 
   it('surfaces drift-risk flight coach messaging during a live run', () => {
@@ -151,5 +158,7 @@ describe('renderShell', () => {
     expect(html).toContain('data-action="next-sector" disabled');
     expect(html).toContain('aria-valuenow="50"');
     expect(html).toContain('width: 50%');
+    expect(html).toContain('Drift risk');
+    expect(html).toContain('Release boost now before the orbit spills through the red ring.');
   });
 });

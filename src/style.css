@@ -379,6 +379,79 @@ h1 {
   gap: 12px;
 }
 
+.arena-signal {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(152, 168, 255, 0.18);
+  background: rgba(143, 166, 255, 0.06);
+}
+
+.arena-signal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.arena-signal-label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8da2d8;
+}
+
+.arena-signal-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(152, 168, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #eef4ff;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.arena-signal-helper {
+  margin: 0;
+  color: #d9e2ff;
+  font-size: 0.95rem;
+}
+
+.arena-signal[data-tone='warning'] {
+  border-color: rgba(255, 181, 103, 0.28);
+  background: rgba(255, 181, 103, 0.08);
+}
+
+.arena-signal[data-tone='warning'] .arena-signal-chip {
+  border-color: rgba(255, 181, 103, 0.3);
+  color: #ffe7c0;
+}
+
+.arena-signal[data-tone='success'] {
+  border-color: rgba(153, 255, 196, 0.26);
+  background: rgba(153, 255, 196, 0.08);
+}
+
+.arena-signal[data-tone='success'] .arena-signal-chip {
+  border-color: rgba(153, 255, 196, 0.3);
+  color: #dcffe9;
+}
+
+.arena-signal[data-tone='danger'] {
+  border-color: rgba(255, 107, 125, 0.28);
+  background: rgba(255, 107, 125, 0.08);
+}
+
+.arena-signal[data-tone='danger'] .arena-signal-chip {
+  border-color: rgba(255, 107, 125, 0.3);
+  color: #ffd5db;
+}
+
 .game-root {
   width: 100%;
   min-height: 100%;
