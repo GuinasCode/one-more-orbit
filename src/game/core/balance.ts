@@ -34,7 +34,7 @@ const SECTOR_TUNING: SectorTuning[] = [
   { baseAngularSpeed: 1.5, gravityPull: 96, boostAcceleration: 196, hazardCount: 4, targetOrbits: 6 },
   { baseAngularSpeed: 1.55, gravityPull: 104, boostAcceleration: 208, hazardCount: 5, targetOrbits: 7 },
   { baseAngularSpeed: 1.6, gravityPull: 112, boostAcceleration: 220, hazardCount: 6, targetOrbits: 8 },
-  { baseAngularSpeed: 1.65, gravityPull: 120, boostAcceleration: 232, hazardCount: 7, targetOrbits: 9 },
+  { baseAngularSpeed: 1.64, gravityPull: 118, boostAcceleration: 230, hazardCount: 6, targetOrbits: 9 },
   { baseAngularSpeed: 1.69, gravityPull: 128, boostAcceleration: 244, hazardCount: 7, targetOrbits: 10 },
   { baseAngularSpeed: 1.73, gravityPull: 136, boostAcceleration: 256, hazardCount: 7, targetOrbits: 10 },
   { baseAngularSpeed: 1.77, gravityPull: 144, boostAcceleration: 268, hazardCount: 7, targetOrbits: 11 },
