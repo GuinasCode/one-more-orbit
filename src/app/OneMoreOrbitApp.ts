@@ -26,6 +26,7 @@ import {
   getSelectedSectorGoalChip,
   getSelectedSectorHazardChip,
   getSelectedSectorLaneChip,
+  getSelectedSectorPressureChip,
   renderShell,
 } from './renderShell';
 import { getRunRecapAction, getRunRecapImpact, getRunRecapNote } from './runRecap';
@@ -247,6 +248,7 @@ export class OneMoreOrbitApp {
     const selectedSectorGoalValue = this.requireElement<HTMLElement>('[data-field="selected-sector-goal"]');
     const selectedSectorHazardsValue = this.requireElement<HTMLElement>('[data-field="selected-sector-hazards"]');
     const selectedSectorLaneValue = this.requireElement<HTMLElement>('[data-field="selected-sector-lane"]');
+    const selectedSectorPressureValue = this.requireElement<HTMLElement>('[data-field="selected-sector-pressure"]');
     const previousSectorButton = this.requireElement<HTMLButtonElement>('[data-action="previous-sector"]');
     const nextSectorButton = this.requireElement<HTMLButtonElement>('[data-action="next-sector"]');
     const scoreChaseValue = this.requireElement<HTMLElement>('[data-field="score-chase-helper"]');
@@ -300,6 +302,7 @@ export class OneMoreOrbitApp {
     selectedSectorGoalValue.textContent = getSelectedSectorGoalChip(this.state);
     selectedSectorHazardsValue.textContent = getSelectedSectorHazardChip(this.state);
     selectedSectorLaneValue.textContent = getSelectedSectorLaneChip(this.state);
+    selectedSectorPressureValue.textContent = getSelectedSectorPressureChip(this.state);
     previousSectorButton.disabled = this.state.screen === 'running' || this.progression.lastPlayedTier <= 1;
     nextSectorButton.disabled =
       this.state.screen === 'running' || this.progression.lastPlayedTier >= this.progression.highestUnlockedTier;

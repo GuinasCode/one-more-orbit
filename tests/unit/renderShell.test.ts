@@ -20,6 +20,7 @@ describe('renderShell', () => {
     expect(html).toContain('6 laps to clear');
     expect(html).toContain('4 rotating mines');
     expect(html).toContain('Safe lane 62-252');
+    expect(html).toContain('Focus: launch rhythm');
     expect(html).toContain('Arena danger legend');
     expect(html).toContain('Best score chase');
     expect(html).toContain('No benchmark yet. Finish a run to set the first score target.');
@@ -89,6 +90,7 @@ describe('renderShell', () => {
     expect(html).toContain('8 laps to clear');
     expect(html).toContain('6 rotating mines');
     expect(html).toContain('Safe lane 62-252');
+    expect(html).toContain('Focus: +1 mine · +1 lap');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
     expect(html).toContain('New personal best: 420 banked (+60 over 360).');
