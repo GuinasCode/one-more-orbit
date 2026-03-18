@@ -40,6 +40,7 @@ describe('renderShell', () => {
     };
     const html = renderShell({
       ...initialAppState(progression),
+      previousBestScore: 360,
       screen: 'won',
       primaryActionLabel: 'Launch Sector 3',
       run: {
@@ -63,10 +64,10 @@ describe('renderShell', () => {
     expect(html).not.toContain('7/7 orbits');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
-    expect(html).toContain('Best score matched. One more point sets a new benchmark.');
+    expect(html).toContain('New personal best: 420 banked (+60 over 360).');
     expect(html).toContain('20.0s');
-    expect(html).toContain('Unlocked Sector 3 · next goal 8 laps');
-    expect(html).toContain('Sector 3 ready');
+    expect(html).toContain('New best 420 · next goal 8 laps');
+    expect(html).toContain('New best locked · +60 over your previous benchmark');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');

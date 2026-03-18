@@ -10,6 +10,7 @@ export interface AppState {
   summary: string;
   primaryActionLabel: string;
   progression: ProgressionState;
+  previousBestScore: number;
   run: RunSnapshot | null;
 }
 
@@ -20,5 +21,6 @@ export const initialAppState = (progression: ProgressionState): AppState => ({
   summary: 'Hold Space, W, Up Arrow, or mouse/touch to boost outward. Complete clean laps to unlock the next sector.',
   primaryActionLabel: 'Launch Sector 1',
   progression,
+  previousBestScore: progression.bestScore,
   run: null,
 });

@@ -7,12 +7,14 @@ describe('getRunRecapNote', () => {
   it('keeps the next sector callout after a win', () => {
     const progression = {
       ...defaultProgressionState(),
+      bestScore: 420,
       highestUnlockedTier: 3,
       lastPlayedTier: 3,
     };
 
     const state = {
       ...initialAppState(progression),
+      previousBestScore: 420,
       screen: 'won' as const,
       run: {
         phase: 'won' as const,
@@ -35,9 +37,13 @@ describe('getRunRecapNote', () => {
     expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 8 laps');
   });
 
-  it('adds a contextual coaching tip after a mine collision', () => {
+  it('adds a personal-best callout and coaching tip after a mine collision', () => {
     const state = {
-      ...initialAppState(defaultProgressionState()),
+      ...initialAppState({
+        ...defaultProgressionState(),
+        bestScore: 180,
+      }),
+      previousBestScore: 120,
       screen: 'failed' as const,
       run: {
         phase: 'failed' as const,
@@ -58,14 +64,18 @@ describe('getRunRecapNote', () => {
     };
 
     expect(getRunRecapNote(state)).toBe(
-      'a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
+      'New best locked · +60 over your previous benchmark. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
     );
-    expect(getRunRecapImpact(state)).toBe('Retry Sector 1 · 4 laps still needed');
+    expect(getRunRecapImpact(state)).toBe('New best 180 · 4 laps still needed');
   });
 
   it('adds a safe-ring recovery tip after drifting too far out', () => {
     const note = getRunRecapNote({
-      ...initialAppState(defaultProgressionState()),
+      ...initialAppState({
+        ...defaultProgressionState(),
+        bestScore: 210,
+      }),
+      previousBestScore: 210,
       screen: 'failed',
       run: {
         phase: 'failed',

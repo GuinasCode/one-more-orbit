@@ -26,10 +26,11 @@ describe('getResultMessaging', () => {
         highestUnlockedTier: 2,
         lastPlayedTier: 1,
       },
+      420,
     );
 
     expect(messaging.headline).toBe('Sector 1 clear · Sector 2 online');
-    expect(messaging.status).toBe('Banked 560 points in 18.4s. Sector 2 is ready.');
+    expect(messaging.status).toBe('Banked 560 points in 18.4s. New best by 140. Sector 2 is ready.');
     expect(messaging.summary).toBe('Next sector pressure: 7 clean laps through 5 rotating mines.');
   });
 
@@ -51,11 +52,15 @@ describe('getResultMessaging', () => {
         summary: 'Fast restart ready.',
         endReason: 'a rotating mine clipped the hull',
       },
-      defaultProgressionState(),
+      {
+        ...defaultProgressionState(),
+        bestScore: 180,
+      },
+      120,
     );
 
     expect(messaging.headline).toBe('Mine strike');
-    expect(messaging.status).toBe('a rotating mine clipped the hull. 4 clean laps still needed in Sector 1.');
+    expect(messaging.status).toBe('a rotating mine clipped the hull. New best by 60. 4 clean laps still needed in Sector 1.');
     expect(messaging.summary).toBe('Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.');
   });
 });

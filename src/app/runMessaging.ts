@@ -45,14 +45,22 @@ const getFailureTip = (endReason?: string): string => {
 export const getResultMessaging = (
   snapshot: RunSnapshot,
   progression: ProgressionState,
+  previousBestScore: number,
 ): Pick<RunSnapshot, 'headline' | 'status' | 'summary'> => {
+  const isNewBest = snapshot.score > previousBestScore;
+  const bestCallout = isNewBest
+    ? previousBestScore > 0
+      ? ` New best by ${snapshot.score - previousBestScore}.`
+      : ' First benchmark locked.'
+    : '';
+
   if (snapshot.phase === 'won') {
     const nextTier = Math.min(progression.highestUnlockedTier, snapshot.tier + 1);
     const nextBalance = getTierBalance(nextTier);
 
     return {
       headline: `Sector ${snapshot.tier} clear · Sector ${nextTier} online`,
-      status: `Banked ${snapshot.score} points in ${snapshot.elapsedSeconds.toFixed(1)}s. Sector ${nextTier} is ready.`,
+      status: `Banked ${snapshot.score} points in ${snapshot.elapsedSeconds.toFixed(1)}s.${bestCallout} Sector ${nextTier} is ready.`,
       summary: `Next sector pressure: ${nextBalance.targetOrbits} clean laps through ${nextBalance.hazardCount} rotating mines.`,
     };
   }
@@ -62,7 +70,7 @@ export const getResultMessaging = (
 
     return {
       headline: getFailureLabel(snapshot.endReason),
-      status: `${snapshot.endReason ?? 'Orbit instability detected'}. ${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} still needed in Sector ${snapshot.tier}.`,
+      status: `${snapshot.endReason ?? 'Orbit instability detected'}.${bestCallout} ${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} still needed in Sector ${snapshot.tier}.`,
       summary: `Retry Sector ${snapshot.tier}. ${getFailureTip(snapshot.endReason)}`,
     };
   }
