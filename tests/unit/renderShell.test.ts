@@ -75,6 +75,6 @@ describe('renderShell', () => {
 
     expect(html).toContain('Run lost');
     expect(html).toContain('12.4s');
-    expect(html).toContain('a rotating mine clipped the hull');
+    expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
   });
 });

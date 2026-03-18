@@ -2,6 +2,7 @@ import type Phaser from 'phaser';
 import { initialAppState, type AppState, type AppScreenState } from './appState';
 import { createPhaserGame } from '../game/createPhaserGame';
 import { renderShell } from './renderShell';
+import { getRunRecapNote } from './runRecap';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
   applyRunResolution,
@@ -188,12 +189,7 @@ export class OneMoreOrbitApp {
     runRecap.toggleAttribute('hidden', !shouldShowRecap);
     runResultValue.textContent = this.state.screen === 'won' ? 'Sector cleared' : shouldShowRecap ? 'Run lost' : 'Stand by';
     runTimeValue.textContent = this.state.run ? `${this.state.run.elapsedSeconds.toFixed(1)}s` : '0.0s';
-    runNoteValue.textContent =
-      this.state.screen === 'won' && this.state.run
-        ? `Sector ${Math.min(this.progression.highestUnlockedTier, this.state.run.tier + 1)} ready`
-        : this.state.screen === 'failed' && this.state.run
-          ? (this.state.run.endReason ?? 'Orbit instability detected')
-          : 'Launch a run to log a recap';
+    runNoteValue.textContent = getRunRecapNote(this.state);
 
     if (this.state.screen !== 'running') {
       primaryButton.focus();
