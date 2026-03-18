@@ -17,6 +17,9 @@ describe('renderShell', () => {
     expect(html).toContain('Browsing unlocked sectors 1-1. Sector 1 asks for 6 clean laps through 4 rotating mines.');
     expect(html).toContain('data-action="previous-sector" disabled');
     expect(html).toContain('data-action="next-sector" disabled');
+    expect(html).toContain('6 laps to clear');
+    expect(html).toContain('4 rotating mines');
+    expect(html).toContain('Safe lane 62-252');
     expect(html).toContain('Arena danger legend');
     expect(html).toContain('Best score chase');
     expect(html).toContain('No benchmark yet. Finish a run to set the first score target.');
@@ -83,6 +86,9 @@ describe('renderShell', () => {
     expect(html).toContain('8 clean orbits');
     expect(html).not.toContain('7/7 orbits');
     expect(html).toContain('Browsing unlocked sectors 1-3. Sector 3 asks for 8 clean laps through 6 rotating mines.');
+    expect(html).toContain('8 laps to clear');
+    expect(html).toContain('6 rotating mines');
+    expect(html).toContain('Safe lane 62-252');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
     expect(html).toContain('New personal best: 420 banked (+60 over 360).');

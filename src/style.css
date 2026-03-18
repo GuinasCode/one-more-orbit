@@ -235,8 +235,15 @@ h1 {
   flex-wrap: wrap;
 }
 
+.sector-selector-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .sector-selector-button,
-.sector-selector-chip {
+.sector-selector-chip,
+.sector-selector-preview-chip {
   min-height: 40px;
   padding: 10px 14px;
   border-radius: 999px;
@@ -268,6 +275,18 @@ h1 {
   align-items: center;
   font-size: 0.95rem;
   font-weight: 700;
+}
+
+.sector-selector-preview-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #dff9ff;
+  border-color: rgba(139, 243, 255, 0.18);
+  background: rgba(139, 243, 255, 0.08);
 }
 
 .next-pressure-chips {
