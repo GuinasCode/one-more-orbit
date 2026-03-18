@@ -1,38 +1,31 @@
-# Stage 1 Spec
+# MVP Spec
 
 ## Product Goal
 
-Build a small, publishable arcade game that can ship to web quickly, then expand to desktop later if traction appears.
+Ship a compact, publishable arcade game that feels complete on the web: clear controls, readable feedback, fast restarts, and enough progression to invite another run.
 
-## Working Concept
+## Core Loop
 
-**One More Orbit** is a high-score survival game where the player skirts a gravity well, dodges hazards, and chases one-more-run tension through ultra-fast restarts.
+1. Launch the current sector.
+2. Auto-orbit around the gravity core.
+3. Hold boost to widen the orbit and release to fall inward.
+4. Dodge rotating mines while gravity pressure ramps up.
+5. Complete the target orbit count to clear the sector and unlock the next one.
+6. Fail instantly on core collapse, mine collision, or drifting outside the safe ring.
+7. Restart immediately.
 
-## Why This Stack
+## MVP Requirements
 
-- **Vite + TypeScript**: fast iteration, low ceremony, easy static hosting.
-- **Phaser 3**: proven 2D arcade framework with scene management and strong browser compatibility.
-- **Playwright**: confidence that the playable shell boots and start flow works.
-- **Vitest**: quick logic coverage for session state and rendering helpers.
+- deterministic, skill-based loop with one clear input verb
+- obvious fail/win conditions
+- readable HUD for score, sector, progress, and best score
+- persistence stub for best score and sector unlocks
+- visual juice strong enough to feel intentionally shipped, not placeholder
+- automated coverage for core simulation and playable boot flow
 
-## Stage 1 Scope
+## Design Notes
 
-- bootstrap repo and tooling
-- define coherent app/game architecture
-- create a polished landing/start screen
-- boot a minimal Phaser arena scene
-- validate the launch flow with tests
-
-## Non-Goals
-
-- final core mechanic
-- art pipeline
-- progression, scoring, sound, or monetization
-- desktop packaging
-
-## Architecture Notes
-
-- `OneMoreOrbitApp` owns shell state and mounts Phaser.
-- `renderShell` keeps the DOM shell simple and testable.
-- `launchRun` isolates session transitions for unit coverage.
-- Phaser scenes are kept under `src/game/scenes` so mechanics can grow cleanly in later stages.
+- **Input simplicity wins.** One primary verb keeps runs legible and mobile-friendly.
+- **Deterministic hazards** keep the game learnable while still tense.
+- **Short run targets** preserve one-more-try tension.
+- **Progression is a stub, not a grind.** Clearing a sector unlocks the next balance tier, giving the MVP a reason to continue without requiring a content pipeline.

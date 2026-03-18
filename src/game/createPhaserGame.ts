@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import { gameConfig } from './config';
+import { gameBridgeRegistryKey, type GameBridge } from './bridge';
 import { BootScene } from './scenes/BootScene';
 import { OrbitArenaScene } from './scenes/OrbitArenaScene';
 
-export const createPhaserGame = (parent: string | HTMLElement): Phaser.Game => {
-  return new Phaser.Game({
+export const createPhaserGame = (parent: string | HTMLElement, bridge: GameBridge): Phaser.Game => {
+  const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent,
     width: gameConfig.width,
@@ -15,8 +16,9 @@ export const createPhaserGame = (parent: string | HTMLElement): Phaser.Game => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    physics: {
-      default: 'arcade',
-    },
   });
+
+  game.registry.set(gameBridgeRegistryKey, bridge);
+
+  return game;
 };
