@@ -9,6 +9,10 @@ import {
   getArenaSignalTone,
   getFlightCoachCopy,
   getGoalHelper,
+  getLaneBalance,
+  getLaneCurrentRadius,
+  getLanePositionPercent,
+  getLaneWindowHelper,
   getNextPressureHelper,
   getNextPressureTier,
   getOutcomeGuideCoreFail,
@@ -252,6 +256,11 @@ export class OneMoreOrbitApp {
     const outcomeGuideCoreValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-core"]');
     const outcomeGuideRingValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-ring"]');
     const outcomeGuideMineValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-mine"]');
+    const laneWindowHelperValue = this.requireElement<HTMLElement>('[data-field="lane-window-helper"]');
+    const laneWindowRangeValue = this.requireElement<HTMLElement>('[data-field="lane-window-range"]');
+    const laneWindowCurrentValue = this.requireElement<HTMLElement>('[data-field="lane-window-current"]');
+    const laneWindowMeterValue = this.requireElement<HTMLElement>('.lane-window-meter');
+    const laneWindowFillValue = this.requireElement<HTMLElement>('[data-field="lane-window-fill"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const arenaSignal = this.requireElement<HTMLElement>('.arena-signal');
     const arenaSignalLabelValue = this.requireElement<HTMLElement>('[data-field="arena-signal-label"]');
@@ -297,6 +306,11 @@ export class OneMoreOrbitApp {
     outcomeGuideCoreValue.textContent = getOutcomeGuideCoreFail(this.state);
     outcomeGuideRingValue.textContent = getOutcomeGuideRingFail(this.state);
     outcomeGuideMineValue.textContent = getOutcomeGuideMineFail(this.state);
+    laneWindowHelperValue.textContent = getLaneWindowHelper(this.state);
+    laneWindowRangeValue.textContent = `${getLaneBalance(this.state).coreRadius}-${getLaneBalance(this.state).maxRadius} radius`;
+    laneWindowCurrentValue.textContent = `Current ${Math.round(getLaneCurrentRadius(this.state))}`;
+    laneWindowMeterValue.setAttribute('aria-valuenow', `${getLanePositionPercent(this.state)}`);
+    laneWindowFillValue.style.width = `${getLanePositionPercent(this.state)}%`;
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
     arenaSignal.dataset.tone = getArenaSignalTone(this.state);
     arenaSignalLabelValue.textContent = getArenaSignalLabel(this.state);

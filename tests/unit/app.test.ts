@@ -83,6 +83,10 @@ describe('OneMoreOrbitApp', () => {
       'Ready check: press Enter or click Launch Sector 3. Browse unlocked sectors before launch if you want a different target.',
     );
     expect(root.querySelector('.status-line')?.textContent).toBe('Awaiting launch command. Sector 3 is calibrated and ready.');
+    expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
+      'Safe radius window for Sector 3: launch at 168 and stay between the amber core and red drift ring.',
+    );
+    expect(root.querySelector('[data-field="lane-window-current"]')?.textContent).toBe('Current 168');
     expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Launch Sector 3');
     expect(nextButton.disabled).toBe(true);
 
@@ -131,6 +135,10 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
     expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
+    expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
+      'Sector clear at radius 178: 116 above the core fail line and 74 before drift-out.',
+    );
+    expect(root.querySelector('[data-field="lane-window-current"]')?.textContent).toBe('Current 178');
     expect(root.querySelector('[data-field="outcome-guide-title"]')?.textContent).toBe('Sector 1 win / fail rules');
     expect(root.querySelector('[data-field="outcome-guide-win"]')?.textContent).toBe(
       'Win: bank 6 clean laps to clear the sector.',
@@ -170,6 +178,10 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
       'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
     );
+    expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
+      'Run ended near radius 110: 48 above the core fail line and 142 before drift-out.',
+    );
+    expect(root.querySelector('[data-field="lane-window-current"]')?.textContent).toBe('Current 110');
     expect(root.querySelector('[data-field="outcome-guide-mine"]')?.textContent).toBe(
       'Fail: any of the 4 rotating mines can break the hull on contact.',
     );

@@ -32,6 +32,13 @@ describe('renderShell', () => {
     expect(html).toContain('Fail: the amber core ends the run inside radius 62.');
     expect(html).toContain('Fail: crossing the red ring at radius 252 counts as a drift-out.');
     expect(html).toContain('Fail: any of the 4 rotating mines can break the hull on contact.');
+    expect(html).toContain('Safe lane');
+    expect(html).toContain('Safe radius window for Sector 1: launch at 168 and stay between the amber core and red drift ring.');
+    expect(html).toContain('62-252 radius');
+    expect(html).toContain('Current 168');
+    expect(html).toContain('aria-valuenow="56"');
+    expect(html).toContain('Core edge');
+    expect(html).toContain('Drift ring');
     expect(html).toContain('Sector 2');
     expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('aria-valuenow="0"');
@@ -90,6 +97,9 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('Sector clear');
+    expect(html).toContain('Sector clear at radius 180: 118 above the core fail line and 72 before drift-out.');
+    expect(html).toContain('Current 180');
+    expect(html).toContain('aria-valuenow="62"');
     expect(html).toContain('Sector 3 is unlocked and ready. Relaunch when you want the next pressure spike.');
   });
 
@@ -130,6 +140,9 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
     expect(html).toContain('Mine strike');
+    expect(html).toContain('Run ended near radius 110: 48 above the core fail line and 142 before drift-out.');
+    expect(html).toContain('Current 110');
+    expect(html).toContain('aria-valuenow="25"');
     expect(html).toContain('A mine clipped the hull. Feather boost through hazard lanes instead of forcing the arc.');
   });
 
@@ -169,6 +182,9 @@ describe('renderShell', () => {
     expect(html).toContain('aria-valuenow="50"');
     expect(html).toContain('width: 50%');
     expect(html).toContain('Sector 1 win / fail rules');
+    expect(html).toContain('176 radius units above core fail · 14 left before drift-out.');
+    expect(html).toContain('Current 238');
+    expect(html).toContain('aria-valuenow="93"');
     expect(html).toContain('Drift risk');
     expect(html).toContain('Release boost now before the orbit spills through the red ring.');
   });

@@ -5,6 +5,21 @@ import { getRunRecapImpact, getRunRecapNote } from './runRecap';
 
 const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
 
+export const getLaneBalance = (state: AppState) => getTierBalance(state.run?.tier ?? state.progression.lastPlayedTier);
+
+export const getLaneCurrentRadius = (state: AppState): number => state.run?.radius ?? getLaneBalance(state).startRadius;
+
+export const getLanePositionPercent = (state: AppState): number => {
+  const balance = getLaneBalance(state);
+  const span = balance.maxRadius - balance.coreRadius;
+
+  if (span <= 0) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(100, Math.round(((getLaneCurrentRadius(state) - balance.coreRadius) / span) * 100)));
+};
+
 const formatGoal = (state: AppState): string => {
   if (state.screen === 'running' && state.run) {
     return `${state.run.completedOrbits}/${state.run.targetOrbits} orbits`;
@@ -118,6 +133,27 @@ export const getSectorSelectorHelper = (state: AppState): string => {
   }
 
   return `Browsing unlocked sectors 1-${state.progression.highestUnlockedTier}. Sector ${selectedTier} asks for ${balance.targetOrbits} clean laps through ${balance.hazardCount} rotating mines.`;
+};
+
+export const getLaneWindowHelper = (state: AppState): string => {
+  const balance = getLaneBalance(state);
+  const currentRadius = Math.round(getLaneCurrentRadius(state));
+  const distanceFromCore = Math.max(0, Math.round(currentRadius - balance.coreRadius));
+  const distanceToRing = Math.max(0, Math.round(balance.maxRadius - currentRadius));
+
+  if (!state.run) {
+    return `Safe radius window for Sector ${balance.tier}: launch at ${balance.startRadius} and stay between the amber core and red drift ring.`;
+  }
+
+  if (state.screen === 'won') {
+    return `Sector clear at radius ${currentRadius}: ${distanceFromCore} above the core fail line and ${distanceToRing} before drift-out.`;
+  }
+
+  if (state.screen === 'failed') {
+    return `Run ended near radius ${currentRadius}: ${distanceFromCore} above the core fail line and ${distanceToRing} before drift-out.`;
+  }
+
+  return `${distanceFromCore} radius units above core fail · ${distanceToRing} left before drift-out.`;
 };
 
 const getOutcomeGuideBalance = (state: AppState) => getTierBalance(state.run?.tier ?? state.progression.lastPlayedTier);
@@ -463,6 +499,30 @@ export const renderShell = (state: AppState): string => {
           <li data-field="outcome-guide-ring">${getOutcomeGuideRingFail(state)}</li>
           <li data-field="outcome-guide-mine">${getOutcomeGuideMineFail(state)}</li>
         </ul>
+      </section>
+      <section class="lane-window" aria-label="Safe lane readout">
+        <div class="lane-window-copy">
+          <p class="lane-window-label">Safe lane</p>
+          <p class="lane-window-helper" data-field="lane-window-helper">${getLaneWindowHelper(state)}</p>
+        </div>
+        <div class="lane-window-chips" aria-label="Safe lane values">
+          <span class="lane-window-chip" data-field="lane-window-range">${getLaneBalance(state).coreRadius}-${getLaneBalance(state).maxRadius} radius</span>
+          <span class="lane-window-chip" data-field="lane-window-current">Current ${Math.round(getLaneCurrentRadius(state))}</span>
+        </div>
+        <div
+          class="lane-window-meter"
+          role="progressbar"
+          aria-label="Safe lane position"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="${getLanePositionPercent(state)}"
+        >
+          <span class="lane-window-fill" data-field="lane-window-fill" style="width: ${getLanePositionPercent(state)}%"></span>
+        </div>
+        <div class="lane-window-scale" aria-hidden="true">
+          <span>Core edge</span>
+          <span>Drift ring</span>
+        </div>
       </section>
       <ul class="pill-list" aria-label="How to play">
         <li>Hold boost to widen your orbit</li>

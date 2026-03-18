@@ -157,7 +157,8 @@ h1 {
 .goal-track,
 .sector-briefing,
 .next-pressure,
-.outcome-guide {
+.outcome-guide,
+.lane-window {
   display: grid;
   gap: 12px;
   padding: 16px 18px;
@@ -198,7 +199,8 @@ h1 {
 .score-chase-copy,
 .goal-track-copy,
 .sector-briefing-copy,
-.next-pressure-copy {
+.next-pressure-copy,
+.lane-window-copy {
   display: grid;
   gap: 6px;
 }
@@ -207,7 +209,8 @@ h1 {
 .score-chase-label,
 .goal-track-label,
 .sector-briefing-label,
-.next-pressure-label {
+.next-pressure-label,
+.lane-window-label {
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -219,7 +222,8 @@ h1 {
 .score-chase-helper,
 .goal-track-helper,
 .sector-briefing-helper,
-.next-pressure-helper {
+.next-pressure-helper,
+.lane-window-helper {
   margin: 0;
   color: #eef4ff;
 }
@@ -284,7 +288,26 @@ h1 {
   font-weight: 600;
 }
 
-.goal-track-meter {
+.lane-window-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lane-window-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 207, 124, 0.18);
+  background: rgba(255, 207, 124, 0.08);
+  color: #fff0ce;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.goal-track-meter,
+.lane-window-meter {
   position: relative;
   overflow: hidden;
   height: 12px;
@@ -293,12 +316,29 @@ h1 {
   border: 1px solid rgba(152, 168, 255, 0.16);
 }
 
-.goal-track-fill {
+.goal-track-fill,
+.lane-window-fill {
   display: block;
   height: 100%;
   border-radius: inherit;
+}
+
+.goal-track-fill {
   background: linear-gradient(90deg, #8bf3ff, #6f89ff 70%, #b678ff);
   box-shadow: 0 0 18px rgba(111, 137, 255, 0.3);
+}
+
+.lane-window-fill {
+  background: linear-gradient(90deg, #ffcf7c, #8bf3ff 52%, #ff6b7d);
+  box-shadow: 0 0 18px rgba(255, 207, 124, 0.28);
+}
+
+.lane-window-scale {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #8da2d8;
+  font-size: 0.8rem;
 }
 
 .pill-list {

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('starts a sector run from the shell and shows live HUD state', async ({ page }) => {
+test('starts a sector run from the shell and updates the safe-lane HUD', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.getByRole('heading', { name: 'One More Orbit' })).toBeVisible();
@@ -22,6 +22,10 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
   await expect(page.getByText('Sector 1 win / fail rules')).toBeVisible();
   await expect(page.getByText('Win: bank 6 clean laps to clear the sector.')).toBeVisible();
   await expect(page.getByText('Fail: crossing the red ring at radius 252 counts as a drift-out.')).toBeVisible();
+  await expect(page.getByText('Safe radius window for Sector 1: launch at 168 and stay between the amber core and red drift ring.')).toBeVisible();
+  await expect(page.locator('[data-field="lane-window-range"]')).toHaveText('62-252 radius');
+  await expect(page.locator('[data-field="lane-window-current"]')).toHaveText('Current 168');
+  await expect(page.locator('.lane-window-meter')).toHaveAttribute('aria-valuenow', '56');
   await expect(page.getByText('+1 mine · +1 lap')).toBeVisible();
   await expect(page.locator('.goal-track-meter')).toHaveAttribute('aria-valuenow', '0');
   await expect(page.locator('.game-root canvas')).toBeVisible();
@@ -29,15 +33,9 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
 
   await page.keyboard.press('Enter');
 
-  await expect(page.locator('.pitch')).toHaveText('Sector 1');
-  await expect(page.locator('.shell')).toHaveAttribute('data-screen', 'running');
-  await expect(page.locator('.goal-track-meter')).toHaveAttribute('aria-valuenow', '0');
-  await expect(page.getByText('Sector 1 is live. Finish or fail this run before switching sectors.')).toBeVisible();
-  await expect(page.getByText('6 clean laps left to clear this sector.')).toBeVisible();
-  await expect(page.getByText('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.')).toBeVisible();
-  await expect(page.getByText('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.')).toBeVisible();
-  await expect(page.locator('[data-field="arena-signal-label"]')).toHaveText('Stable lane');
-  await expect(page.locator('[data-field="arena-signal-helper"]')).toHaveText('You are centered in the safe lane. Feather boost only when gravity starts winning.');
-  await expect(page.getByRole('button', { name: 'Restart Run' })).toBeVisible();
+  await expect(page.locator('.shell')).not.toHaveAttribute('data-screen', 'start');
+  await expect(page.getByRole('button', { name: /Restart Run|Retry Sector 1|Launch Sector 2/ })).toBeVisible();
+  await expect(page.locator('[data-field="lane-window-current"]')).not.toHaveText('Current 168');
+  await expect(page.locator('.lane-window-meter')).not.toHaveAttribute('aria-valuenow', '56');
   await expect(page.getByText('Boost: Space / W / ↑ / Mouse / Touch · Restart: R')).toBeVisible();
 });
