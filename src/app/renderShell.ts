@@ -162,6 +162,124 @@ const getFailureRecoveryPrompt = (endReason?: string): string => {
   return 'Reset fast and rebuild a calmer lane.';
 };
 
+export const getArenaSignalTone = (state: AppState): 'neutral' | 'warning' | 'success' | 'danger' => {
+  if (state.screen === 'won') {
+    return 'success';
+  }
+
+  if (state.screen === 'failed') {
+    return 'danger';
+  }
+
+  if (state.screen === 'running' && state.run) {
+    const balance = getTierBalance(state.run.tier);
+
+    if (state.run.completedOrbits >= state.run.targetOrbits - 1) {
+      return 'success';
+    }
+
+    if (state.run.radius <= balance.coreRadius + 34 || state.run.radius >= balance.maxRadius - 18) {
+      return 'warning';
+    }
+  }
+
+  return 'neutral';
+};
+
+export const getArenaSignalLabel = (state: AppState): string => {
+  if (!state.run) {
+    return 'Stand by';
+  }
+
+  if (state.screen === 'won') {
+    return 'Sector clear';
+  }
+
+  if (state.screen === 'failed') {
+    if (state.run.endReason?.includes('core')) {
+      return 'Core collapse';
+    }
+
+    if (state.run.endReason?.includes('safe ring')) {
+      return 'Drift-out';
+    }
+
+    if (state.run.endReason?.includes('mine')) {
+      return 'Mine strike';
+    }
+
+    return 'Run lost';
+  }
+
+  const balance = getTierBalance(state.run.tier);
+  const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (lapsRemaining <= 1) {
+    return 'Final lap';
+  }
+
+  if (state.run.radius <= balance.coreRadius + 34) {
+    return 'Core danger';
+  }
+
+  if (state.run.radius >= balance.maxRadius - 18) {
+    return 'Drift risk';
+  }
+
+  if (state.run.boostActive) {
+    return 'Orbit widening';
+  }
+
+  return 'Stable lane';
+};
+
+export const getArenaSignalHelper = (state: AppState): string => {
+  if (!state.run) {
+    return `Launch Sector ${state.progression.lastPlayedTier} to establish a safe lane between the core and red ring.`;
+  }
+
+  if (state.screen === 'won') {
+    return `Sector ${state.progression.lastPlayedTier} is unlocked and ready. Relaunch when you want the next pressure spike.`;
+  }
+
+  if (state.screen === 'failed') {
+    if (state.run.endReason?.includes('core')) {
+      return 'The core won that run. Boost a beat earlier to recover the lane.';
+    }
+
+    if (state.run.endReason?.includes('safe ring')) {
+      return 'The red ring caught you. Release boost sooner to stay inside the safe lane.';
+    }
+
+    if (state.run.endReason?.includes('mine')) {
+      return 'A mine clipped the hull. Feather boost through hazard lanes instead of forcing the arc.';
+    }
+
+    return 'Reset fast and rebuild a calmer lane before committing to the next full boost.';
+  }
+
+  const balance = getTierBalance(state.run.tier);
+  const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (lapsRemaining <= 1) {
+    return 'One clean orbit left. Protect the line and ignore any greedy late boost.';
+  }
+
+  if (state.run.radius <= balance.coreRadius + 34) {
+    return 'Hold boost now or gravity will fold the ship into the core.';
+  }
+
+  if (state.run.radius >= balance.maxRadius - 18) {
+    return 'Release boost now before the orbit spills through the red ring.';
+  }
+
+  if (state.run.boostActive) {
+    return 'The orbit is expanding. Be ready to release before you overshoot the safe lane.';
+  }
+
+  return 'You are centered in the safe lane. Feather boost only when gravity starts winning.';
+};
+
 export const getActionPrompt = (state: AppState): string => {
   const targetTier = state.progression.lastPlayedTier;
 
@@ -364,6 +482,13 @@ export const renderShell = (state: AppState): string => {
 
     <section class="game-panel" aria-label="game preview area">
       <div id="game-root" class="game-root"></div>
+      <section class="arena-signal" data-tone="${getArenaSignalTone(state)}" aria-label="Arena signal">
+        <div class="arena-signal-header">
+          <p class="arena-signal-label">Arena signal</p>
+          <span class="arena-signal-chip" data-field="arena-signal-label">${getArenaSignalLabel(state)}</span>
+        </div>
+        <p class="arena-signal-helper" data-field="arena-signal-helper">${getArenaSignalHelper(state)}</p>
+      </section>
       <div class="hud-tip">Boost: Space / W / ↑ / Mouse / Touch · Restart: R</div>
     </section>
   </div>

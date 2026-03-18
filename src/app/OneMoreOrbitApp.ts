@@ -4,6 +4,9 @@ import { createPhaserGame } from '../game/createPhaserGame';
 import {
   formatNextPressureDelta,
   getActionPrompt,
+  getArenaSignalHelper,
+  getArenaSignalLabel,
+  getArenaSignalTone,
   getFlightCoachCopy,
   getGoalHelper,
   getNextPressureHelper,
@@ -240,6 +243,9 @@ export class OneMoreOrbitApp {
     const nextPressureSectorValue = this.requireElement<HTMLElement>('[data-field="next-pressure-sector"]');
     const nextPressureDeltaValue = this.requireElement<HTMLElement>('[data-field="next-pressure-delta"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
+    const arenaSignal = this.requireElement<HTMLElement>('.arena-signal');
+    const arenaSignalLabelValue = this.requireElement<HTMLElement>('[data-field="arena-signal-label"]');
+    const arenaSignalHelperValue = this.requireElement<HTMLElement>('[data-field="arena-signal-helper"]');
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
     const runTimeValue = this.requireElement<HTMLElement>('[data-field="run-time"]');
@@ -277,6 +283,9 @@ export class OneMoreOrbitApp {
     nextPressureSectorValue.textContent = `Sector ${getNextPressureTier(this.state)}`;
     nextPressureDeltaValue.textContent = formatNextPressureDelta(this.state);
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
+    arenaSignal.dataset.tone = getArenaSignalTone(this.state);
+    arenaSignalLabelValue.textContent = getArenaSignalLabel(this.state);
+    arenaSignalHelperValue.textContent = getArenaSignalHelper(this.state);
 
     const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';
     runRecap.toggleAttribute('hidden', !shouldShowRecap);
