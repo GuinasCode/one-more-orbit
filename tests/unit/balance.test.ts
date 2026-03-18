@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { balanceGuardrails, getTierBalance } from '../../src/game/core/balance';
 
+const TAU = Math.PI * 2;
+
+const estimateClearSeconds = (tier: number): number => {
+  const balance = getTierBalance(tier);
+  return Number(((balance.targetOrbits * TAU) / balance.baseAngularSpeed).toFixed(2));
+};
+
 describe('balance fairness guardrails', () => {
   it('keeps every checked sector passable with a recoverable lane', () => {
     for (let tier = 1; tier <= 12; tier += 1) {
@@ -30,6 +37,22 @@ describe('balance fairness guardrails', () => {
       expect(current.gravityPull).toBeGreaterThanOrEqual(previous.gravityPull);
       expect(current.boostAcceleration).toBeGreaterThanOrEqual(previous.boostAcceleration);
       expect(current.baseAngularSpeed).toBeGreaterThanOrEqual(previous.baseAngularSpeed);
+    }
+  });
+
+  it('keeps sector clear-time demands short and smoothly stepped', () => {
+    for (let tier = 1; tier <= 12; tier += 1) {
+      const estimatedClearSeconds = estimateClearSeconds(tier);
+
+      expect(estimatedClearSeconds).toBeLessThanOrEqual(balanceGuardrails.maximumEstimatedClearSeconds);
+
+      if (tier > 1) {
+        const previousEstimatedClearSeconds = estimateClearSeconds(tier - 1);
+
+        expect(estimatedClearSeconds - previousEstimatedClearSeconds).toBeLessThanOrEqual(
+          balanceGuardrails.maximumEstimatedClearStepSeconds,
+        );
+      }
     }
   });
 });
