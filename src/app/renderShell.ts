@@ -24,7 +24,7 @@ const getGoalProgress = (state: AppState): number => {
   return Math.min(100, Math.round((state.run.completedOrbits / state.run.targetOrbits) * 100));
 };
 
-const getGoalHelper = (state: AppState): string => {
+export const getGoalHelper = (state: AppState): string => {
   if (state.screen === 'running' && state.run) {
     const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
     return lapsRemaining === 0
@@ -36,7 +36,7 @@ const getGoalHelper = (state: AppState): string => {
   return `${previewBalance.targetOrbits} clean laps unlock the next sector pressure spike.`;
 };
 
-const getSectorBriefing = (state: AppState): string => {
+export const getSectorBriefing = (state: AppState): string => {
   const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
   const balance = getTierBalance(activeTier);
   const unlockTier = Math.max(state.progression.highestUnlockedTier, activeTier + 1);
@@ -52,12 +52,12 @@ const getSectorBriefing = (state: AppState): string => {
   return `Clear ${balance.targetOrbits} clean laps while dodging ${balance.hazardCount} rotating mines to unlock Sector ${unlockTier}.`;
 };
 
-const getNextPressureTier = (state: AppState): number => {
+export const getNextPressureTier = (state: AppState): number => {
   const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
   return Math.max(state.progression.highestUnlockedTier, activeTier + 1);
 };
 
-const formatNextPressureDelta = (state: AppState): string => {
+export const formatNextPressureDelta = (state: AppState): string => {
   const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
   const currentBalance = getTierBalance(activeTier);
   const nextBalance = getTierBalance(getNextPressureTier(state));
@@ -67,7 +67,7 @@ const formatNextPressureDelta = (state: AppState): string => {
   return `+${mineDelta} mine${mineDelta === 1 ? '' : 's'} · +${orbitDelta} lap${orbitDelta === 1 ? '' : 's'}`;
 };
 
-const getNextPressureHelper = (state: AppState): string => {
+export const getNextPressureHelper = (state: AppState): string => {
   const nextTier = getNextPressureTier(state);
   const nextBalance = getTierBalance(nextTier);
 
