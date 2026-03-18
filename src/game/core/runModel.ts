@@ -2,8 +2,10 @@ import { getTierBalance, type TierBalance } from './balance';
 
 const TAU = Math.PI * 2;
 const START_LANE_CLEARANCE = 28;
+const START_LANE_GRACE_CLEARANCE = 12;
 const START_LANE_ARC_SHIFT = 0.52;
 const START_LANE_ADJUSTMENT_ATTEMPTS = 18;
+const START_LANE_GRACE_SAMPLE_SECONDS = [0.3, 0.6, 0.9, 1.2];
 
 export type RunPhase = 'idle' | 'running' | 'won' | 'failed';
 
@@ -75,14 +77,25 @@ const createHazards = (balance: TierBalance): HazardState[] => {
     const size = 12 + (index % 3) * 2;
     let angle = ((index * 1.37) + 1.8 + balance.tier * 0.41) % TAU;
     const direction = index % 2 === 0 ? 1 : -1;
+    const spin = direction * (0.48 + index * 0.07 + balance.tier * 0.03);
 
     for (let attempt = 0; attempt < START_LANE_ADJUSTMENT_ATTEMPTS; attempt += 1) {
       const hazardX = Math.cos(angle) * radius;
       const hazardY = Math.sin(angle) * radius;
       const startGap = Math.hypot(startX - hazardX, startY - hazardY) - (balance.shipRadius + size);
       const launchLaneGap = getLaunchLaneEdgeClearance(balance, radius, angle, size);
+      const graceWindowGap = START_LANE_GRACE_SAMPLE_SECONDS.reduce((smallestGap, sampleSeconds) => {
+        const projectedAngle = wrapAngle(angle + (spin * sampleSeconds) + (direction * 0.0075 * sampleSeconds * sampleSeconds));
+        const projectedGap = getLaunchLaneEdgeClearance(balance, radius, projectedAngle, size);
 
-      if (startGap >= START_LANE_CLEARANCE && launchLaneGap >= START_LANE_CLEARANCE) {
+        return Math.min(smallestGap, projectedGap);
+      }, Number.POSITIVE_INFINITY);
+
+      if (
+        startGap >= START_LANE_CLEARANCE &&
+        launchLaneGap >= START_LANE_CLEARANCE &&
+        graceWindowGap >= START_LANE_GRACE_CLEARANCE
+      ) {
         break;
       }
 
@@ -93,7 +106,7 @@ const createHazards = (balance: TierBalance): HazardState[] => {
       id: index,
       radius,
       angle,
-      spin: direction * (0.48 + index * 0.07 + balance.tier * 0.03),
+      spin,
       size,
     };
   });
