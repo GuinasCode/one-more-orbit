@@ -1,7 +1,15 @@
 import type Phaser from 'phaser';
 import { initialAppState, type AppState, type AppScreenState } from './appState';
 import { createPhaserGame } from '../game/createPhaserGame';
-import { getFlightCoachCopy, renderShell } from './renderShell';
+import {
+  formatNextPressureDelta,
+  getFlightCoachCopy,
+  getGoalHelper,
+  getNextPressureHelper,
+  getNextPressureTier,
+  getSectorBriefing,
+  renderShell,
+} from './renderShell';
 import { getRunRecapNote } from './runRecap';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
@@ -171,6 +179,9 @@ export class OneMoreOrbitApp {
     const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
     const goalProgressFillValue = this.requireElement<HTMLElement>('[data-field="goal-progress-fill"]');
     const sectorBriefingValue = this.requireElement<HTMLElement>('[data-field="sector-briefing-helper"]');
+    const nextPressureHelperValue = this.requireElement<HTMLElement>('[data-field="next-pressure-helper"]');
+    const nextPressureSectorValue = this.requireElement<HTMLElement>('[data-field="next-pressure-sector"]');
+    const nextPressureDeltaValue = this.requireElement<HTMLElement>('[data-field="next-pressure-delta"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
@@ -193,20 +204,13 @@ export class OneMoreOrbitApp {
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
         : `${targetOrbits} clean orbits`;
-    goalHelperValue.textContent =
-      this.state.screen === 'running' && this.state.run
-        ? `${Math.max(0, targetOrbits - completedOrbits)} clean lap${targetOrbits - completedOrbits === 1 ? '' : 's'} left to clear this sector.`
-        : `${targetOrbits} clean laps unlock the next sector pressure spike.`;
+    goalHelperValue.textContent = getGoalHelper(this.state);
     goalProgressValue.setAttribute('aria-valuenow', `${goalProgress}`);
     goalProgressFillValue.style.width = `${goalProgress}%`;
-    const activeTier = this.state.run?.tier ?? this.progression.lastPlayedTier;
-    const activeBalance = getTierBalance(activeTier);
-    const unlockTier = Math.max(this.progression.highestUnlockedTier, activeTier + 1);
-    sectorBriefingValue.textContent = this.state.screen === 'won'
-      ? `Sector ${unlockTier} is now unlocked with ${getTierBalance(unlockTier).hazardCount} rotating mines waiting.`
-      : this.state.screen === 'failed'
-        ? `Sector ${activeTier} still needs ${activeBalance.targetOrbits} clean laps. Clear it to unlock Sector ${unlockTier}.`
-        : `Clear ${activeBalance.targetOrbits} clean laps while dodging ${activeBalance.hazardCount} rotating mines to unlock Sector ${unlockTier}.`;
+    sectorBriefingValue.textContent = getSectorBriefing(this.state);
+    nextPressureHelperValue.textContent = getNextPressureHelper(this.state);
+    nextPressureSectorValue.textContent = `Sector ${getNextPressureTier(this.state)}`;
+    nextPressureDeltaValue.textContent = formatNextPressureDelta(this.state);
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
 
     const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';
