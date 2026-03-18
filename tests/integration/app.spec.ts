@@ -8,6 +8,7 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
   await expect(page.getByText('Amber core pulls inward hard')).toBeVisible();
   await expect(page.getByText('Red ring marks the drift-out fail line')).toBeVisible();
   await expect(page.getByText('Pink mines punish greedy boost lines')).toBeVisible();
+  await expect(page.getByText('Flight coach: Launch, then hold boost only when gravity starts dragging you inward.')).toBeVisible();
   await expect(page.locator('.game-root canvas')).toBeVisible();
   await expect(page.getByRole('button', { name: 'Launch Sector 1' })).toBeFocused();
 

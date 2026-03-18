@@ -169,6 +169,28 @@ h1 {
   background: rgba(143, 166, 255, 0.05);
 }
 
+.flight-coach {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(139, 243, 255, 0.22);
+  background: linear-gradient(135deg, rgba(139, 243, 255, 0.1), rgba(111, 137, 255, 0.08));
+}
+
+.flight-coach-label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8bf3ff;
+}
+
+.flight-coach-copy {
+  margin: 0;
+  color: #eef4ff;
+}
+
 .danger-legend-item {
   display: flex;
   align-items: center;

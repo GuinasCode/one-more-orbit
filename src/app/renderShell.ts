@@ -36,6 +36,53 @@ const formatRunTime = (state: AppState): string => {
 
 const formatRunNote = (state: AppState): string => getRunRecapNote(state);
 
+export const getFlightCoachCopy = (state: AppState): string => {
+  if (!state.run) {
+    return 'Flight coach: Launch, then hold boost only when gravity starts dragging you inward.';
+  }
+
+  if (state.screen === 'won') {
+    return `Flight coach: Sector clear. Queue Sector ${state.progression.lastPlayedTier} when you want the next pressure spike.`;
+  }
+
+  if (state.screen === 'failed') {
+    if (state.run.endReason?.includes('core')) {
+      return 'Flight coach: Core danger won that run. Boost a beat earlier and rebuild a safer lane.';
+    }
+
+    if (state.run.endReason?.includes('safe ring')) {
+      return 'Flight coach: Drift risk broke the run. Release boost sooner when the ship nears the red ring.';
+    }
+
+    if (state.run.endReason?.includes('mine')) {
+      return 'Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.';
+    }
+
+    return 'Flight coach: Reset fast and look for the calmest lane before taking the next wide arc.';
+  }
+
+  const balance = getTierBalance(state.run.tier);
+  const lapsRemaining = Math.max(0, state.run.targetOrbits - state.run.completedOrbits);
+
+  if (lapsRemaining <= 1) {
+    return 'Flight coach: Final lap. Stay patient and protect the clean line to the finish.';
+  }
+
+  if (state.run.radius <= balance.coreRadius + 34) {
+    return 'Flight coach: Core danger. Hold boost now to climb back into the safer rings.';
+  }
+
+  if (state.run.radius >= balance.maxRadius - 18) {
+    return 'Flight coach: Drift risk. Release boost now before you cross the red ring.';
+  }
+
+  if (state.run.boostActive) {
+    return 'Flight coach: Orbit widening. Prepare to release before the ship touches the outer warning lane.';
+  }
+
+  return 'Flight coach: Stable lane. Feather boost to stay mid-ring and keep clean orbit progress.';
+};
+
 export const renderShell = (state: AppState): string => `
   <div class="shell" data-screen="${state.screen}">
     <section class="marketing-panel">
@@ -78,6 +125,10 @@ export const renderShell = (state: AppState): string => `
           <span class="danger-dot danger-dot--mine" aria-hidden="true"></span>
           <span>Pink mines punish greedy boost lines</span>
         </div>
+      </section>
+      <section class="flight-coach" aria-label="Flight coach">
+        <p class="flight-coach-label">Flight coach</p>
+        <p class="flight-coach-copy" data-field="flight-coach">${getFlightCoachCopy(state)}</p>
       </section>
       <button class="launch-button" type="button" data-action="primary-run-action">
         ${state.primaryActionLabel}

@@ -17,6 +17,7 @@ describe('renderShell', () => {
     expect(html).toContain('Amber core pulls inward hard');
     expect(html).toContain('Red ring marks the drift-out fail line');
     expect(html).toContain('Pink mines punish greedy boost lines');
+    expect(html).toContain('Flight coach: Launch, then hold boost only when gravity starts dragging you inward.');
   });
 
   it('previews the next sector goal after a completed run', () => {
@@ -80,5 +81,31 @@ describe('renderShell', () => {
     expect(html).toContain('Run lost');
     expect(html).toContain('12.4s');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
+    expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
+  });
+
+  it('surfaces drift-risk flight coach messaging during a live run', () => {
+    const html = renderShell({
+      ...initialAppState(defaultProgressionState()),
+      screen: 'running',
+      primaryActionLabel: 'Restart Run',
+      run: {
+        phase: 'running',
+        tier: 1,
+        score: 240,
+        elapsedMs: 9800,
+        elapsedSeconds: 9.8,
+        completedOrbits: 3,
+        targetOrbits: 6,
+        radius: 238,
+        hazardCount: 4,
+        boostActive: true,
+        status: 'Boosting outward.',
+        headline: 'Sector 1',
+        summary: 'Stay alive.',
+      },
+    });
+
+    expect(html).toContain('Flight coach: Drift risk. Release boost now before you cross the red ring.');
   });
 });

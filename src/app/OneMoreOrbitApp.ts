@@ -1,7 +1,7 @@
 import type Phaser from 'phaser';
 import { initialAppState, type AppState, type AppScreenState } from './appState';
 import { createPhaserGame } from '../game/createPhaserGame';
-import { renderShell } from './renderShell';
+import { getFlightCoachCopy, renderShell } from './renderShell';
 import { getRunRecapNote } from './runRecap';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
@@ -167,6 +167,7 @@ export class OneMoreOrbitApp {
     const bestScoreValue = this.requireElement<HTMLElement>('[data-field="best-score"]');
     const currentScoreValue = this.requireElement<HTMLElement>('[data-field="current-score"]');
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
+    const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
     const runTimeValue = this.requireElement<HTMLElement>('[data-field="run-time"]');
@@ -184,6 +185,7 @@ export class OneMoreOrbitApp {
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
         : `${getTierBalance(this.progression.lastPlayedTier).targetOrbits} clean orbits`;
+    flightCoachValue.textContent = getFlightCoachCopy(this.state);
 
     const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';
     runRecap.toggleAttribute('hidden', !shouldShowRecap);
