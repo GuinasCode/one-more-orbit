@@ -1,6 +1,7 @@
 import { getTierBalance } from '../game/core/balance';
 import { gameConfig } from '../game/config';
 import type { AppState } from './appState';
+import { getRunRecapNote } from './runRecap';
 
 const formatGoal = (state: AppState): string => {
   if (state.screen === 'running' && state.run) {
@@ -33,17 +34,7 @@ const formatRunTime = (state: AppState): string => {
   return `${state.run.elapsedSeconds.toFixed(1)}s`;
 };
 
-const formatRunNote = (state: AppState): string => {
-  if (state.screen === 'won' && state.run) {
-    return `Sector ${Math.min(state.progression.highestUnlockedTier, state.run.tier + 1)} ready`;
-  }
-
-  if (state.screen === 'failed' && state.run) {
-    return state.run.endReason ?? 'Orbit instability detected';
-  }
-
-  return 'Launch a run to log a recap';
-};
+const formatRunNote = (state: AppState): string => getRunRecapNote(state);
 
 export const renderShell = (state: AppState): string => `
   <div class="shell" data-screen="${state.screen}">
