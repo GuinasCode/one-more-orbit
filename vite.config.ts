@@ -1,6 +1,9 @@
 import { defineConfig } from 'vitest/config';
 
+const githubPagesBase = process.env.GITHUB_ACTIONS ? '/one-more-orbit/' : '/';
+
 export default defineConfig({
+  base: githubPagesBase,
   build: {
     chunkSizeWarningLimit: 1500,
   },

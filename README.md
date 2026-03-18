@@ -1,8 +1,17 @@
 # One More Orbit
 
-Web-first arcade game prototype focused on a fast restart loop and streamer-friendly readability.
+Web-first arcade survival game built for fast restarts, readable action, and a publishable browser MVP.
 
-## MVP Stack
+## Current MVP Slice
+
+- auto-orbit survival around a collapsing gravity well
+- hold boost to widen your arc and dodge rotating mines
+- clear a sector by finishing the required orbit count
+- fail states for core collision, mine collision, and drifting beyond the safe ring
+- persistent best score + sector unlock stub stored in localStorage
+- polished HUD, instant restart flow, lightweight game juice, and release docs/workflows
+
+## Stack
 
 - TypeScript
 - Vite
@@ -10,6 +19,7 @@ Web-first arcade game prototype focused on a fast restart loop and streamer-frie
 - ESLint
 - Vitest
 - Playwright
+- GitHub Actions + GitHub Pages
 
 ## Scripts
 
@@ -20,19 +30,27 @@ Web-first arcade game prototype focused on a fast restart loop and streamer-frie
 - `npm run test:integration` — browser integration tests
 - `npm test` — run unit + integration suites
 
-## Stage 1 Delivered
+## How To Play
 
-- project scaffold for web-first release
-- Phaser runtime embedded in a clean app shell
-- start screen with launch CTA and live status text
-- minimal orbit arena scene with placeholder motion
-- lint + unit + integration test setup
-- docs/spec and roadmap for follow-up stages
+- Launch the current sector from the left panel.
+- Hold **Space**, **W**, **Up Arrow**, mouse, or touch to boost outward.
+- Release boost to let gravity pull you back in.
+- Thread between rotating mines and complete the target orbit count.
+- Press **R** or use the primary button for an instant restart.
 
-## Structure
+## Shipping Notes
 
-- `src/app` — shell UI and app orchestration
-- `src/game` — Phaser scenes, config, session logic
-- `tests/unit` — unit tests
-- `tests/integration` — Playwright integration flow
-- `docs` — spec and roadmap
+- CI workflow: `.github/workflows/ci.yml`
+- GitHub Pages deploy workflow: `.github/workflows/deploy-pages.yml`
+- Publish checklist: `docs/publish-checklist.md`
+- Store copy draft: `docs/store-copy.md`
+
+## Project Structure
+
+- `src/app` — DOM shell, persistence wiring, app-level orchestration
+- `src/game/core` — balance, progression, and deterministic run simulation
+- `src/game/scenes` — Phaser presentation layer and run controls
+- `public` — static web assets and manifest
+- `tests/unit` — logic and shell coverage
+- `tests/integration` — browser smoke tests
+- `docs` — product spec and delivery roadmap

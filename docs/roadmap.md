@@ -10,21 +10,22 @@
 
 ## Stage 2 — First Playable Loop
 
-- [ ] Add player input and gravity management
-- [ ] Introduce hazards and fail/restart loop
-- [ ] Track score, survival time, and best run
-- [ ] Add juice: screenshake, particles, sound placeholders
+- [x] Add player input and gravity management
+- [x] Introduce hazards and fail/restart loop
+- [x] Track score, survival time, and best run
+- [x] Add juice: screenshake, pulses, trail sparks, responsive HUD
 
-## Stage 3 — Retention Hooks
+## Stage 3 — MVP Finish
 
-- [ ] Daily challenge seed
-- [ ] Ghost replay or clip-friendly highlights
-- [ ] Shareable result card
-- [ ] Difficulty ramp tuning based on restart analytics
+- [x] Add win condition and sector unlock progression stub
+- [x] Tune balancing constants into explicit core config
+- [x] Improve test coverage around run resolution + persistence
+- [x] Add publish checklist and store-facing copy draft
 
 ## Stage 4 — Publishability
 
-- [ ] Web deployment pipeline
-- [ ] Desktop wrapper evaluation (Tauri first, Electron only if needed)
-- [ ] Basic telemetry/privacy review
-- [ ] Store assets and capsule art
+- [x] Add GitHub Actions CI verification
+- [x] Add GitHub Pages deployment workflow
+- [x] Add basic web manifest and icon
+- [ ] Produce final gameplay trailer/GIF and social art
+- [ ] Enable Pages on the repository and verify the live URL
