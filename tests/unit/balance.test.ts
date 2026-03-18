@@ -71,4 +71,17 @@ describe('balance fairness guardrails', () => {
     expect(sector4.targetOrbits).toBe(sector3.targetOrbits + 1);
     expect(sector5.targetOrbits).toBe(sector4.targetOrbits + 1);
   });
+
+  it('keeps sector 7 as an endurance bridge before the 7-mine pressure spike', () => {
+    const sector5 = getTierBalance(5);
+    const sector6 = getTierBalance(6);
+    const sector7 = getTierBalance(7);
+    const sector8 = getTierBalance(8);
+
+    expect(sector6.hazardCount).toBe(sector5.hazardCount);
+    expect(sector7.hazardCount).toBe(sector6.hazardCount);
+    expect(sector7.targetOrbits).toBe(sector6.targetOrbits + 1);
+    expect(sector8.hazardCount).toBe(sector7.hazardCount + 1);
+    expect(sector8.targetOrbits).toBe(sector7.targetOrbits);
+  });
 });
