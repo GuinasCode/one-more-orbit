@@ -142,6 +142,50 @@ h1 {
   grid-column: 1 / -1;
 }
 
+.goal-track {
+  display: grid;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  border: 1px solid rgba(152, 168, 255, 0.18);
+  background: rgba(143, 166, 255, 0.05);
+}
+
+.goal-track-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.goal-track-label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8da2d8;
+}
+
+.goal-track-helper {
+  margin: 0;
+  color: #eef4ff;
+}
+
+.goal-track-meter {
+  position: relative;
+  overflow: hidden;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(152, 168, 255, 0.16);
+}
+
+.goal-track-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8bf3ff, #6f89ff 70%, #b678ff);
+  box-shadow: 0 0 18px rgba(111, 137, 255, 0.3);
+}
+
 .pill-list {
   list-style: none;
   margin: 0;

@@ -167,6 +167,9 @@ export class OneMoreOrbitApp {
     const bestScoreValue = this.requireElement<HTMLElement>('[data-field="best-score"]');
     const currentScoreValue = this.requireElement<HTMLElement>('[data-field="current-score"]');
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
+    const goalHelperValue = this.requireElement<HTMLElement>('[data-field="goal-helper"]');
+    const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
+    const goalProgressFillValue = this.requireElement<HTMLElement>('[data-field="goal-progress-fill"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
@@ -181,10 +184,20 @@ export class OneMoreOrbitApp {
     sectorValue.textContent = `${this.progression.lastPlayedTier}`;
     bestScoreValue.textContent = `${this.progression.bestScore}`;
     currentScoreValue.textContent = `${this.state.run?.score ?? 0}`;
+    const targetOrbits = this.state.run?.targetOrbits ?? getTierBalance(this.progression.lastPlayedTier).targetOrbits;
+    const completedOrbits = this.state.run?.completedOrbits ?? 0;
+    const goalProgress = targetOrbits > 0 ? Math.min(100, Math.round((completedOrbits / targetOrbits) * 100)) : 0;
+
     goalValue.textContent =
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
-        : `${getTierBalance(this.progression.lastPlayedTier).targetOrbits} clean orbits`;
+        : `${targetOrbits} clean orbits`;
+    goalHelperValue.textContent =
+      this.state.screen === 'running' && this.state.run
+        ? `${Math.max(0, targetOrbits - completedOrbits)} clean lap${targetOrbits - completedOrbits === 1 ? '' : 's'} left to clear this sector.`
+        : `${targetOrbits} clean laps unlock the next sector pressure spike.`;
+    goalProgressValue.setAttribute('aria-valuenow', `${goalProgress}`);
+    goalProgressFillValue.style.width = `${goalProgress}%`;
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
 
     const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';

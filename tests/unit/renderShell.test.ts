@@ -14,6 +14,9 @@ describe('renderShell', () => {
     expect(html).toContain('Boost: Space / W / ↑ / Mouse / Touch');
     expect(html).toContain('6 clean orbits');
     expect(html).toContain('Arena danger legend');
+    expect(html).toContain('Goal track');
+    expect(html).toContain('6 clean laps unlock the next sector pressure spike.');
+    expect(html).toContain('aria-valuenow="0"');
     expect(html).toContain('Amber core pulls inward hard');
     expect(html).toContain('Red ring marks the drift-out fail line');
     expect(html).toContain('Pink mines punish greedy boost lines');
@@ -107,5 +110,8 @@ describe('renderShell', () => {
     });
 
     expect(html).toContain('Flight coach: Drift risk. Release boost now before you cross the red ring.');
+    expect(html).toContain('3 clean laps left to clear this sector.');
+    expect(html).toContain('aria-valuenow="50"');
+    expect(html).toContain('width: 50%');
   });
 });
