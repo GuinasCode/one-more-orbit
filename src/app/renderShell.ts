@@ -1,12 +1,14 @@
+import { getTierBalance } from '../game/core/balance';
 import { gameConfig } from '../game/config';
 import type { AppState } from './appState';
 
 const formatGoal = (state: AppState): string => {
-  if (!state.run) {
-    return '6 clean orbits';
+  if (state.screen === 'running' && state.run) {
+    return `${state.run.completedOrbits}/${state.run.targetOrbits} orbits`;
   }
 
-  return `${state.run.targetOrbits} clean orbits`;
+  const previewBalance = getTierBalance(state.progression.lastPlayedTier);
+  return `${previewBalance.targetOrbits} clean orbits`;
 };
 
 const formatScore = (state: AppState): string => `${state.run?.score ?? 0}`;
