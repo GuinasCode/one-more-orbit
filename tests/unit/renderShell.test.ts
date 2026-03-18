@@ -27,6 +27,11 @@ describe('renderShell', () => {
     expect(html).toContain('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.');
     expect(html).toContain('Next pressure');
     expect(html).toContain('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.');
+    expect(html).toContain('Sector 1 win / fail rules');
+    expect(html).toContain('Win: bank 6 clean laps to clear the sector.');
+    expect(html).toContain('Fail: the amber core ends the run inside radius 62.');
+    expect(html).toContain('Fail: crossing the red ring at radius 252 counts as a drift-out.');
+    expect(html).toContain('Fail: any of the 4 rotating mines can break the hull on contact.');
     expect(html).toContain('Sector 2');
     expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('aria-valuenow="0"');
@@ -79,6 +84,9 @@ describe('renderShell', () => {
     expect(html).toContain('New best locked · +60 over your previous benchmark');
     expect(html).toContain('Next move: press Enter or click Launch Sector 3 to test the new pressure spike.');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
+    expect(html).toContain('Sector 2 win / fail rules');
+    expect(html).toContain('Win: bank 7 clean laps to clear the sector.');
+    expect(html).toContain('Fail: any of the 5 rotating mines can break the hull on contact.');
     expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('Sector clear');
@@ -117,6 +125,8 @@ describe('renderShell', () => {
     expect(html).toContain('180 more points beats your best score of 360.');
     expect(html).toContain('a rotating mine clipped the hull. Tip: Feather the boost through hazard lanes instead of holding it all the way down.');
     expect(html).toContain('Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.');
+    expect(html).toContain('Sector 1 win / fail rules');
+    expect(html).toContain('Fail: any of the 4 rotating mines can break the hull on contact.');
     expect(html).toContain('Sector 1 still needs 6 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
     expect(html).toContain('Mine strike');
@@ -158,6 +168,7 @@ describe('renderShell', () => {
     expect(html).toContain('data-action="next-sector" disabled');
     expect(html).toContain('aria-valuenow="50"');
     expect(html).toContain('width: 50%');
+    expect(html).toContain('Sector 1 win / fail rules');
     expect(html).toContain('Drift risk');
     expect(html).toContain('Release boost now before the orbit spills through the red ring.');
   });

@@ -156,13 +156,42 @@ h1 {
 .score-chase,
 .goal-track,
 .sector-briefing,
-.next-pressure {
+.next-pressure,
+.outcome-guide {
   display: grid;
   gap: 12px;
   padding: 16px 18px;
   border-radius: 22px;
   border: 1px solid rgba(152, 168, 255, 0.18);
   background: rgba(143, 166, 255, 0.05);
+}
+
+.outcome-guide {
+  gap: 10px;
+}
+
+.outcome-guide-label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8da2d8;
+}
+
+.outcome-guide-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  color: #eef4ff;
+}
+
+.outcome-guide-list li::marker {
+  color: #8bf3ff;
+}
+
+.outcome-guide-list li {
+  line-height: 1.45;
 }
 
 .sector-selector-copy,

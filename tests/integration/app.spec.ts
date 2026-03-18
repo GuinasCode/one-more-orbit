@@ -19,6 +19,9 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
   await expect(page.getByText('6 clean laps unlock the next sector pressure spike.')).toBeVisible();
   await expect(page.getByText('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.')).toBeVisible();
   await expect(page.getByText('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.')).toBeVisible();
+  await expect(page.getByText('Sector 1 win / fail rules')).toBeVisible();
+  await expect(page.getByText('Win: bank 6 clean laps to clear the sector.')).toBeVisible();
+  await expect(page.getByText('Fail: crossing the red ring at radius 252 counts as a drift-out.')).toBeVisible();
   await expect(page.getByText('+1 mine · +1 lap')).toBeVisible();
   await expect(page.locator('.goal-track-meter')).toHaveAttribute('aria-valuenow', '0');
   await expect(page.locator('.game-root canvas')).toBeVisible();
