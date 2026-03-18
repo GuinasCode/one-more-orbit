@@ -12,6 +12,7 @@ import {
   renderShell,
 } from './renderShell';
 import { getRunRecapImpact, getRunRecapNote } from './runRecap';
+import { getResultMessaging } from './runMessaging';
 import { OrbitArenaScene } from '../game/scenes/OrbitArenaScene';
 import {
   applyRunResolution,
@@ -116,12 +117,13 @@ export class OneMoreOrbitApp {
     const nextTier = snapshot.phase === 'won'
       ? Math.min(this.progression.highestUnlockedTier, snapshot.tier + 1)
       : snapshot.tier;
+    const resultMessaging = getResultMessaging(snapshot, this.progression);
 
     this.state = {
       screen,
-      status: snapshot.status,
-      headline: snapshot.headline,
-      summary: snapshot.summary,
+      status: resultMessaging.status,
+      headline: resultMessaging.headline,
+      summary: resultMessaging.summary,
       primaryActionLabel: this.getPrimaryActionLabel(screen, nextTier),
       progression: {
         ...this.progression,

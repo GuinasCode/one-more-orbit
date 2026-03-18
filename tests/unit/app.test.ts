@@ -73,6 +73,11 @@ describe('OneMoreOrbitApp', () => {
       summary: 'Sector 2 is now in rotation.',
     });
 
+    expect(root.querySelector('.pitch')?.textContent).toBe('Sector 1 clear · Sector 2 online');
+    expect(root.querySelector('.status-line')?.textContent).toBe('Banked 560 points in 18.4s. Sector 2 is ready.');
+    expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
+      'Next sector pressure: 7 clean laps through 5 rotating mines.',
+    );
     expect(root.querySelector('[data-field="next-pressure-helper"]')?.textContent).toBe(
       'Sector 2 is live: 7 clean laps and 5 rotating mines.',
     );
@@ -84,5 +89,37 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(
       '7 clean laps unlock the next sector pressure spike.',
     );
+  });
+
+  it('shows a failure-specific recovery prompt after a lost run', () => {
+    const root = document.querySelector('#root') as HTMLDivElement;
+    const app = new OneMoreOrbitApp(root);
+
+    app.mount();
+    bridgeRef?.onRunUpdate({
+      phase: 'failed',
+      tier: 1,
+      score: 180,
+      elapsedMs: 12400,
+      elapsedSeconds: 12.4,
+      completedOrbits: 2,
+      targetOrbits: 6,
+      radius: 110,
+      hazardCount: 4,
+      boostActive: false,
+      status: 'Run collapsed.',
+      headline: 'Run Lost',
+      summary: 'Fast restart ready.',
+      endReason: 'a rotating mine clipped the hull',
+    });
+
+    expect(root.querySelector('.pitch')?.textContent).toBe('Mine strike');
+    expect(root.querySelector('.status-line')?.textContent).toBe(
+      'a rotating mine clipped the hull. 4 clean laps still needed in Sector 1.',
+    );
+    expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
+      'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
+    );
+    expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Retry Sector 1');
   });
 });
