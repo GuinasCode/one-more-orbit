@@ -13,6 +13,38 @@ const formatGoal = (state: AppState): string => {
 
 const formatScore = (state: AppState): string => `${state.run?.score ?? 0}`;
 
+const formatRunResult = (state: AppState): string => {
+  if (state.screen === 'won') {
+    return 'Sector cleared';
+  }
+
+  if (state.screen === 'failed') {
+    return 'Run lost';
+  }
+
+  return 'Stand by';
+};
+
+const formatRunTime = (state: AppState): string => {
+  if (!state.run) {
+    return '0.0s';
+  }
+
+  return `${state.run.elapsedSeconds.toFixed(1)}s`;
+};
+
+const formatRunNote = (state: AppState): string => {
+  if (state.screen === 'won' && state.run) {
+    return `Sector ${Math.min(state.progression.highestUnlockedTier, state.run.tier + 1)} ready`;
+  }
+
+  if (state.screen === 'failed' && state.run) {
+    return state.run.endReason ?? 'Orbit instability detected';
+  }
+
+  return 'Launch a run to log a recap';
+};
+
 export const renderShell = (state: AppState): string => `
   <div class="shell" data-screen="${state.screen}">
     <section class="marketing-panel">
@@ -47,6 +79,23 @@ export const renderShell = (state: AppState): string => `
       </button>
       <p class="status-line" aria-live="polite">${state.status}</p>
       <p class="summary-line" data-field="summary">${state.summary}</p>
+      <section class="run-recap" data-field="run-recap" ${state.screen === 'won' || state.screen === 'failed' ? '' : 'hidden'}>
+        <p class="run-recap-title">Last run recap</p>
+        <div class="run-recap-grid" aria-label="last run recap">
+          <article class="stat-card">
+            <span class="stat-label">Result</span>
+            <strong class="stat-value stat-value--compact" data-field="run-result">${formatRunResult(state)}</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Time</span>
+            <strong class="stat-value stat-value--compact" data-field="run-time">${formatRunTime(state)}</strong>
+          </article>
+          <article class="stat-card stat-card--wide">
+            <span class="stat-label">Note</span>
+            <strong class="stat-value stat-value--compact" data-field="run-note">${formatRunNote(state)}</strong>
+          </article>
+        </div>
+      </section>
     </section>
 
     <section class="game-panel" aria-label="game preview area">
