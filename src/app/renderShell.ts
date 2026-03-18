@@ -65,6 +65,20 @@ export const renderShell = (state: AppState): string => `
         <li>Dodge rotating mines</li>
         <li>Finish the target laps to win</li>
       </ul>
+      <section class="danger-legend" aria-label="Arena danger legend">
+        <div class="danger-legend-item">
+          <span class="danger-dot danger-dot--core" aria-hidden="true"></span>
+          <span>Amber core pulls inward hard</span>
+        </div>
+        <div class="danger-legend-item">
+          <span class="danger-dot danger-dot--ring" aria-hidden="true"></span>
+          <span>Red ring marks the drift-out fail line</span>
+        </div>
+        <div class="danger-legend-item">
+          <span class="danger-dot danger-dot--mine" aria-hidden="true"></span>
+          <span>Pink mines punish greedy boost lines</span>
+        </div>
+      </section>
       <button class="launch-button" type="button" data-action="primary-run-action">
         ${state.primaryActionLabel}
       </button>
