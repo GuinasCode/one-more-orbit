@@ -52,6 +52,42 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('.status-line')?.textContent).toBe('Sector 1 engaged. Hold boost and stabilize the orbit.');
   });
 
+  it('lets the player browse unlocked sectors before launch', () => {
+    window.localStorage.setItem(
+      'one-more-orbit-progress-v1',
+      JSON.stringify({
+        bestScore: 420,
+        highestUnlockedTier: 3,
+        lastPlayedTier: 2,
+      }),
+    );
+    const root = document.querySelector('#root') as HTMLDivElement;
+    const app = new OneMoreOrbitApp(root);
+
+    app.mount();
+
+    const previousButton = root.querySelector('[data-action="previous-sector"]') as HTMLButtonElement;
+    const nextButton = root.querySelector('[data-action="next-sector"]') as HTMLButtonElement;
+
+    expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
+    expect(previousButton.disabled).toBe(false);
+    expect(nextButton.disabled).toBe(false);
+
+    nextButton.click();
+
+    expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 3');
+    expect(root.querySelector('.status-line')?.textContent).toBe('Awaiting launch command. Sector 3 is calibrated and ready.');
+    expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Launch Sector 3');
+    expect(nextButton.disabled).toBe(true);
+
+    previousButton.click();
+
+    expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
+    expect(root.querySelector('[data-field="sector-selector-helper"]')?.textContent).toBe(
+      'Browsing unlocked sectors 1-3. Sector 2 asks for 7 clean laps through 5 rotating mines.',
+    );
+  });
+
   it('refreshes the next pressure panel after a sector clear', () => {
     const root = document.querySelector('#root') as HTMLDivElement;
     const app = new OneMoreOrbitApp(root);
@@ -89,6 +125,7 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(
       '7 clean laps unlock the next sector pressure spike.',
     );
+    expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
   });
 
   it('shows a failure-specific recovery prompt after a lost run', () => {

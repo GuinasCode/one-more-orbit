@@ -9,6 +9,7 @@ import {
   getNextPressureTier,
   getScoreChaseCopy,
   getSectorBriefing,
+  getSectorSelectorHelper,
   renderShell,
 } from './renderShell';
 import { getRunRecapImpact, getRunRecapNote } from './runRecap';
@@ -66,12 +67,51 @@ export class OneMoreOrbitApp {
 
   private bindControls(): void {
     const primaryButton = this.requireElement<HTMLButtonElement>('[data-action="primary-run-action"]');
+    const previousSectorButton = this.requireElement<HTMLButtonElement>('[data-action="previous-sector"]');
+    const nextSectorButton = this.requireElement<HTMLButtonElement>('[data-action="next-sector"]');
 
     primaryButton.addEventListener('click', () => {
       this.startRun(this.progression.lastPlayedTier);
     });
 
+    previousSectorButton.addEventListener('click', () => {
+      this.changeSelectedTier(-1);
+    });
+
+    nextSectorButton.addEventListener('click', () => {
+      this.changeSelectedTier(1);
+    });
+
     window.addEventListener('keydown', this.handlePrimaryActionKeydown);
+  }
+
+  private changeSelectedTier(delta: number): void {
+    if (this.state.screen === 'running') {
+      return;
+    }
+
+    const nextTier = Math.min(
+      this.progression.highestUnlockedTier,
+      Math.max(1, this.progression.lastPlayedTier + delta),
+    );
+
+    if (nextTier === this.progression.lastPlayedTier) {
+      return;
+    }
+
+    this.progression = {
+      ...this.progression,
+      lastPlayedTier: nextTier,
+    };
+    saveProgression(this.progression, this.getStorage());
+
+    this.state = {
+      ...this.state,
+      progression: this.progression,
+      status: `Awaiting launch command. Sector ${nextTier} is calibrated and ready.`,
+      primaryActionLabel: this.getPrimaryActionLabel(this.state.screen, nextTier),
+    };
+    this.syncUi();
   }
 
   private startRun(tier: number): void {
@@ -79,11 +119,14 @@ export class OneMoreOrbitApp {
       ...this.progression,
       lastPlayedTier: Math.min(this.progression.highestUnlockedTier, Math.max(1, Math.floor(tier))),
     };
+    saveProgression(this.progression, this.getStorage());
     this.state = {
       ...this.state,
       screen: 'running',
       run: null,
       previousBestScore: this.progression.bestScore,
+      progression: this.progression,
+      primaryActionLabel: 'Restart Run',
       status: `Sector ${this.progression.lastPlayedTier} engaged. Hold boost and stabilize the orbit.`,
       headline: 'Thread the mines and keep the orbit alive.',
       summary: 'Survive the pull, avoid the rotating hazards, and close the sector target before the hull breaks.',
@@ -136,6 +179,7 @@ export class OneMoreOrbitApp {
     };
 
     this.progression = this.state.progression;
+    saveProgression(this.progression, this.getStorage());
     this.syncUi();
   }
 
@@ -181,6 +225,10 @@ export class OneMoreOrbitApp {
     const bestScoreValue = this.requireElement<HTMLElement>('[data-field="best-score"]');
     const currentScoreValue = this.requireElement<HTMLElement>('[data-field="current-score"]');
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
+    const sectorSelectorHelperValue = this.requireElement<HTMLElement>('[data-field="sector-selector-helper"]');
+    const selectedSectorChipValue = this.requireElement<HTMLElement>('[data-field="selected-sector-chip"]');
+    const previousSectorButton = this.requireElement<HTMLButtonElement>('[data-action="previous-sector"]');
+    const nextSectorButton = this.requireElement<HTMLButtonElement>('[data-action="next-sector"]');
     const scoreChaseValue = this.requireElement<HTMLElement>('[data-field="score-chase-helper"]');
     const goalHelperValue = this.requireElement<HTMLElement>('[data-field="goal-helper"]');
     const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
@@ -212,6 +260,11 @@ export class OneMoreOrbitApp {
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
         : `${targetOrbits} clean orbits`;
+    sectorSelectorHelperValue.textContent = getSectorSelectorHelper(this.state);
+    selectedSectorChipValue.textContent = `Sector ${this.progression.lastPlayedTier}`;
+    previousSectorButton.disabled = this.state.screen === 'running' || this.progression.lastPlayedTier <= 1;
+    nextSectorButton.disabled =
+      this.state.screen === 'running' || this.progression.lastPlayedTier >= this.progression.highestUnlockedTier;
     scoreChaseValue.textContent = getScoreChaseCopy(this.state);
     goalHelperValue.textContent = getGoalHelper(this.state);
     goalProgressValue.setAttribute('aria-valuenow', `${goalProgress}`);
