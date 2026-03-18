@@ -142,6 +142,7 @@ h1 {
   grid-column: 1 / -1;
 }
 
+.score-chase,
 .goal-track,
 .sector-briefing,
 .next-pressure {
@@ -153,6 +154,7 @@ h1 {
   background: rgba(143, 166, 255, 0.05);
 }
 
+.score-chase-copy,
 .goal-track-copy,
 .sector-briefing-copy,
 .next-pressure-copy {
@@ -160,6 +162,7 @@ h1 {
   gap: 6px;
 }
 
+.score-chase-label,
 .goal-track-label,
 .sector-briefing-label,
 .next-pressure-label {
@@ -170,6 +173,7 @@ h1 {
   color: #8da2d8;
 }
 
+.score-chase-helper,
 .goal-track-helper,
 .sector-briefing-helper,
 .next-pressure-helper {

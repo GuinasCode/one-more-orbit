@@ -9,6 +9,7 @@ test('starts a sector run from the shell and shows live HUD state', async ({ pag
   await expect(page.getByText('Red ring marks the drift-out fail line')).toBeVisible();
   await expect(page.getByText('Pink mines punish greedy boost lines')).toBeVisible();
   await expect(page.getByText('Flight coach: Launch, then hold boost only when gravity starts dragging you inward.')).toBeVisible();
+  await expect(page.getByText('No benchmark yet. Finish a run to set the first score target.')).toBeVisible();
   await expect(page.getByText('6 clean laps unlock the next sector pressure spike.')).toBeVisible();
   await expect(page.getByText('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.')).toBeVisible();
   await expect(page.getByText('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.')).toBeVisible();

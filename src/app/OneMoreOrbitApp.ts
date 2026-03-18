@@ -7,6 +7,7 @@ import {
   getGoalHelper,
   getNextPressureHelper,
   getNextPressureTier,
+  getScoreChaseCopy,
   getSectorBriefing,
   renderShell,
 } from './renderShell';
@@ -175,6 +176,7 @@ export class OneMoreOrbitApp {
     const bestScoreValue = this.requireElement<HTMLElement>('[data-field="best-score"]');
     const currentScoreValue = this.requireElement<HTMLElement>('[data-field="current-score"]');
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
+    const scoreChaseValue = this.requireElement<HTMLElement>('[data-field="score-chase-helper"]');
     const goalHelperValue = this.requireElement<HTMLElement>('[data-field="goal-helper"]');
     const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
     const goalProgressFillValue = this.requireElement<HTMLElement>('[data-field="goal-progress-fill"]');
@@ -204,6 +206,7 @@ export class OneMoreOrbitApp {
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
         : `${targetOrbits} clean orbits`;
+    scoreChaseValue.textContent = getScoreChaseCopy(this.state);
     goalHelperValue.textContent = getGoalHelper(this.state);
     goalProgressValue.setAttribute('aria-valuenow', `${goalProgress}`);
     goalProgressFillValue.style.width = `${goalProgress}%`;

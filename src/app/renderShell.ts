@@ -16,6 +16,27 @@ const formatGoal = (state: AppState): string => {
 
 const formatScore = (state: AppState): string => `${state.run?.score ?? 0}`;
 
+export const getScoreChaseCopy = (state: AppState): string => {
+  const bestScore = state.progression.bestScore;
+  const currentScore = state.run?.score ?? 0;
+
+  if (bestScore <= 0) {
+    return currentScore > 0
+      ? `${Math.max(0, currentScore)} points banked. Finish the run to lock in your first benchmark.`
+      : 'No benchmark yet. Finish a run to set the first score target.';
+  }
+
+  if (currentScore > bestScore) {
+    return `Record pace: +${currentScore - bestScore} over your best. Keep the lane clean and bank it.`;
+  }
+
+  if (currentScore === bestScore && currentScore > 0) {
+    return 'Best score matched. One more point sets a new benchmark.';
+  }
+
+  return `${bestScore - currentScore} more point${bestScore - currentScore === 1 ? '' : 's'} beats your best score of ${bestScore}.`;
+};
+
 const getGoalProgress = (state: AppState): number => {
   if (!state.run || state.run.targetOrbits <= 0) {
     return 0;
@@ -171,6 +192,12 @@ export const renderShell = (state: AppState): string => `
           <strong class="stat-value" data-field="goal">${formatGoal(state)}</strong>
         </article>
       </div>
+      <section class="score-chase" aria-label="Best score chase">
+        <div class="score-chase-copy">
+          <p class="score-chase-label">Best score chase</p>
+          <p class="score-chase-helper" data-field="score-chase-helper">${getScoreChaseCopy(state)}</p>
+        </div>
+      </section>
       <section class="goal-track" aria-label="Sector goal progress">
         <div class="goal-track-copy">
           <p class="goal-track-label">Goal track</p>
