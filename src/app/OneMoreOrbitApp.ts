@@ -9,6 +9,7 @@ import {
   saveProgression,
   type ProgressionState,
 } from '../game/core/progression';
+import { getTierBalance } from '../game/core/balance';
 import type { RunSnapshot } from '../game/core/runModel';
 import type { GameBridge } from '../game/bridge';
 
@@ -159,9 +160,10 @@ export class OneMoreOrbitApp {
     sectorValue.textContent = `${this.progression.lastPlayedTier}`;
     bestScoreValue.textContent = `${this.progression.bestScore}`;
     currentScoreValue.textContent = `${this.state.run?.score ?? 0}`;
-    goalValue.textContent = this.state.run
-      ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
-      : '6 clean orbits';
+    goalValue.textContent =
+      this.state.screen === 'running' && this.state.run
+        ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
+        : `${getTierBalance(this.progression.lastPlayedTier).targetOrbits} clean orbits`;
   }
 
   private getStorage(): Storage | undefined {
