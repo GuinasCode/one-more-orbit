@@ -83,6 +83,7 @@ export class OneMoreOrbitApp {
       ...this.state,
       screen: 'running',
       run: null,
+      previousBestScore: this.progression.bestScore,
       status: `Sector ${this.progression.lastPlayedTier} engaged. Hold boost and stabilize the orbit.`,
       headline: 'Thread the mines and keep the orbit alive.',
       summary: 'Survive the pull, avoid the rotating hazards, and close the sector target before the hull breaks.',
@@ -98,6 +99,7 @@ export class OneMoreOrbitApp {
 
   private handleRunUpdate(snapshot: RunSnapshot): void {
     const screen = this.mapRunPhaseToScreen(snapshot.phase);
+    const previousBestScore = this.progression.bestScore;
     const resolvedProgression =
       snapshot.phase === 'won' || snapshot.phase === 'failed'
         ? applyRunResolution(this.progression, {
@@ -117,7 +119,7 @@ export class OneMoreOrbitApp {
     const nextTier = snapshot.phase === 'won'
       ? Math.min(this.progression.highestUnlockedTier, snapshot.tier + 1)
       : snapshot.tier;
-    const resultMessaging = getResultMessaging(snapshot, this.progression);
+    const resultMessaging = getResultMessaging(snapshot, this.progression, previousBestScore);
 
     this.state = {
       screen,
@@ -129,6 +131,7 @@ export class OneMoreOrbitApp {
         ...this.progression,
         lastPlayedTier: nextTier,
       },
+      previousBestScore,
       run: snapshot,
     };
 

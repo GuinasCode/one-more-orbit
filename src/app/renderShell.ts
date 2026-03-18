@@ -18,7 +18,17 @@ const formatScore = (state: AppState): string => `${state.run?.score ?? 0}`;
 
 export const getScoreChaseCopy = (state: AppState): string => {
   const bestScore = state.progression.bestScore;
+  const previousBestScore = state.previousBestScore;
   const currentScore = state.run?.score ?? 0;
+  const runResolved = state.screen === 'won' || state.screen === 'failed';
+
+  if (runResolved && currentScore > previousBestScore) {
+    if (previousBestScore <= 0) {
+      return `First benchmark locked: ${currentScore} points banked. Beat it next run.`;
+    }
+
+    return `New personal best: ${currentScore} banked (+${currentScore - previousBestScore} over ${previousBestScore}).`;
+  }
 
   if (bestScore <= 0) {
     return currentScore > 0
@@ -26,8 +36,8 @@ export const getScoreChaseCopy = (state: AppState): string => {
       : 'No benchmark yet. Finish a run to set the first score target.';
   }
 
-  if (currentScore > bestScore) {
-    return `Record pace: +${currentScore - bestScore} over your best. Keep the lane clean and bank it.`;
+  if (currentScore > previousBestScore) {
+    return `Record pace: +${currentScore - previousBestScore} over your best. Keep the lane clean and bank it.`;
   }
 
   if (currentScore === bestScore && currentScore > 0) {
