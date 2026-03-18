@@ -143,7 +143,8 @@ h1 {
 }
 
 .goal-track,
-.sector-briefing {
+.sector-briefing,
+.next-pressure {
   display: grid;
   gap: 12px;
   padding: 16px 18px;
@@ -153,13 +154,15 @@ h1 {
 }
 
 .goal-track-copy,
-.sector-briefing-copy {
+.sector-briefing-copy,
+.next-pressure-copy {
   display: grid;
   gap: 6px;
 }
 
 .goal-track-label,
-.sector-briefing-label {
+.sector-briefing-label,
+.next-pressure-label {
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -168,9 +171,28 @@ h1 {
 }
 
 .goal-track-helper,
-.sector-briefing-helper {
+.sector-briefing-helper,
+.next-pressure-helper {
   margin: 0;
   color: #eef4ff;
+}
+
+.next-pressure-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.next-pressure-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(139, 243, 255, 0.18);
+  background: rgba(139, 243, 255, 0.08);
+  color: #dff9ff;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .goal-track-meter {
