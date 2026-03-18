@@ -27,6 +27,35 @@ const getLaunchLaneEdgeClearance = (
 };
 
 describe('runModel', () => {
+  const keepsLaunchLanePassableDuringGraceWindow = (tier: number, sampleDeltaMs: number, minimumEdgeClearance: number): boolean => {
+    let state = createRunState(tier);
+    const laneMinRadius = state.balance.coreRadius + state.balance.shipRadius + 4;
+    const laneMaxRadius = state.balance.maxRadius - state.balance.shipRadius;
+
+    for (let elapsedMs = 0; elapsedMs <= 1200; elapsedMs += sampleDeltaMs) {
+      const laneRemainsPassable = state.hazards.every((hazard) => {
+        const edgeClearance = getLaunchLaneEdgeClearance(
+          laneMinRadius,
+          laneMaxRadius,
+          state.balance.shipRadius,
+          hazard.radius,
+          hazard.angle,
+          hazard.size,
+        );
+
+        return edgeClearance >= minimumEdgeClearance;
+      });
+
+      if (!laneRemainsPassable) {
+        return false;
+      }
+
+      state = updateRunState(state, { boost: false }, sampleDeltaMs);
+    }
+
+    return true;
+  };
+
   it('starts a running sector with score and goals wired', () => {
     const state = createRunState(2);
     const snapshot = toRunSnapshot(state);
@@ -120,6 +149,17 @@ describe('runModel', () => {
 
         expect(edgeClearance).toBeGreaterThanOrEqual(minimumEdgeClearance);
       });
+    }
+  });
+
+  it('keeps advanced-sector launch corridors passable through the collision grace window', () => {
+    const minimumEdgeClearance = 12;
+
+    for (let tier = 8; tier <= 16; tier += 1) {
+      expect(
+        keepsLaunchLanePassableDuringGraceWindow(tier, 100, minimumEdgeClearance),
+        `sector ${tier} should keep a recoverable launch lane while collision grace is active`,
+      ).toBe(true);
     }
   });
 });
