@@ -170,6 +170,7 @@ export class OneMoreOrbitApp {
     const goalHelperValue = this.requireElement<HTMLElement>('[data-field="goal-helper"]');
     const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
     const goalProgressFillValue = this.requireElement<HTMLElement>('[data-field="goal-progress-fill"]');
+    const sectorBriefingValue = this.requireElement<HTMLElement>('[data-field="sector-briefing-helper"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
     const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
@@ -198,6 +199,14 @@ export class OneMoreOrbitApp {
         : `${targetOrbits} clean laps unlock the next sector pressure spike.`;
     goalProgressValue.setAttribute('aria-valuenow', `${goalProgress}`);
     goalProgressFillValue.style.width = `${goalProgress}%`;
+    const activeTier = this.state.run?.tier ?? this.progression.lastPlayedTier;
+    const activeBalance = getTierBalance(activeTier);
+    const unlockTier = Math.max(this.progression.highestUnlockedTier, activeTier + 1);
+    sectorBriefingValue.textContent = this.state.screen === 'won'
+      ? `Sector ${unlockTier} is now unlocked with ${getTierBalance(unlockTier).hazardCount} rotating mines waiting.`
+      : this.state.screen === 'failed'
+        ? `Sector ${activeTier} still needs ${activeBalance.targetOrbits} clean laps. Clear it to unlock Sector ${unlockTier}.`
+        : `Clear ${activeBalance.targetOrbits} clean laps while dodging ${activeBalance.hazardCount} rotating mines to unlock Sector ${unlockTier}.`;
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
 
     const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';

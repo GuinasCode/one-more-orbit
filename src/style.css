@@ -142,7 +142,8 @@ h1 {
   grid-column: 1 / -1;
 }
 
-.goal-track {
+.goal-track,
+.sector-briefing {
   display: grid;
   gap: 12px;
   padding: 16px 18px;
@@ -151,12 +152,14 @@ h1 {
   background: rgba(143, 166, 255, 0.05);
 }
 
-.goal-track-copy {
+.goal-track-copy,
+.sector-briefing-copy {
   display: grid;
   gap: 6px;
 }
 
-.goal-track-label {
+.goal-track-label,
+.sector-briefing-label {
   margin: 0;
   font-size: 0.75rem;
   letter-spacing: 0.12em;
@@ -164,7 +167,8 @@ h1 {
   color: #8da2d8;
 }
 
-.goal-track-helper {
+.goal-track-helper,
+.sector-briefing-helper {
   margin: 0;
   color: #eef4ff;
 }
