@@ -18,6 +18,10 @@ describe('renderShell', () => {
     expect(html).toContain('6 clean laps unlock the next sector pressure spike.');
     expect(html).toContain('Sector briefing');
     expect(html).toContain('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.');
+    expect(html).toContain('Next pressure');
+    expect(html).toContain('Next unlock is Sector 2: 7 clean laps, 5 rotating mines.');
+    expect(html).toContain('Sector 2');
+    expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('aria-valuenow="0"');
     expect(html).toContain('Amber core pulls inward hard');
     expect(html).toContain('Red ring marks the drift-out fail line');
@@ -59,6 +63,8 @@ describe('renderShell', () => {
     expect(html).toContain('20.0s');
     expect(html).toContain('Sector 3 ready');
     expect(html).toContain('Sector 3 is now unlocked with 6 rotating mines waiting.');
+    expect(html).toContain('Sector 3 is live: 8 clean laps and 6 rotating mines.');
+    expect(html).toContain('+1 mine · +1 lap');
   });
 
   it('renders failure recap details for a lost run', () => {

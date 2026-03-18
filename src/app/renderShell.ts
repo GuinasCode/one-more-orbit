@@ -52,6 +52,32 @@ const getSectorBriefing = (state: AppState): string => {
   return `Clear ${balance.targetOrbits} clean laps while dodging ${balance.hazardCount} rotating mines to unlock Sector ${unlockTier}.`;
 };
 
+const getNextPressureTier = (state: AppState): number => {
+  const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
+  return Math.max(state.progression.highestUnlockedTier, activeTier + 1);
+};
+
+const formatNextPressureDelta = (state: AppState): string => {
+  const activeTier = state.run?.tier ?? state.progression.lastPlayedTier;
+  const currentBalance = getTierBalance(activeTier);
+  const nextBalance = getTierBalance(getNextPressureTier(state));
+  const mineDelta = Math.max(0, nextBalance.hazardCount - currentBalance.hazardCount);
+  const orbitDelta = Math.max(0, nextBalance.targetOrbits - currentBalance.targetOrbits);
+
+  return `+${mineDelta} mine${mineDelta === 1 ? '' : 's'} · +${orbitDelta} lap${orbitDelta === 1 ? '' : 's'}`;
+};
+
+const getNextPressureHelper = (state: AppState): string => {
+  const nextTier = getNextPressureTier(state);
+  const nextBalance = getTierBalance(nextTier);
+
+  if (state.screen === 'won') {
+    return `Sector ${nextTier} is live: ${nextBalance.targetOrbits} clean laps and ${nextBalance.hazardCount} rotating mines.`;
+  }
+
+  return `Next unlock is Sector ${nextTier}: ${nextBalance.targetOrbits} clean laps, ${nextBalance.hazardCount} rotating mines.`;
+};
+
 const formatRunResult = (state: AppState): string => {
   if (state.screen === 'won') {
     return 'Sector cleared';
@@ -165,6 +191,16 @@ export const renderShell = (state: AppState): string => `
         <div class="sector-briefing-copy">
           <p class="sector-briefing-label">Sector briefing</p>
           <p class="sector-briefing-helper" data-field="sector-briefing-helper">${getSectorBriefing(state)}</p>
+        </div>
+      </section>
+      <section class="next-pressure" aria-label="Next sector pressure">
+        <div class="next-pressure-copy">
+          <p class="next-pressure-label">Next pressure</p>
+          <p class="next-pressure-helper" data-field="next-pressure-helper">${getNextPressureHelper(state)}</p>
+        </div>
+        <div class="next-pressure-chips" aria-label="Next sector pressure delta">
+          <span class="next-pressure-chip" data-field="next-pressure-sector">Sector ${getNextPressureTier(state)}</span>
+          <span class="next-pressure-chip" data-field="next-pressure-delta">${formatNextPressureDelta(state)}</span>
         </div>
       </section>
       <ul class="pill-list" aria-label="How to play">
