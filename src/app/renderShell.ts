@@ -120,6 +120,33 @@ export const getSectorSelectorHelper = (state: AppState): string => {
   return `Browsing unlocked sectors 1-${state.progression.highestUnlockedTier}. Sector ${selectedTier} asks for ${balance.targetOrbits} clean laps through ${balance.hazardCount} rotating mines.`;
 };
 
+const getOutcomeGuideBalance = (state: AppState) => getTierBalance(state.run?.tier ?? state.progression.lastPlayedTier);
+
+export const getOutcomeGuideTitle = (state: AppState): string => {
+  const balance = getOutcomeGuideBalance(state);
+  return `Sector ${balance.tier} win / fail rules`;
+};
+
+export const getOutcomeGuideWin = (state: AppState): string => {
+  const balance = getOutcomeGuideBalance(state);
+  return `Win: bank ${balance.targetOrbits} clean laps to clear the sector.`;
+};
+
+export const getOutcomeGuideCoreFail = (state: AppState): string => {
+  const balance = getOutcomeGuideBalance(state);
+  return `Fail: the amber core ends the run inside radius ${balance.coreRadius}.`;
+};
+
+export const getOutcomeGuideRingFail = (state: AppState): string => {
+  const balance = getOutcomeGuideBalance(state);
+  return `Fail: crossing the red ring at radius ${balance.maxRadius} counts as a drift-out.`;
+};
+
+export const getOutcomeGuideMineFail = (state: AppState): string => {
+  const balance = getOutcomeGuideBalance(state);
+  return `Fail: any of the ${balance.hazardCount} rotating mines can break the hull on contact.`;
+};
+
 const formatRunResult = (state: AppState): string => {
   if (state.screen === 'won') {
     return 'Sector cleared';
@@ -427,6 +454,15 @@ export const renderShell = (state: AppState): string => {
           <span class="next-pressure-chip" data-field="next-pressure-sector">Sector ${getNextPressureTier(state)}</span>
           <span class="next-pressure-chip" data-field="next-pressure-delta">${formatNextPressureDelta(state)}</span>
         </div>
+      </section>
+      <section class="outcome-guide" aria-label="Sector outcome guide">
+        <p class="outcome-guide-label" data-field="outcome-guide-title">${getOutcomeGuideTitle(state)}</p>
+        <ul class="outcome-guide-list">
+          <li data-field="outcome-guide-win">${getOutcomeGuideWin(state)}</li>
+          <li data-field="outcome-guide-core">${getOutcomeGuideCoreFail(state)}</li>
+          <li data-field="outcome-guide-ring">${getOutcomeGuideRingFail(state)}</li>
+          <li data-field="outcome-guide-mine">${getOutcomeGuideMineFail(state)}</li>
+        </ul>
       </section>
       <ul class="pill-list" aria-label="How to play">
         <li>Hold boost to widen your orbit</li>

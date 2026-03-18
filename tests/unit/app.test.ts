@@ -131,6 +131,10 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
     expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
+    expect(root.querySelector('[data-field="outcome-guide-title"]')?.textContent).toBe('Sector 1 win / fail rules');
+    expect(root.querySelector('[data-field="outcome-guide-win"]')?.textContent).toBe(
+      'Win: bank 6 clean laps to clear the sector.',
+    );
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(
       '7 clean laps unlock the next sector pressure spike.',
     );
@@ -165,6 +169,9 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
       'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
+    );
+    expect(root.querySelector('[data-field="outcome-guide-mine"]')?.textContent).toBe(
+      'Fail: any of the 4 rotating mines can break the hull on contact.',
     );
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
       'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.',

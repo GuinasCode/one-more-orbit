@@ -11,6 +11,11 @@ import {
   getGoalHelper,
   getNextPressureHelper,
   getNextPressureTier,
+  getOutcomeGuideCoreFail,
+  getOutcomeGuideMineFail,
+  getOutcomeGuideRingFail,
+  getOutcomeGuideTitle,
+  getOutcomeGuideWin,
   getScoreChaseCopy,
   getSectorBriefing,
   getSectorSelectorHelper,
@@ -242,6 +247,11 @@ export class OneMoreOrbitApp {
     const nextPressureHelperValue = this.requireElement<HTMLElement>('[data-field="next-pressure-helper"]');
     const nextPressureSectorValue = this.requireElement<HTMLElement>('[data-field="next-pressure-sector"]');
     const nextPressureDeltaValue = this.requireElement<HTMLElement>('[data-field="next-pressure-delta"]');
+    const outcomeGuideTitleValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-title"]');
+    const outcomeGuideWinValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-win"]');
+    const outcomeGuideCoreValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-core"]');
+    const outcomeGuideRingValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-ring"]');
+    const outcomeGuideMineValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-mine"]');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const arenaSignal = this.requireElement<HTMLElement>('.arena-signal');
     const arenaSignalLabelValue = this.requireElement<HTMLElement>('[data-field="arena-signal-label"]');
@@ -282,6 +292,11 @@ export class OneMoreOrbitApp {
     nextPressureHelperValue.textContent = getNextPressureHelper(this.state);
     nextPressureSectorValue.textContent = `Sector ${getNextPressureTier(this.state)}`;
     nextPressureDeltaValue.textContent = formatNextPressureDelta(this.state);
+    outcomeGuideTitleValue.textContent = getOutcomeGuideTitle(this.state);
+    outcomeGuideWinValue.textContent = getOutcomeGuideWin(this.state);
+    outcomeGuideCoreValue.textContent = getOutcomeGuideCoreFail(this.state);
+    outcomeGuideRingValue.textContent = getOutcomeGuideRingFail(this.state);
+    outcomeGuideMineValue.textContent = getOutcomeGuideMineFail(this.state);
     flightCoachValue.textContent = getFlightCoachCopy(this.state);
     arenaSignal.dataset.tone = getArenaSignalTone(this.state);
     arenaSignalLabelValue.textContent = getArenaSignalLabel(this.state);
