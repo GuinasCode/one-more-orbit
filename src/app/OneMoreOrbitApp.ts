@@ -151,6 +151,10 @@ export class OneMoreOrbitApp {
     const bestScoreValue = this.requireElement<HTMLElement>('[data-field="best-score"]');
     const currentScoreValue = this.requireElement<HTMLElement>('[data-field="current-score"]');
     const goalValue = this.requireElement<HTMLElement>('[data-field="goal"]');
+    const runRecap = this.requireElement<HTMLElement>('[data-field="run-recap"]');
+    const runResultValue = this.requireElement<HTMLElement>('[data-field="run-result"]');
+    const runTimeValue = this.requireElement<HTMLElement>('[data-field="run-time"]');
+    const runNoteValue = this.requireElement<HTMLElement>('[data-field="run-note"]');
 
     shell.dataset.screen = this.state.screen;
     pitch.textContent = this.state.headline;
@@ -164,6 +168,17 @@ export class OneMoreOrbitApp {
       this.state.screen === 'running' && this.state.run
         ? `${this.state.run.completedOrbits}/${this.state.run.targetOrbits} orbits`
         : `${getTierBalance(this.progression.lastPlayedTier).targetOrbits} clean orbits`;
+
+    const shouldShowRecap = this.state.screen === 'won' || this.state.screen === 'failed';
+    runRecap.toggleAttribute('hidden', !shouldShowRecap);
+    runResultValue.textContent = this.state.screen === 'won' ? 'Sector cleared' : shouldShowRecap ? 'Run lost' : 'Stand by';
+    runTimeValue.textContent = this.state.run ? `${this.state.run.elapsedSeconds.toFixed(1)}s` : '0.0s';
+    runNoteValue.textContent =
+      this.state.screen === 'won' && this.state.run
+        ? `Sector ${Math.min(this.progression.highestUnlockedTier, this.state.run.tier + 1)} ready`
+        : this.state.screen === 'failed' && this.state.run
+          ? (this.state.run.endReason ?? 'Orbit instability detected')
+          : 'Launch a run to log a recap';
   }
 
   private getStorage(): Storage | undefined {

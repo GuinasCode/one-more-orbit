@@ -44,5 +44,37 @@ describe('renderShell', () => {
 
     expect(html).toContain('8 clean orbits');
     expect(html).not.toContain('7/7 orbits');
+    expect(html).toContain('Last run recap');
+    expect(html).toContain('Sector cleared');
+    expect(html).toContain('20.0s');
+    expect(html).toContain('Sector 3 ready');
+  });
+
+  it('renders failure recap details for a lost run', () => {
+    const html = renderShell({
+      ...initialAppState(defaultProgressionState()),
+      screen: 'failed',
+      primaryActionLabel: 'Retry Sector 1',
+      run: {
+        phase: 'failed',
+        tier: 1,
+        score: 180,
+        elapsedMs: 12400,
+        elapsedSeconds: 12.4,
+        completedOrbits: 2,
+        targetOrbits: 6,
+        radius: 110,
+        hazardCount: 4,
+        boostActive: false,
+        status: 'Run collapsed.',
+        headline: 'Run Lost',
+        summary: 'Fast restart ready.',
+        endReason: 'a rotating mine clipped the hull',
+      },
+    });
+
+    expect(html).toContain('Run lost');
+    expect(html).toContain('12.4s');
+    expect(html).toContain('a rotating mine clipped the hull');
   });
 });
