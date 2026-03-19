@@ -79,7 +79,7 @@ describe('OneMoreOrbitApp', () => {
     nextButton.click();
 
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 3');
-    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('8 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('6 laps to clear');
     expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('5 rotating mines');
     expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
     expect(root.querySelector('[data-field="selected-sector-pressure"]')?.textContent).toBe('Focus: +1 mine · +1 lap');
@@ -97,12 +97,12 @@ describe('OneMoreOrbitApp', () => {
     previousButton.click();
 
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
-    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('7 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('5 laps to clear');
     expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('4 rotating mines');
     expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
-    expect(root.querySelector('[data-field="selected-sector-pressure"]')?.textContent).toBe('Focus: +1 lap endurance');
+    expect(root.querySelector('[data-field="selected-sector-pressure"]')?.textContent).toBe('Focus: +1 mine · +1 lap');
     expect(root.querySelector('[data-field="sector-selector-helper"]')?.textContent).toBe(
-      'Browsing unlocked sectors 1-3. Sector 2 asks for 7 clean laps through 4 rotating mines.',
+      'Browsing unlocked sectors 1-3. Sector 2 asks for 5 clean laps through 4 rotating mines.',
     );
   });
 
@@ -117,10 +117,10 @@ describe('OneMoreOrbitApp', () => {
       score: 560,
       elapsedMs: 18400,
       elapsedSeconds: 18.4,
-      completedOrbits: 6,
-      targetOrbits: 6,
+      completedOrbits: 4,
+      targetOrbits: 4,
       radius: 178,
-      hazardCount: 4,
+      hazardCount: 3,
       nearestHazardGap: null,
       boostActive: false,
       status: 'Sector 1 cleared.',
@@ -131,10 +131,10 @@ describe('OneMoreOrbitApp', () => {
     expect(root.querySelector('.pitch')?.textContent).toBe('Sector 1 clear · Sector 2 online');
     expect(root.querySelector('.status-line')?.textContent).toBe('Banked 560 points in 18.4s. First benchmark locked. Sector 2 is ready.');
     expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
-      'Next sector pressure: 7 clean laps through 4 rotating mines.',
+      'Next sector pressure: 5 clean laps through 4 rotating mines.',
     );
     expect(root.querySelector('[data-field="next-pressure-helper"]')?.textContent).toBe(
-      'Sector 2 is live: 7 clean laps and 4 rotating mines.',
+      'Sector 2 is live: 5 clean laps and 4 rotating mines.',
     );
     expect(root.querySelector('[data-field="score-chase-helper"]')?.textContent).toBe(
       'First benchmark locked: 560 points banked. Beat it next run.',
@@ -143,26 +143,26 @@ describe('OneMoreOrbitApp', () => {
       'Next move: press Enter or click Launch Sector 2 to test the new pressure spike.',
     );
     expect(root.querySelector('[data-field="run-action"]')?.textContent).toBe(
-      'Launch Sector 2 next · 7 clean laps through 4 rotating mines.',
+      'Launch Sector 2 next · 5 clean laps through 4 rotating mines.',
     );
     expect(root.querySelector('[data-field="next-pressure-sector"]')?.textContent).toBe('Sector 2');
-    expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 lap');
+    expect(root.querySelector('[data-field="next-pressure-delta"]')?.textContent).toBe('+1 mine · +1 lap');
     expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
       'Sector clear at radius 178: 116 above the core fail line and 74 before drift-out.',
     );
     expect(root.querySelector('[data-field="lane-window-current"]')?.textContent).toBe('Current 178');
     expect(root.querySelector('[data-field="outcome-guide-title"]')?.textContent).toBe('Sector 1 win / fail rules');
     expect(root.querySelector('[data-field="outcome-guide-win"]')?.textContent).toBe(
-      'Win: bank 6 clean laps to clear the sector.',
+      'Win: bank 4 clean laps to clear the sector.',
     );
     expect(root.querySelector('[data-field="goal-helper"]')?.textContent).toBe(
-      '7 clean laps unlock the next sector pressure spike.',
+      '5 clean laps unlock the next sector pressure spike.',
     );
     expect(root.querySelector('[data-field="selected-sector-chip"]')?.textContent).toBe('Sector 2');
-    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('7 laps to clear');
+    expect(root.querySelector('[data-field="selected-sector-goal"]')?.textContent).toBe('5 laps to clear');
     expect(root.querySelector('[data-field="selected-sector-hazards"]')?.textContent).toBe('4 rotating mines');
     expect(root.querySelector('[data-field="selected-sector-lane"]')?.textContent).toBe('Safe lane 62-252');
-    expect(root.querySelector('[data-field="selected-sector-pressure"]')?.textContent).toBe('Focus: +1 lap endurance');
+    expect(root.querySelector('[data-field="selected-sector-pressure"]')?.textContent).toBe('Focus: +1 mine · +1 lap');
   });
 
   it('shows a failure-specific recovery prompt after a lost run', () => {
@@ -177,9 +177,9 @@ describe('OneMoreOrbitApp', () => {
       elapsedMs: 12400,
       elapsedSeconds: 12.4,
       completedOrbits: 2,
-      targetOrbits: 6,
+      targetOrbits: 4,
       radius: 110,
-      hazardCount: 4,
+      hazardCount: 3,
       nearestHazardGap: null,
       boostActive: false,
       status: 'Run collapsed.',
@@ -190,7 +190,7 @@ describe('OneMoreOrbitApp', () => {
 
     expect(root.querySelector('.pitch')?.textContent).toBe('Mine strike');
     expect(root.querySelector('.status-line')?.textContent).toBe(
-      'a rotating mine clipped the hull. First benchmark locked. 4 clean laps still needed in Sector 1.',
+      'a rotating mine clipped the hull. First benchmark locked. 2 clean laps still needed in Sector 1.',
     );
     expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
       'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
@@ -200,7 +200,7 @@ describe('OneMoreOrbitApp', () => {
     );
     expect(root.querySelector('[data-field="lane-window-current"]')?.textContent).toBe('Current 110');
     expect(root.querySelector('[data-field="outcome-guide-mine"]')?.textContent).toBe(
-      'Fail: any of the 4 rotating mines can break the hull on contact.',
+      'Fail: any of the 3 rotating mines can break the hull on contact.',
     );
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
       'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.',

@@ -352,16 +352,16 @@ export const getArenaSignalLabel = (state: AppState): string => {
     return 'Mine danger';
   }
 
-  if (lapsRemaining <= 1) {
-    return 'Final lap';
-  }
-
   if (state.run.radius <= balance.coreRadius + 34) {
     return 'Core danger';
   }
 
   if (state.run.radius >= balance.maxRadius - 18) {
     return 'Drift risk';
+  }
+
+  if (lapsRemaining <= 1) {
+    return 'Final lap';
   }
 
   if (state.run.boostActive) {
@@ -403,16 +403,16 @@ export const getArenaSignalHelper = (state: AppState): string => {
     return `Mine proximity alert: only ${formatMineDangerGap(state.run.nearestHazardGap)} radius units of hull clearance left. Feather boost and slip behind the nearest mine.`;
   }
 
-  if (lapsRemaining <= 1) {
-    return 'One clean orbit left. Protect the line and ignore any greedy late boost.';
-  }
-
   if (state.run.radius <= balance.coreRadius + 34) {
     return 'Hold boost now or gravity will fold the ship into the core.';
   }
 
   if (state.run.radius >= balance.maxRadius - 18) {
     return 'Release boost now before the orbit spills through the red ring.';
+  }
+
+  if (lapsRemaining <= 1) {
+    return 'One clean orbit left. Protect the line and ignore any greedy late boost.';
   }
 
   if (state.run.boostActive) {
@@ -472,16 +472,16 @@ export const getFlightCoachCopy = (state: AppState): string => {
     return `Flight coach: Mine danger. The nearest mine is only ${formatMineDangerGap(state.run.nearestHazardGap)} radius units off the hull — feather boost and let it rotate past.`;
   }
 
-  if (lapsRemaining <= 1) {
-    return 'Flight coach: Final lap. Stay patient and protect the clean line to the finish.';
-  }
-
   if (state.run.radius <= balance.coreRadius + 34) {
     return 'Flight coach: Core danger. Hold boost now to climb back into the safer rings.';
   }
 
   if (state.run.radius >= balance.maxRadius - 18) {
     return 'Flight coach: Drift risk. Release boost now before you cross the red ring.';
+  }
+
+  if (lapsRemaining <= 1) {
+    return 'Flight coach: Final lap. Stay patient and protect the clean line to the finish.';
   }
 
   if (state.run.boostActive) {

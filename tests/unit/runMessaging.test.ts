@@ -11,10 +11,10 @@ describe('getResultMessaging', () => {
         score: 560,
         elapsedMs: 18400,
         elapsedSeconds: 18.4,
-        completedOrbits: 6,
-        targetOrbits: 6,
+        completedOrbits: 4,
+        targetOrbits: 4,
         radius: 178,
-        hazardCount: 4,
+        hazardCount: 3,
         nearestHazardGap: null,
         boostActive: false,
         status: 'Sector 1 cleared.',
@@ -32,7 +32,7 @@ describe('getResultMessaging', () => {
 
     expect(messaging.headline).toBe('Sector 1 clear · Sector 2 online');
     expect(messaging.status).toBe('Banked 560 points in 18.4s. New best by 140. Sector 2 is ready.');
-    expect(messaging.summary).toBe('Next sector pressure: 7 clean laps through 4 rotating mines.');
+    expect(messaging.summary).toBe('Next sector pressure: 5 clean laps through 4 rotating mines.');
   });
 
   it('turns a failed run into a specific recovery prompt', () => {
@@ -44,9 +44,9 @@ describe('getResultMessaging', () => {
         elapsedMs: 12400,
         elapsedSeconds: 12.4,
         completedOrbits: 2,
-        targetOrbits: 6,
+        targetOrbits: 4,
         radius: 110,
-        hazardCount: 4,
+        hazardCount: 3,
         nearestHazardGap: null,
         boostActive: false,
         status: 'Run collapsed.',
@@ -62,7 +62,7 @@ describe('getResultMessaging', () => {
     );
 
     expect(messaging.headline).toBe('Mine strike');
-    expect(messaging.status).toBe('a rotating mine clipped the hull. New best by 60. 4 clean laps still needed in Sector 1.');
+    expect(messaging.status).toBe('a rotating mine clipped the hull. New best by 60. 2 clean laps still needed in Sector 1.');
     expect(messaging.summary).toBe('Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.');
   });
 });
