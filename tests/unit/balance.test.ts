@@ -66,19 +66,22 @@ describe('balance fairness guardrails', () => {
     }
   });
 
-  it('keeps sector 2 as a fair onboarding bridge before early mine pressure ramps', () => {
+  it('keeps sector 1 as a forgiving onboarding step before the full pressure ramp', () => {
     const sector1 = getTierBalance(1);
     const sector2 = getTierBalance(2);
     const sector3 = getTierBalance(3);
     const sector4 = getTierBalance(4);
     const sector5 = getTierBalance(5);
 
-    expect(sector2.hazardCount).toBe(sector1.hazardCount);
+    expect(sector1.hazardCount).toBe(3);
+    expect(sector1.targetOrbits).toBe(4);
+    expect(sector2.hazardCount).toBe(sector1.hazardCount + 1);
     expect(sector2.targetOrbits).toBe(sector1.targetOrbits + 1);
     expect(sector3.hazardCount).toBe(sector2.hazardCount + 1);
+    expect(sector3.targetOrbits).toBe(sector2.targetOrbits + 1);
     expect(sector4.hazardCount).toBe(sector3.hazardCount);
-    expect(sector5.hazardCount).toBe(sector4.hazardCount + 1);
     expect(sector4.targetOrbits).toBe(sector3.targetOrbits + 1);
+    expect(sector5.hazardCount).toBe(sector4.hazardCount + 1);
     expect(sector5.targetOrbits).toBe(sector4.targetOrbits + 1);
   });
 
@@ -92,6 +95,6 @@ describe('balance fairness guardrails', () => {
     expect(sector7.hazardCount).toBe(sector6.hazardCount);
     expect(sector7.targetOrbits).toBe(sector6.targetOrbits + 1);
     expect(sector8.hazardCount).toBe(sector7.hazardCount + 1);
-    expect(sector8.targetOrbits).toBe(sector7.targetOrbits);
+    expect(sector8.targetOrbits).toBe(sector7.targetOrbits + 1);
   });
 });

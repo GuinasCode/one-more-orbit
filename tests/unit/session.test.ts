@@ -65,6 +65,66 @@ describe('runModel', () => {
     return true;
   };
 
+  const hasWinningInputRoute = (tier: number): boolean => {
+    const decisionDeltaMs = 32;
+    const maxSearchSteps = 500;
+    const beamWidth = 150;
+    const angleBucketSize = (Math.PI * 2) / 40;
+    let beam = [createRunState(tier)];
+
+    for (let step = 0; step < maxSearchSteps; step += 1) {
+      const nextStates = new Map<string, { score: number; state: ReturnType<typeof createRunState> }>();
+
+      beam.forEach((state) => {
+        [false, true].forEach((boost) => {
+          const nextState = updateRunState(state, { boost }, decisionDeltaMs);
+
+          if (nextState.phase === 'won') {
+            nextStates.set('won', { score: Number.POSITIVE_INFINITY, state: nextState });
+            return;
+          }
+
+          if (nextState.phase !== 'running') {
+            return;
+          }
+
+          const searchKey = [
+            nextState.completedOrbits,
+            Math.round(nextState.radius / 4),
+            Math.round((nextState.radialVelocity + 180) / 8),
+            Math.round(nextState.displayedAngle / angleBucketSize),
+            Math.round((getNearestHazardGap(nextState) ?? 999) / 8),
+          ].join('|');
+          const searchScore =
+            (nextState.completedOrbits * 1_000_000) +
+            (nextState.angle * 1_000) +
+            (Math.min(getNearestHazardGap(nextState) ?? 200, 100) * 10) -
+            Math.abs(nextState.radius - 170);
+          const previousBest = nextStates.get(searchKey);
+
+          if (!previousBest || searchScore > previousBest.score) {
+            nextStates.set(searchKey, { score: searchScore, state: nextState });
+          }
+        });
+      });
+
+      if (nextStates.has('won')) {
+        return true;
+      }
+
+      beam = [...nextStates.values()]
+        .sort((left, right) => right.score - left.score)
+        .slice(0, beamWidth)
+        .map((entry) => entry.state);
+
+      if (beam.length === 0) {
+        return false;
+      }
+    }
+
+    return false;
+  };
+
   it('starts a running sector with score and goals wired', () => {
     const state = createRunState(2);
     const snapshot = toRunSnapshot(state);
@@ -74,6 +134,10 @@ describe('runModel', () => {
     expect(snapshot.targetOrbits).toBeGreaterThan(0);
     expect(snapshot.hazardCount).toBeGreaterThan(0);
     expect(snapshot.nearestHazardGap).not.toBeNull();
+  });
+
+  it('keeps sector 1 solvable by a deterministic input search', () => {
+    expect(hasWinningInputRoute(1)).toBe(true);
   });
 
   it('widens the orbit while boost is held', () => {

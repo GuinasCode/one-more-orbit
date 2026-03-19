@@ -6,7 +6,7 @@ test('starts a sector run from the shell and updates the safe-lane HUD', async (
   await expect(page.getByRole('heading', { name: 'One More Orbit' })).toBeVisible();
   await expect(page.getByText('Awaiting launch command. Sector 1 is calibrated and ready.')).toBeVisible();
   await expect(page.getByText('Sector select')).toBeVisible();
-  await expect(page.getByText('Browsing unlocked sectors 1-1. Sector 1 asks for 6 clean laps through 4 rotating mines.')).toBeVisible();
+  await expect(page.getByText('Browsing unlocked sectors 1-1. Sector 1 asks for 4 clean laps through 3 rotating mines.')).toBeVisible();
   await expect(page.getByRole('button', { name: '← Prev' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Next →' })).toBeDisabled();
   await expect(page.getByText('Amber core pulls inward hard')).toBeVisible();
@@ -16,11 +16,11 @@ test('starts a sector run from the shell and updates the safe-lane HUD', async (
   await expect(page.locator('[data-field="arena-signal-label"]')).toHaveText('Stand by');
   await expect(page.locator('[data-field="arena-signal-helper"]')).toHaveText('Launch Sector 1 to establish a safe lane between the core and red ring.');
   await expect(page.getByText('No benchmark yet. Finish a run to set the first score target.')).toBeVisible();
-  await expect(page.getByText('6 clean laps unlock the next sector pressure spike.')).toBeVisible();
-  await expect(page.getByText('Clear 6 clean laps while dodging 4 rotating mines to unlock Sector 2.')).toBeVisible();
-  await expect(page.getByText('Next unlock is Sector 2: 7 clean laps, 4 rotating mines.')).toBeVisible();
+  await expect(page.getByText('4 clean laps unlock the next sector pressure spike.')).toBeVisible();
+  await expect(page.getByText('Clear 4 clean laps while dodging 3 rotating mines to unlock Sector 2.')).toBeVisible();
+  await expect(page.getByText('Next unlock is Sector 2: 5 clean laps, 4 rotating mines.')).toBeVisible();
   await expect(page.getByText('Sector 1 win / fail rules')).toBeVisible();
-  await expect(page.getByText('Win: bank 6 clean laps to clear the sector.')).toBeVisible();
+  await expect(page.getByText('Win: bank 4 clean laps to clear the sector.')).toBeVisible();
   await expect(page.getByText('Fail: crossing the red ring at radius 252 counts as a drift-out.')).toBeVisible();
   await expect(page.getByText('Safe radius window for Sector 1: launch at 168 and stay between the amber core and red drift ring.')).toBeVisible();
   await expect(page.locator('[data-field="lane-window-range"]')).toHaveText('62-252 radius');

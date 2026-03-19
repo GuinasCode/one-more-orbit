@@ -22,8 +22,8 @@ describe('getRunRecapNote', () => {
         score: 420,
         elapsedMs: 20000,
         elapsedSeconds: 20,
-        completedOrbits: 7,
-        targetOrbits: 7,
+        completedOrbits: 5,
+        targetOrbits: 5,
         radius: 180,
         hazardCount: 5,
         nearestHazardGap: null,
@@ -35,8 +35,8 @@ describe('getRunRecapNote', () => {
     };
 
     expect(getRunRecapNote(state)).toBe('Sector 3 ready');
-    expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 8 laps');
-    expect(getRunRecapAction(state)).toBe('Launch Sector 3 next · 8 clean laps through 5 rotating mines.');
+    expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 6 laps');
+    expect(getRunRecapAction(state)).toBe('Launch Sector 3 next · 6 clean laps through 5 rotating mines.');
   });
 
   it('adds a personal-best callout and coaching tip after a mine collision', () => {
@@ -54,9 +54,9 @@ describe('getRunRecapNote', () => {
         elapsedMs: 12400,
         elapsedSeconds: 12.4,
         completedOrbits: 2,
-        targetOrbits: 6,
+        targetOrbits: 4,
         radius: 110,
-        hazardCount: 4,
+        hazardCount: 3,
         nearestHazardGap: null,
         boostActive: false,
         status: 'Run collapsed.',
@@ -69,7 +69,7 @@ describe('getRunRecapNote', () => {
     expect(getRunRecapNote(state)).toBe(
       'New best locked · +60 over your previous benchmark. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
     );
-    expect(getRunRecapImpact(state)).toBe('New best 180 · 4 laps still needed');
+    expect(getRunRecapImpact(state)).toBe('New best 180 · 2 laps still needed');
     expect(getRunRecapAction(state)).toBe(
       'Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.',
     );
@@ -90,9 +90,9 @@ describe('getRunRecapNote', () => {
         elapsedMs: 15200,
         elapsedSeconds: 15.2,
         completedOrbits: 3,
-        targetOrbits: 6,
+        targetOrbits: 4,
         radius: 240,
-        hazardCount: 4,
+        hazardCount: 3,
         nearestHazardGap: null,
         boostActive: false,
         status: 'Run collapsed.',
