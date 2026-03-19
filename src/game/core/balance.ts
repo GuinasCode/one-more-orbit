@@ -29,32 +29,32 @@ interface SectorDifficultyStep {
   targetOrbits: number;
 }
 
-const BASE_START_RADIUS = 168;
-const BASE_MAX_RADIUS = 252;
+const BASE_START_RADIUS = 172;
+const BASE_MAX_RADIUS = 272;
 const BASE_CORE_RADIUS = 62;
 const BASE_SHIP_RADIUS = 10;
 const BASE_RADIAL_DAMPING = 0.92;
-const MAX_HAZARD_COUNT = 7;
+const MAX_HAZARD_COUNT = 5;
 const SCORE_PER_SECOND = 18;
 const SCORE_PER_ORBIT = 140;
 const POST_PRESET_BALANCE_STEPS: SectorDifficultyStep[] = [
-  { baseAngularSpeed: 0.045, gravityPull: 6, boostAcceleration: 10, targetOrbits: 0 },
-  { baseAngularSpeed: 0.05, gravityPull: 7, boostAcceleration: 11, targetOrbits: 0 },
-  { baseAngularSpeed: 0.055, gravityPull: 8, boostAcceleration: 12, targetOrbits: 1 },
+  { baseAngularSpeed: 0.025, gravityPull: 3, boostAcceleration: 10, targetOrbits: 0 },
+  { baseAngularSpeed: 0.03, gravityPull: 4, boostAcceleration: 11, targetOrbits: 0 },
+  { baseAngularSpeed: 0.035, gravityPull: 5, boostAcceleration: 12, targetOrbits: 0 },
 ];
 const SECTOR_TUNING: SectorTuning[] = [
   { baseAngularSpeed: 1.5, gravityPull: 96, boostAcceleration: 196, hazardCount: 3, targetOrbits: 4 },
-  { baseAngularSpeed: 1.55, gravityPull: 104, boostAcceleration: 208, hazardCount: 4, targetOrbits: 5 },
-  { baseAngularSpeed: 1.6, gravityPull: 112, boostAcceleration: 220, hazardCount: 5, targetOrbits: 6 },
-  { baseAngularSpeed: 1.64, gravityPull: 118, boostAcceleration: 230, hazardCount: 5, targetOrbits: 7 },
-  { baseAngularSpeed: 1.69, gravityPull: 128, boostAcceleration: 244, hazardCount: 6, targetOrbits: 8 },
-  { baseAngularSpeed: 1.73, gravityPull: 136, boostAcceleration: 256, hazardCount: 6, targetOrbits: 9 },
-  { baseAngularSpeed: 1.77, gravityPull: 144, boostAcceleration: 268, hazardCount: 6, targetOrbits: 10 },
-  { baseAngularSpeed: 1.81, gravityPull: 152, boostAcceleration: 280, hazardCount: 7, targetOrbits: 11 },
-  { baseAngularSpeed: 1.84, gravityPull: 160, boostAcceleration: 292, hazardCount: 7, targetOrbits: 12 },
-  { baseAngularSpeed: 1.87, gravityPull: 168, boostAcceleration: 304, hazardCount: 7, targetOrbits: 12 },
-  { baseAngularSpeed: 1.9, gravityPull: 176, boostAcceleration: 316, hazardCount: 7, targetOrbits: 13 },
-  { baseAngularSpeed: 1.93, gravityPull: 184, boostAcceleration: 328, hazardCount: 7, targetOrbits: 13 },
+  { baseAngularSpeed: 1.54, gravityPull: 102, boostAcceleration: 210, hazardCount: 4, targetOrbits: 5 },
+  { baseAngularSpeed: 1.58, gravityPull: 108, boostAcceleration: 224, hazardCount: 5, targetOrbits: 6 },
+  { baseAngularSpeed: 1.61, gravityPull: 114, boostAcceleration: 238, hazardCount: 5, targetOrbits: 6 },
+  { baseAngularSpeed: 1.64, gravityPull: 120, boostAcceleration: 252, hazardCount: 5, targetOrbits: 7 },
+  { baseAngularSpeed: 1.67, gravityPull: 126, boostAcceleration: 266, hazardCount: 5, targetOrbits: 7 },
+  { baseAngularSpeed: 1.7, gravityPull: 132, boostAcceleration: 280, hazardCount: 5, targetOrbits: 8 },
+  { baseAngularSpeed: 1.73, gravityPull: 138, boostAcceleration: 294, hazardCount: 5, targetOrbits: 8 },
+  { baseAngularSpeed: 1.76, gravityPull: 144, boostAcceleration: 308, hazardCount: 5, targetOrbits: 8 },
+  { baseAngularSpeed: 1.79, gravityPull: 150, boostAcceleration: 322, hazardCount: 5, targetOrbits: 8 },
+  { baseAngularSpeed: 1.84, gravityPull: 156, boostAcceleration: 344, hazardCount: 5, targetOrbits: 8 },
+  { baseAngularSpeed: 1.89, gravityPull: 162, boostAcceleration: 366, hazardCount: 5, targetOrbits: 8 },
 ];
 
 export const balanceGuardrails = {

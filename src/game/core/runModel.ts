@@ -81,7 +81,7 @@ const getHazardSlotAngles = (balance: TierBalance): number[] => {
 };
 
 const createHazards = (balance: TierBalance): HazardState[] => {
-  const laneRadii = [116, 148, 182, 214, 238];
+  const laneRadii = [104, 128, 220, 244, 264];
   const slotAngles = getHazardSlotAngles(balance);
   const slotSize = (TAU - START_LANE_RESERVED_ARC) / balance.hazardCount;
   const adjustmentStep = Math.min(0.16, slotSize * 0.18);

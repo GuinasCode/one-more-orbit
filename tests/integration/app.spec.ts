@@ -21,11 +21,11 @@ test('starts a sector run from the shell and updates the safe-lane HUD', async (
   await expect(page.getByText('Next unlock is Sector 2: 5 clean laps, 4 rotating mines.')).toBeVisible();
   await expect(page.getByText('Sector 1 win / fail rules')).toBeVisible();
   await expect(page.getByText('Win: bank 4 clean laps to clear the sector.')).toBeVisible();
-  await expect(page.getByText('Fail: crossing the red ring at radius 252 counts as a drift-out.')).toBeVisible();
-  await expect(page.getByText('Safe radius window for Sector 1: launch at 168 and stay between the amber core and red drift ring.')).toBeVisible();
-  await expect(page.locator('[data-field="lane-window-range"]')).toHaveText('62-252 radius');
-  await expect(page.locator('[data-field="lane-window-current"]')).toHaveText('Current 168');
-  await expect(page.locator('.lane-window-meter')).toHaveAttribute('aria-valuenow', '56');
+  await expect(page.getByText('Fail: crossing the red ring at radius 272 counts as a drift-out.')).toBeVisible();
+  await expect(page.getByText('Safe radius window for Sector 1: launch at 172 and stay between the amber core and red drift ring.')).toBeVisible();
+  await expect(page.locator('[data-field="lane-window-range"]')).toHaveText('62-272 radius');
+  await expect(page.locator('[data-field="lane-window-current"]')).toHaveText('Current 172');
+  await expect(page.locator('.lane-window-meter')).toHaveAttribute('aria-valuenow', '52');
   await expect(page.getByText('+1 lap')).toBeVisible();
   await expect(page.locator('.goal-track-meter')).toHaveAttribute('aria-valuenow', '0');
   await expect(page.locator('.game-root canvas')).toBeVisible();
@@ -35,7 +35,7 @@ test('starts a sector run from the shell and updates the safe-lane HUD', async (
 
   await expect(page.locator('.shell')).not.toHaveAttribute('data-screen', 'start');
   await expect(page.getByRole('button', { name: /Restart Run|Retry Sector 1|Launch Sector 2/ })).toBeVisible();
-  await expect(page.locator('[data-field="lane-window-current"]')).not.toHaveText('Current 168');
-  await expect(page.locator('.lane-window-meter')).not.toHaveAttribute('aria-valuenow', '56');
+  await expect(page.locator('[data-field="lane-window-current"]')).not.toHaveText('Current 172');
+  await expect(page.locator('.lane-window-meter')).not.toHaveAttribute('aria-valuenow', '52');
   await expect(page.getByText('Boost: Space / W / ↑ / Mouse / Touch · Restart: R')).toBeVisible();
 });

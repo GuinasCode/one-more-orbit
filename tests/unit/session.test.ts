@@ -67,9 +67,9 @@ describe('runModel', () => {
 
   const hasWinningInputRoute = (tier: number): boolean => {
     const decisionDeltaMs = 32;
-    const maxSearchSteps = 500;
-    const beamWidth = 150;
-    const angleBucketSize = (Math.PI * 2) / 40;
+    const maxSearchSteps = 1200;
+    const beamWidth = 600;
+    const angleBucketSize = (Math.PI * 2) / 64;
     let beam = [createRunState(tier)];
 
     for (let step = 0; step < maxSearchSteps; step += 1) {
@@ -88,18 +88,20 @@ describe('runModel', () => {
             return;
           }
 
+          const nearestHazardGap = getNearestHazardGap(nextState) ?? 999;
           const searchKey = [
             nextState.completedOrbits,
-            Math.round(nextState.radius / 4),
-            Math.round((nextState.radialVelocity + 180) / 8),
+            Math.round(nextState.radius / 2),
+            Math.round((nextState.radialVelocity + 260) / 4),
             Math.round(nextState.displayedAngle / angleBucketSize),
-            Math.round((getNearestHazardGap(nextState) ?? 999) / 8),
+            Math.round(nearestHazardGap / 4),
           ].join('|');
           const searchScore =
             (nextState.completedOrbits * 1_000_000) +
-            (nextState.angle * 1_000) +
-            (Math.min(getNearestHazardGap(nextState) ?? 200, 100) * 10) -
-            Math.abs(nextState.radius - 170);
+            (nextState.angle * 1_500) +
+            (Math.min(nearestHazardGap, 140) * 16) -
+            Math.abs(nextState.radius - 180) -
+            Math.abs(nextState.radialVelocity) * 0.5;
           const previousBest = nextStates.get(searchKey);
 
           if (!previousBest || searchScore > previousBest.score) {
@@ -136,8 +138,10 @@ describe('runModel', () => {
     expect(snapshot.nearestHazardGap).not.toBeNull();
   });
 
-  it('keeps sector 1 solvable by a deterministic input search', () => {
-    expect(hasWinningInputRoute(1)).toBe(true);
+  it('keeps sectors 1-24 solvable by a deterministic input search', { timeout: 60_000 }, () => {
+    for (let tier = 1; tier <= 24; tier += 1) {
+      expect(hasWinningInputRoute(tier), `sector ${tier} should have at least one deterministic winning route`).toBe(true);
+    }
   });
 
   it('widens the orbit while boost is held', () => {
