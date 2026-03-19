@@ -19,7 +19,7 @@ describe('renderShell', () => {
     expect(html).toContain('data-action="next-sector" disabled');
     expect(html).toContain('4 laps to clear');
     expect(html).toContain('3 rotating mines');
-    expect(html).toContain('Safe lane 62-252');
+    expect(html).toContain('Safe lane 62-272');
     expect(html).toContain('Focus: launch rhythm');
     expect(html).toContain('Arena danger legend');
     expect(html).toContain('Best score chase');
@@ -34,13 +34,13 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 1 win / fail rules');
     expect(html).toContain('Win: bank 4 clean laps to clear the sector.');
     expect(html).toContain('Fail: the amber core ends the run inside radius 62.');
-    expect(html).toContain('Fail: crossing the red ring at radius 252 counts as a drift-out.');
+    expect(html).toContain('Fail: crossing the red ring at radius 272 counts as a drift-out.');
     expect(html).toContain('Fail: any of the 3 rotating mines can break the hull on contact.');
     expect(html).toContain('Safe lane');
-    expect(html).toContain('Safe radius window for Sector 1: launch at 168 and stay between the amber core and red drift ring.');
-    expect(html).toContain('62-252 radius');
-    expect(html).toContain('Current 168');
-    expect(html).toContain('aria-valuenow="56"');
+    expect(html).toContain('Safe radius window for Sector 1: launch at 172 and stay between the amber core and red drift ring.');
+    expect(html).toContain('62-272 radius');
+    expect(html).toContain('Current 172');
+    expect(html).toContain('aria-valuenow="52"');
     expect(html).toContain('Core edge');
     expect(html).toContain('Drift ring');
     expect(html).toContain('Sector 2');
@@ -90,7 +90,7 @@ describe('renderShell', () => {
     expect(html).toContain('Browsing unlocked sectors 1-3. Sector 3 asks for 6 clean laps through 5 rotating mines.');
     expect(html).toContain('6 laps to clear');
     expect(html).toContain('5 rotating mines');
-    expect(html).toContain('Safe lane 62-252');
+    expect(html).toContain('Safe lane 62-272');
     expect(html).toContain('Focus: +1 mine · +1 lap');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
@@ -107,9 +107,9 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 3 is live: 6 clean laps and 5 rotating mines.');
     expect(html).toContain('+1 mine · +1 lap');
     expect(html).toContain('Sector clear');
-    expect(html).toContain('Sector clear at radius 180: 118 above the core fail line and 72 before drift-out.');
+    expect(html).toContain('Sector clear at radius 180: 118 above the core fail line and 92 before drift-out.');
     expect(html).toContain('Current 180');
-    expect(html).toContain('aria-valuenow="62"');
+    expect(html).toContain('aria-valuenow="56"');
     expect(html).toContain('Sector 3 is unlocked and ready. Relaunch when you want the next pressure spike.');
   });
 
@@ -152,9 +152,9 @@ describe('renderShell', () => {
     expect(html).toContain('Sector 1 still needs 4 clean laps. Clear it to unlock Sector 2.');
     expect(html).toContain('Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.');
     expect(html).toContain('Mine strike');
-    expect(html).toContain('Run ended near radius 110: 48 above the core fail line and 142 before drift-out.');
+    expect(html).toContain('Run ended near radius 110: 48 above the core fail line and 162 before drift-out.');
     expect(html).toContain('Current 110');
-    expect(html).toContain('aria-valuenow="25"');
+    expect(html).toContain('aria-valuenow="23"');
     expect(html).toContain('A mine clipped the hull. Feather boost through hazard lanes instead of forcing the arc.');
   });
 
@@ -185,7 +185,7 @@ describe('renderShell', () => {
       },
     });
 
-    expect(html).toContain('Flight coach: Drift risk. Release boost now before you cross the red ring.');
+    expect(html).toContain('Flight coach: Final lap. Stay patient and protect the clean line to the finish.');
     expect(html).toContain('Record pace: +40 over your best. Keep the lane clean and bank it.');
     expect(html).toContain('Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.');
     expect(html).toContain('1 clean lap left to clear this sector.');
@@ -195,11 +195,11 @@ describe('renderShell', () => {
     expect(html).toContain('aria-valuenow="75"');
     expect(html).toContain('width: 75%');
     expect(html).toContain('Sector 1 win / fail rules');
-    expect(html).toContain('176 radius units above core fail · 14 left before drift-out.');
+    expect(html).toContain('176 radius units above core fail · 34 left before drift-out.');
     expect(html).toContain('Current 238');
-    expect(html).toContain('aria-valuenow="93"');
-    expect(html).toContain('Drift risk');
-    expect(html).toContain('Release boost now before the orbit spills through the red ring.');
+    expect(html).toContain('aria-valuenow="84"');
+    expect(html).toContain('Final lap');
+    expect(html).toContain('One clean orbit left. Protect the line and ignore any greedy late boost.');
   });
 
   it('prioritizes mine danger telegraphing when a hazard is about to clip the hull', () => {
