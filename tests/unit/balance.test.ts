@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { balanceGuardrails, getTierBalance } from '../../src/game/core/balance';
+import { balanceGuardrails, getTierBalance, getTierDifficultyRating } from '../../src/game/core/balance';
 
 const TAU = Math.PI * 2;
 
@@ -53,6 +53,16 @@ describe('balance fairness guardrails', () => {
           balanceGuardrails.maximumEstimatedClearStepSeconds,
         );
       }
+    }
+  });
+
+  it('keeps the derived difficulty rating progressive without runaway jumps', () => {
+    for (let tier = 2; tier <= 24; tier += 1) {
+      const previousRating = getTierDifficultyRating(tier - 1);
+      const currentRating = getTierDifficultyRating(tier);
+
+      expect(currentRating).toBeGreaterThanOrEqual(previousRating);
+      expect(currentRating - previousRating).toBeLessThanOrEqual(balanceGuardrails.maximumDifficultyStepPerTier);
     }
   });
 

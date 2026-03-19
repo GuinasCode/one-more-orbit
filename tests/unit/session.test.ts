@@ -26,6 +26,15 @@ const getLaunchLaneEdgeClearance = (
   return laneGap - (shipRadius + hazardSize);
 };
 
+const getCircularGaps = (angles: number[]): number[] => {
+  const sortedAngles = [...angles].sort((left, right) => left - right);
+
+  return sortedAngles.map((angle, index) => {
+    const nextAngle = sortedAngles[(index + 1) % sortedAngles.length] ?? (sortedAngles[0] + (Math.PI * 2));
+    return (index === sortedAngles.length - 1 ? (sortedAngles[0] + (Math.PI * 2)) : nextAngle) - angle;
+  });
+};
+
 describe('runModel', () => {
   const keepsLaunchLanePassableDuringGraceWindow = (tier: number, sampleDeltaMs: number, minimumEdgeClearance: number): boolean => {
     let state = createRunState(tier);
@@ -152,10 +161,22 @@ describe('runModel', () => {
     }
   });
 
-  it('keeps advanced-sector launch corridors passable through the collision grace window', () => {
+  it('keeps deterministic hazard spacing wide enough to leave an intentional opening', () => {
+    for (let tier = 1; tier <= 24; tier += 1) {
+      const state = createRunState(tier);
+      const circularGaps = getCircularGaps(state.hazards.map((hazard) => hazard.angle));
+      const smallestGap = Math.min(...circularGaps);
+      const largestGap = Math.max(...circularGaps);
+
+      expect(smallestGap).toBeGreaterThanOrEqual(0.38);
+      expect(largestGap).toBeGreaterThanOrEqual(0.8);
+    }
+  });
+
+  it('keeps every checked launch corridor passable through the collision grace window', () => {
     const minimumEdgeClearance = 12;
 
-    for (let tier = 8; tier <= 16; tier += 1) {
+    for (let tier = 1; tier <= 24; tier += 1) {
       expect(
         keepsLaunchLanePassableDuringGraceWindow(tier, 100, minimumEdgeClearance),
         `sector ${tier} should keep a recoverable launch lane while collision grace is active`,
