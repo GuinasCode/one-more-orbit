@@ -125,7 +125,9 @@ export class OneMoreOrbitApp {
     this.state = {
       ...this.state,
       progression: this.progression,
-      status: `Awaiting launch command. Sector ${nextTier} is calibrated and ready.`,
+      status: nextTier === 1 && this.progression.bestScore <= 0 && this.progression.highestUnlockedTier <= 1
+        ? 'Hold anywhere to boost out. Release before the red ring.'
+        : `Awaiting launch command. Sector ${nextTier} is calibrated and ready.`,
       primaryActionLabel: this.getPrimaryActionLabel(this.state.screen, nextTier),
     };
     this.syncUi();
@@ -144,9 +146,9 @@ export class OneMoreOrbitApp {
       previousBestScore: this.progression.bestScore,
       progression: this.progression,
       primaryActionLabel: 'Restart Run',
-      status: `Sector ${this.progression.lastPlayedTier} engaged. Hold boost and stabilize the orbit.`,
-      headline: 'Thread the mines and keep the orbit alive.',
-      summary: 'Survive the pull, avoid the rotating hazards, and close the sector target before the hull breaks.',
+      status: 'Hold anywhere to boost out. Release before the red ring.',
+      headline: 'Stay between the core and red ring.',
+      summary: 'Avoid the mines and bank clean laps before the hull breaks.',
     };
     this.syncUi();
     this.startArena(this.progression.lastPlayedTier);
@@ -251,14 +253,18 @@ export class OneMoreOrbitApp {
     const selectedSectorPressureValue = this.requireElement<HTMLElement>('[data-field="selected-sector-pressure"]');
     const previousSectorButton = this.requireElement<HTMLButtonElement>('[data-action="previous-sector"]');
     const nextSectorButton = this.requireElement<HTMLButtonElement>('[data-action="next-sector"]');
+    const scoreChaseSection = this.requireElement<HTMLElement>('.score-chase');
     const scoreChaseValue = this.requireElement<HTMLElement>('[data-field="score-chase-helper"]');
     const goalHelperValue = this.requireElement<HTMLElement>('[data-field="goal-helper"]');
     const goalProgressValue = this.requireElement<HTMLElement>('.goal-track-meter');
     const goalProgressFillValue = this.requireElement<HTMLElement>('[data-field="goal-progress-fill"]');
+    const sectorBriefingSection = this.requireElement<HTMLElement>('.sector-briefing');
     const sectorBriefingValue = this.requireElement<HTMLElement>('[data-field="sector-briefing-helper"]');
+    const nextPressureSection = this.requireElement<HTMLElement>('.next-pressure');
     const nextPressureHelperValue = this.requireElement<HTMLElement>('[data-field="next-pressure-helper"]');
     const nextPressureSectorValue = this.requireElement<HTMLElement>('[data-field="next-pressure-sector"]');
     const nextPressureDeltaValue = this.requireElement<HTMLElement>('[data-field="next-pressure-delta"]');
+    const outcomeGuideSection = this.requireElement<HTMLElement>('.outcome-guide');
     const outcomeGuideTitleValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-title"]');
     const outcomeGuideWinValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-win"]');
     const outcomeGuideCoreValue = this.requireElement<HTMLElement>('[data-field="outcome-guide-core"]');
@@ -269,6 +275,7 @@ export class OneMoreOrbitApp {
     const laneWindowCurrentValue = this.requireElement<HTMLElement>('[data-field="lane-window-current"]');
     const laneWindowMeterValue = this.requireElement<HTMLElement>('.lane-window-meter');
     const laneWindowFillValue = this.requireElement<HTMLElement>('[data-field="lane-window-fill"]');
+    const dangerLegendSection = this.requireElement<HTMLElement>('.danger-legend');
     const flightCoachValue = this.requireElement<HTMLElement>('[data-field="flight-coach"]');
     const arenaSignal = this.requireElement<HTMLElement>('.arena-signal');
     const arenaSignalLabelValue = this.requireElement<HTMLElement>('[data-field="arena-signal-label"]');
@@ -280,7 +287,19 @@ export class OneMoreOrbitApp {
     const runNoteValue = this.requireElement<HTMLElement>('[data-field="run-note"]');
     const runActionValue = this.requireElement<HTMLElement>('[data-field="run-action"]');
 
+    const firstRunIntro =
+      this.state.screen === 'start' &&
+      !this.state.run &&
+      this.progression.bestScore <= 0 &&
+      this.progression.highestUnlockedTier <= 1;
+
     shell.dataset.screen = this.state.screen;
+    shell.dataset.firstRunIntro = firstRunIntro ? 'true' : 'false';
+    scoreChaseSection.toggleAttribute('hidden', firstRunIntro);
+    sectorBriefingSection.toggleAttribute('hidden', firstRunIntro);
+    nextPressureSection.toggleAttribute('hidden', firstRunIntro);
+    outcomeGuideSection.toggleAttribute('hidden', firstRunIntro);
+    dangerLegendSection.toggleAttribute('hidden', firstRunIntro);
     pitch.textContent = this.state.headline;
     actionPromptLine.textContent = getActionPrompt(this.state);
     statusLine.textContent = this.state.status;

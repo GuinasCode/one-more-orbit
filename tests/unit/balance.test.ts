@@ -76,6 +76,9 @@ describe('balance fairness guardrails', () => {
 
     expect(sector1.hazardCount).toBe(3);
     expect(sector1.targetOrbits).toBe(4);
+    expect(sector1.baseAngularSpeed).toBeLessThan(sector2.baseAngularSpeed);
+    expect(sector1.gravityPull).toBeLessThan(sector2.gravityPull);
+    expect(sector1.boostAcceleration).toBeLessThan(sector2.boostAcceleration);
     expect(sector2.hazardCount).toBe(sector1.hazardCount + 1);
     expect(sector2.targetOrbits).toBe(sector1.targetOrbits + 1);
     expect(sector3.hazardCount).toBe(sector2.hazardCount + 1);

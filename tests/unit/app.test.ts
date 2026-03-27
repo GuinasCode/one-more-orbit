@@ -50,9 +50,9 @@ describe('OneMoreOrbitApp', () => {
     expect(startRunSpy).toHaveBeenCalledWith(1);
     expect(root.querySelector('.shell')?.getAttribute('data-screen')).toBe('running');
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
-      'Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.',
+      'Hold anywhere to boost out. Release before the red ring. Press R to restart instantly.',
     );
-    expect(root.querySelector('.status-line')?.textContent).toBe('Sector 1 engaged. Hold boost and stabilize the orbit.');
+    expect(root.querySelector('.status-line')?.textContent).toBe('Hold anywhere to boost out. Release before the red ring.');
   });
 
   it('lets the player browse unlocked sectors before launch', () => {
@@ -188,13 +188,9 @@ describe('OneMoreOrbitApp', () => {
       endReason: 'a rotating mine clipped the hull',
     });
 
-    expect(root.querySelector('.pitch')?.textContent).toBe('Mine strike');
-    expect(root.querySelector('.status-line')?.textContent).toBe(
-      'a rotating mine clipped the hull. First benchmark locked. 2 clean laps still needed in Sector 1.',
-    );
-    expect(root.querySelector('[data-field="summary"]')?.textContent).toBe(
-      'Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.',
-    );
+    expect(root.querySelector('.pitch')?.textContent).toBe('Mine hit');
+    expect(root.querySelector('.status-line')?.textContent).toBe('Mine hit. 2 clean laps left in Sector 1. First benchmark locked.');
+    expect(root.querySelector('[data-field="summary"]')?.textContent).toBe('Retry Sector 1 now. Feather boost through mine lanes.');
     expect(root.querySelector('[data-field="lane-window-helper"]')?.textContent).toBe(
       'Run ended near radius 110: 48 above the core fail line and 162 before drift-out.',
     );
@@ -203,11 +199,9 @@ describe('OneMoreOrbitApp', () => {
       'Fail: any of the 3 rotating mines can break the hull on contact.',
     );
     expect(root.querySelector('[data-field="action-prompt"]')?.textContent).toBe(
-      'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes instead of holding it down.',
+      'Recovery lane: press Enter or click Retry Sector 1. Feather boost through mine lanes.',
     );
-    expect(root.querySelector('[data-field="run-action"]')?.textContent).toBe(
-      'Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.',
-    );
+    expect(root.querySelector('[data-field="run-action"]')?.textContent).toBe('Retry Sector 1 next · Feather boost through mine lanes.');
     expect(root.querySelector('[data-action="primary-run-action"]')?.textContent).toBe('Retry Sector 1');
   });
 });

@@ -43,7 +43,7 @@ const POST_PRESET_BALANCE_STEPS: SectorDifficultyStep[] = [
   { baseAngularSpeed: 0.035, gravityPull: 5, boostAcceleration: 12, targetOrbits: 0 },
 ];
 const SECTOR_TUNING: SectorTuning[] = [
-  { baseAngularSpeed: 1.5, gravityPull: 96, boostAcceleration: 196, hazardCount: 3, targetOrbits: 4 },
+  { baseAngularSpeed: 1.49, gravityPull: 93, boostAcceleration: 194, hazardCount: 3, targetOrbits: 4 },
   { baseAngularSpeed: 1.54, gravityPull: 102, boostAcceleration: 210, hazardCount: 4, targetOrbits: 5 },
   { baseAngularSpeed: 1.58, gravityPull: 108, boostAcceleration: 224, hazardCount: 5, targetOrbits: 6 },
   { baseAngularSpeed: 1.61, gravityPull: 114, boostAcceleration: 238, hazardCount: 5, targetOrbits: 6 },

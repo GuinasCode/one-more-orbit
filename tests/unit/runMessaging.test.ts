@@ -61,8 +61,8 @@ describe('getResultMessaging', () => {
       120,
     );
 
-    expect(messaging.headline).toBe('Mine strike');
-    expect(messaging.status).toBe('a rotating mine clipped the hull. New best by 60. 2 clean laps still needed in Sector 1.');
-    expect(messaging.summary).toBe('Retry Sector 1. Feather boost through hazard lanes instead of holding it all the way down.');
+    expect(messaging.headline).toBe('Mine hit');
+    expect(messaging.status).toBe('Mine hit. 2 clean laps left in Sector 1. New best by 60.');
+    expect(messaging.summary).toBe('Retry Sector 1 now. Feather boost through mine lanes.');
   });
 });
