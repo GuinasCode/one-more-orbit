@@ -29,3 +29,14 @@
 - [x] Add basic web manifest and icon
 - [ ] Produce final gameplay trailer/GIF and social art
 - [ ] Enable Pages on the repository and verify the live URL
+
+## Stage 5 — Productization / Play Store Push
+
+- [x] Audit current product gaps against hypercasual/mobile goals
+- [x] Write execution roadmap for onboarding, difficulty curve, juice, retention, and Android shipping
+- [ ] Tighten first-run onboarding and simplify HUD copy
+- [ ] Rework sectors 1-8 into explicit learning/progression beats
+- [ ] Add stronger reward/feedback moments for near-miss, orbit clear, sector clear, and record runs
+- [ ] Add a lightweight retention layer beyond raw score
+- [ ] Choose Android packaging path and validate on-device UX/performance
+- [ ] Prepare Play Store listing assets/copy and release requirements

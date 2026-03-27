@@ -18,3 +18,16 @@
 - Tagline: **Orbit tight. Boost late. Risk one more lap.**
 - Short description: **A one-button arcade survival game about threading rotating mines around a hungry star.**
 - Long description: **One More Orbit is a fast-restart score attack game for the browser. Hold boost to widen your orbit, release to fall back toward the core, dodge rotating mines, and finish clean laps to unlock the next sector. Every loss is instant, readable, and built for one more try.**
+
+## Play Store Readiness
+
+- [ ] Decide Android shipping path (Capacitor, TWA, or alternative wrapper)
+- [ ] Validate touch-first UX on real Android devices
+- [ ] Decide primary orientation (portrait or landscape)
+- [ ] Audit HUD readability and safe areas on mobile screens
+- [ ] Validate persistence and resume behavior inside Android shell
+- [ ] Profile performance on mid-range Android hardware
+- [ ] Prepare Android app icon, splash, package id, signing, and versioning
+- [ ] Produce Play Store screenshots, feature graphic, and gameplay capture
+- [ ] Finalize Play Store short/long description and metadata
+- [ ] Confirm privacy policy / disclosure requirements for chosen release path
