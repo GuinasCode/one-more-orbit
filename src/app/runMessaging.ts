@@ -8,15 +8,15 @@ const getFailureLabel = (endReason?: string): string => {
   }
 
   if (endReason.includes('core')) {
-    return 'Core collapse';
+    return 'Core hit';
   }
 
   if (endReason.includes('safe ring')) {
-    return 'Drift-out';
+    return 'Drifted out';
   }
 
   if (endReason.includes('mine')) {
-    return 'Mine strike';
+    return 'Mine hit';
   }
 
   return 'Run lost';
@@ -24,19 +24,19 @@ const getFailureLabel = (endReason?: string): string => {
 
 const getFailureTip = (endReason?: string): string => {
   if (!endReason) {
-    return 'Reset fast and look for the calmest lane before committing to a full boost.';
+    return 'Retry fast and rebuild the lane.';
   }
 
   if (endReason.includes('core')) {
-    return 'Boost a beat earlier to recover into the middle rings.';
+    return 'Boost a beat earlier.';
   }
 
   if (endReason.includes('safe ring')) {
-    return 'Release boost sooner when the ship reaches the outer warning lane.';
+    return 'Release sooner near the red ring.';
   }
 
   if (endReason.includes('mine')) {
-    return 'Feather boost through hazard lanes instead of holding it all the way down.';
+    return 'Feather boost through mine lanes.';
   }
 
   return 'Reset fast and look for the calmest lane before committing to a full boost.';
@@ -68,10 +68,12 @@ export const getResultMessaging = (
   if (snapshot.phase === 'failed') {
     const lapsRemaining = Math.max(0, snapshot.targetOrbits - snapshot.completedOrbits);
 
+    const failureLabel = getFailureLabel(snapshot.endReason);
+
     return {
-      headline: getFailureLabel(snapshot.endReason),
-      status: `${snapshot.endReason ?? 'Orbit instability detected'}.${bestCallout} ${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} still needed in Sector ${snapshot.tier}.`,
-      summary: `Retry Sector ${snapshot.tier}. ${getFailureTip(snapshot.endReason)}`,
+      headline: failureLabel,
+      status: `${failureLabel}. ${lapsRemaining} clean lap${lapsRemaining === 1 ? '' : 's'} left in Sector ${snapshot.tier}.${bestCallout}`,
+      summary: `Retry Sector ${snapshot.tier} now. ${getFailureTip(snapshot.endReason)}`,
     };
   }
 

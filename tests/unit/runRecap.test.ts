@@ -67,11 +67,11 @@ describe('getRunRecapNote', () => {
     };
 
     expect(getRunRecapNote(state)).toBe(
-      'New best locked · +60 over your previous benchmark. Tip: Feather the boost through hazard lanes instead of holding it all the way down.',
+      'New best locked · +60 over your previous benchmark. Feather boost through mine lanes.',
     );
     expect(getRunRecapImpact(state)).toBe('New best 180 · 2 laps still needed');
     expect(getRunRecapAction(state)).toBe(
-      'Retry Sector 1 next · Feather the boost through hazard lanes instead of holding it all the way down.',
+      'Retry Sector 1 next · Feather boost through mine lanes.',
     );
   });
 
@@ -102,8 +102,6 @@ describe('getRunRecapNote', () => {
       },
     });
 
-    expect(note).toBe(
-      'you drifted beyond the safe ring. Tip: Release boost a beat sooner when you approach the outer warning ring.',
-    );
+    expect(note).toBe('you drifted beyond the safe ring. Release a beat sooner near the red ring.');
   });
 });

@@ -16,9 +16,9 @@ export interface AppState {
 
 export const initialAppState = (progression: ProgressionState): AppState => ({
   screen: 'start',
-  status: `Awaiting launch command. Sector ${progression.lastPlayedTier} is calibrated and ready.`,
-  headline: 'Fast-restart orbital survival',
-  summary: 'Hold Space, W, Up Arrow, or mouse/touch to boost outward. Complete clean laps to unlock the next sector.',
+  status: 'Hold anywhere to boost out. Release before the red ring.',
+  headline: 'Hold to boost. Release to stay in orbit.',
+  summary: 'Avoid the pink mines and finish Sector 1 clean laps.',
   primaryActionLabel: `Launch Sector ${progression.lastPlayedTier}`,
   progression,
   previousBestScore: progression.bestScore,

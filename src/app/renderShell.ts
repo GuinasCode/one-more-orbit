@@ -9,6 +9,12 @@ const getPreviewBalance = (state: AppState) => getTierBalance(state.progression.
 
 const getSelectedSectorPreview = (state: AppState) => getTierBalance(state.progression.lastPlayedTier);
 
+const isFirstRunIntro = (state: AppState): boolean =>
+  state.screen === 'start' &&
+  !state.run &&
+  state.progression.bestScore <= 0 &&
+  state.progression.highestUnlockedTier <= 1;
+
 export const getLaneBalance = (state: AppState) => getTierBalance(state.run?.tier ?? state.progression.lastPlayedTier);
 
 export const getLaneCurrentRadius = (state: AppState): number => state.run?.radius ?? getLaneBalance(state).startRadius;
@@ -83,6 +89,11 @@ export const getGoalHelper = (state: AppState): string => {
   }
 
   const previewBalance = getPreviewBalance(state);
+
+  if (isFirstRunIntro(state)) {
+    return `Clear ${previewBalance.targetOrbits} clean laps to finish your first sector.`;
+  }
+
   return `${previewBalance.targetOrbits} clean laps unlock the next sector pressure spike.`;
 };
 
@@ -146,6 +157,10 @@ export const getSectorSelectorHelper = (state: AppState): string => {
 
   if (state.screen === 'running' && state.run) {
     return `Sector ${state.run.tier} is live. Finish or fail this run before switching sectors.`;
+  }
+
+  if (isFirstRunIntro(state)) {
+    return `Sector ${selectedTier} is the opener: ${balance.targetOrbits} clean laps with a forgiving launch lane.`;
   }
 
   return `Browsing unlocked sectors 1-${state.progression.highestUnlockedTier}. Sector ${selectedTier} asks for ${balance.targetOrbits} clean laps through ${balance.hazardCount} rotating mines.`;
@@ -269,22 +284,22 @@ const formatRunNote = (state: AppState): string => getRunRecapNote(state);
 
 const getFailureRecoveryPrompt = (endReason?: string): string => {
   if (!endReason) {
-    return 'Reset fast and rebuild a calmer lane.';
+    return 'Retry fast and rebuild the lane.';
   }
 
   if (endReason.includes('core')) {
-    return 'Boost a beat earlier to stay out of the core.';
+    return 'Boost a beat earlier.';
   }
 
   if (endReason.includes('safe ring')) {
-    return 'Release boost sooner near the outer warning ring.';
+    return 'Release sooner near the red ring.';
   }
 
   if (endReason.includes('mine')) {
-    return 'Feather boost through mine lanes instead of holding it down.';
+    return 'Feather boost through mine lanes.';
   }
 
-  return 'Reset fast and rebuild a calmer lane.';
+  return 'Retry fast and rebuild the lane.';
 };
 
 const isMineDangerState = (state: AppState): boolean =>
@@ -373,6 +388,10 @@ export const getArenaSignalLabel = (state: AppState): string => {
 
 export const getArenaSignalHelper = (state: AppState): string => {
   if (!state.run) {
+    if (isFirstRunIntro(state)) {
+      return 'Tap launch, then keep the ship between the core and red ring.';
+    }
+
     return `Launch Sector ${state.progression.lastPlayedTier} to establish a safe lane between the core and red ring.`;
   }
 
@@ -426,7 +445,7 @@ export const getActionPrompt = (state: AppState): string => {
   const targetTier = state.progression.lastPlayedTier;
 
   if (state.screen === 'running') {
-    return 'Live run: hold boost to widen the orbit, release before the red ring, press R to restart instantly.';
+    return 'Hold anywhere to boost out. Release before the red ring. Press R to restart instantly.';
   }
 
   if (state.screen === 'won') {
@@ -437,11 +456,19 @@ export const getActionPrompt = (state: AppState): string => {
     return `Recovery lane: press Enter or click Retry Sector ${targetTier}. ${getFailureRecoveryPrompt(state.run?.endReason)}`;
   }
 
+  if (isFirstRunIntro(state)) {
+    return `Tap Launch Sector ${targetTier}, then hold anywhere to boost out and release before the red ring.`;
+  }
+
   return `Ready check: press Enter or click Launch Sector ${targetTier}. Browse unlocked sectors before launch if you want a different target.`;
 };
 
 export const getFlightCoachCopy = (state: AppState): string => {
   if (!state.run) {
+    if (isFirstRunIntro(state)) {
+      return 'Flight coach: Hold only when the ship starts falling inward. Release before the red ring.';
+    }
+
     return 'Flight coach: Launch, then hold boost only when gravity starts dragging you inward.';
   }
 
@@ -459,7 +486,7 @@ export const getFlightCoachCopy = (state: AppState): string => {
     }
 
     if (state.run.endReason?.includes('mine')) {
-      return 'Flight coach: Mine contact ended the run. Feather the boost instead of committing through the whole lane.';
+      return 'Flight coach: Mine hit. Feather boost through the lane instead of holding it down.';
     }
 
     return 'Flight coach: Reset fast and look for the calmest lane before taking the next wide arc.';
@@ -497,8 +524,10 @@ export const renderShell = (state: AppState): string => {
   const canSelectPrevious = !selectionLocked && selectedTier > 1;
   const canSelectNext = !selectionLocked && selectedTier < state.progression.highestUnlockedTier;
 
+  const firstRunIntro = isFirstRunIntro(state);
+
   return `
-  <div class="shell" data-screen="${state.screen}">
+  <div class="shell" data-screen="${state.screen}" data-first-run-intro="${firstRunIntro ? 'true' : 'false'}">
     <section class="marketing-panel">
       <p class="eyebrow">Fast-restart browser arcade MVP</p>
       <h1>${gameConfig.title}</h1>
@@ -542,7 +571,7 @@ export const renderShell = (state: AppState): string => {
           <span class="sector-selector-preview-chip" data-field="selected-sector-pressure">${getSelectedSectorPressureChip(state)}</span>
         </div>
       </section>
-      <section class="score-chase" aria-label="Best score chase">
+      <section class="score-chase" aria-label="Best score chase" ${firstRunIntro ? 'hidden' : ''}>
         <div class="score-chase-copy">
           <p class="score-chase-label">Best score chase</p>
           <p class="score-chase-helper" data-field="score-chase-helper">${getScoreChaseCopy(state)}</p>
@@ -564,13 +593,13 @@ export const renderShell = (state: AppState): string => {
           <span class="goal-track-fill" data-field="goal-progress-fill" style="width: ${getGoalProgress(state)}%"></span>
         </div>
       </section>
-      <section class="sector-briefing" aria-label="Sector briefing">
+      <section class="sector-briefing" aria-label="Sector briefing" ${firstRunIntro ? 'hidden' : ''}>
         <div class="sector-briefing-copy">
           <p class="sector-briefing-label">Sector briefing</p>
           <p class="sector-briefing-helper" data-field="sector-briefing-helper">${getSectorBriefing(state)}</p>
         </div>
       </section>
-      <section class="next-pressure" aria-label="Next sector pressure">
+      <section class="next-pressure" aria-label="Next sector pressure" ${firstRunIntro ? 'hidden' : ''}>
         <div class="next-pressure-copy">
           <p class="next-pressure-label">Next pressure</p>
           <p class="next-pressure-helper" data-field="next-pressure-helper">${getNextPressureHelper(state)}</p>
@@ -580,7 +609,7 @@ export const renderShell = (state: AppState): string => {
           <span class="next-pressure-chip" data-field="next-pressure-delta">${formatNextPressureDelta(state)}</span>
         </div>
       </section>
-      <section class="outcome-guide" aria-label="Sector outcome guide">
+      <section class="outcome-guide" aria-label="Sector outcome guide" ${firstRunIntro ? 'hidden' : ''}>
         <p class="outcome-guide-label" data-field="outcome-guide-title">${getOutcomeGuideTitle(state)}</p>
         <ul class="outcome-guide-list">
           <li data-field="outcome-guide-win">${getOutcomeGuideWin(state)}</li>
@@ -614,11 +643,11 @@ export const renderShell = (state: AppState): string => {
         </div>
       </section>
       <ul class="pill-list" aria-label="How to play">
-        <li>Hold boost to widen your orbit</li>
-        <li>Dodge rotating mines</li>
-        <li>Finish the target laps to win</li>
+        <li>${firstRunIntro ? 'Hold anywhere to boost out' : 'Hold boost to widen your orbit'}</li>
+        <li>${firstRunIntro ? 'Release before the red ring' : 'Dodge rotating mines'}</li>
+        <li>${firstRunIntro ? 'Avoid pink mines and finish the laps' : 'Finish the target laps to win'}</li>
       </ul>
-      <section class="danger-legend" aria-label="Arena danger legend">
+      <section class="danger-legend" aria-label="Arena danger legend" ${firstRunIntro ? 'hidden' : ''}>
         <div class="danger-legend-item">
           <span class="danger-dot danger-dot--core" aria-hidden="true"></span>
           <span>Amber core pulls inward hard</span>
