@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">One More Orbit</string>
+    <string name="title_activity_main">One More Orbit</string>
+    <string name="package_name">ai.guinas.oneMoreOrbit</string>
+    <string name="custom_url_scheme">ai.guinas.oneMoreOrbit</string>
+</resources>
