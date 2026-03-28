@@ -121,6 +121,7 @@ Make progression feel natural, fair, and habit-forming instead of visibly mechan
 - Re-tune hazard count, orbit targets, gravity, and boost pressure for learning cadence.
 - Add or extend tests that lock in the intended early-curve behavior.
 - Verify that the early sectors feel better, not merely easier.
+- Add Android availability tasking after the early-curve pass so shipping work stays visible on the roadmap.
 
 ### Acceptance criteria
 - Sector 1 reliably teaches the core action.

@@ -32,7 +32,7 @@ describe('getResultMessaging', () => {
 
     expect(messaging.headline).toBe('Sector 1 clear · Sector 2 online');
     expect(messaging.status).toBe('Banked 560 points in 18.4s. New best by 140. Sector 2 is ready.');
-    expect(messaging.summary).toBe('Next sector pressure: 5 clean laps through 4 rotating mines.');
+    expect(messaging.summary).toBe('Next sector pressure: 4 clean laps through 4 rotating mines.');
   });
 
   it('turns a failed run into a specific recovery prompt', () => {

@@ -66,29 +66,45 @@ describe('balance fairness guardrails', () => {
     }
   });
 
-  it('keeps sector 1 as a forgiving onboarding step before the five-mine plateau', () => {
+  it('shapes sectors 1-8 into a readable learn-pressure-confidence curve', () => {
     const sector1 = getTierBalance(1);
     const sector2 = getTierBalance(2);
     const sector3 = getTierBalance(3);
     const sector4 = getTierBalance(4);
     const sector5 = getTierBalance(5);
     const sector6 = getTierBalance(6);
+    const sector7 = getTierBalance(7);
+    const sector8 = getTierBalance(8);
 
     expect(sector1.hazardCount).toBe(3);
     expect(sector1.targetOrbits).toBe(4);
+
+    expect(sector2.hazardCount).toBe(4);
+    expect(sector2.targetOrbits).toBe(4);
+
+    expect(sector3.hazardCount).toBe(4);
+    expect(sector3.targetOrbits).toBe(5);
+
+    expect(sector4.hazardCount).toBe(5);
+    expect(sector4.targetOrbits).toBe(5);
+
+    expect(sector5.hazardCount).toBe(5);
+    expect(sector5.targetOrbits).toBe(6);
+
+    expect(sector6.hazardCount).toBe(5);
+    expect(sector6.targetOrbits).toBe(6);
+
+    expect(sector7.hazardCount).toBe(5);
+    expect(sector7.targetOrbits).toBe(7);
+
+    expect(sector8.hazardCount).toBe(5);
+    expect(sector8.targetOrbits).toBe(7);
+
     expect(sector1.baseAngularSpeed).toBeLessThan(sector2.baseAngularSpeed);
-    expect(sector1.gravityPull).toBeLessThan(sector2.gravityPull);
-    expect(sector1.boostAcceleration).toBeLessThan(sector2.boostAcceleration);
-    expect(sector2.hazardCount).toBe(sector1.hazardCount + 1);
-    expect(sector2.targetOrbits).toBe(sector1.targetOrbits + 1);
-    expect(sector3.hazardCount).toBe(sector2.hazardCount + 1);
-    expect(sector3.targetOrbits).toBe(sector2.targetOrbits + 1);
-    expect(sector4.hazardCount).toBe(sector3.hazardCount);
-    expect(sector4.targetOrbits).toBe(sector3.targetOrbits);
-    expect(sector5.hazardCount).toBe(sector4.hazardCount);
-    expect(sector5.targetOrbits).toBe(sector4.targetOrbits + 1);
-    expect(sector6.hazardCount).toBe(sector5.hazardCount);
-    expect(sector6.targetOrbits).toBe(sector5.targetOrbits);
+    expect(sector2.baseAngularSpeed).toBeLessThan(sector3.baseAngularSpeed);
+    expect(sector3.baseAngularSpeed).toBeLessThan(sector4.baseAngularSpeed);
+    expect(sector4.gravityPull).toBeLessThan(sector5.gravityPull);
+    expect(sector6.gravityPull).toBeLessThan(sector7.gravityPull);
   });
 
   it('keeps later preset sectors on a solvable five-mine endurance ramp before endless scaling', () => {
@@ -106,7 +122,7 @@ describe('balance fairness guardrails', () => {
     expect(sector11.hazardCount).toBe(5);
     expect(sector12.hazardCount).toBe(5);
     expect(sector8.targetOrbits).toBe(sector7.targetOrbits);
-    expect(sector9.targetOrbits).toBe(sector8.targetOrbits);
+    expect(sector9.targetOrbits).toBe(sector8.targetOrbits + 1);
     expect(sector10.targetOrbits).toBe(sector9.targetOrbits);
     expect(sector11.targetOrbits).toBe(sector10.targetOrbits);
     expect(sector12.targetOrbits).toBe(sector11.targetOrbits);
