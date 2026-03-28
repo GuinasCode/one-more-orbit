@@ -35,8 +35,8 @@ describe('getRunRecapNote', () => {
     };
 
     expect(getRunRecapNote(state)).toBe('Sector 3 ready');
-    expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 6 laps');
-    expect(getRunRecapAction(state)).toBe('Launch Sector 3 next · 6 clean laps through 5 rotating mines.');
+    expect(getRunRecapImpact(state)).toBe('Unlocked Sector 3 · next goal 5 laps');
+    expect(getRunRecapAction(state)).toBe('Launch Sector 3 next · 5 clean laps through 4 rotating mines.');
   });
 
   it('adds a personal-best callout and coaching tip after a mine collision', () => {

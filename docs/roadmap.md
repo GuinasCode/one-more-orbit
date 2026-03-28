@@ -38,5 +38,6 @@
 - [ ] Rework sectors 1-8 into explicit learning/progression beats
 - [ ] Add stronger reward/feedback moments for near-miss, orbit clear, sector clear, and record runs
 - [ ] Add a lightweight retention layer beyond raw score
+- [ ] Make the game available on Android (package, installable build, device validation)
 - [ ] Choose Android packaging path and validate on-device UX/performance
 - [ ] Prepare Play Store listing assets/copy and release requirements

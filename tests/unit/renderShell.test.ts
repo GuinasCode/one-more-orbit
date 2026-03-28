@@ -41,7 +41,7 @@ describe('renderShell', () => {
     expect(html).toContain('Core edge');
     expect(html).toContain('Drift ring');
     expect(html).toContain('Sector 2');
-    expect(html).toContain('+1 lap');
+    expect(html).toContain('+1 mine');
     expect(html).toContain('aria-valuenow="0"');
     expect(html).toContain('Amber core pulls inward hard');
     expect(html).toContain('Red ring marks the drift-out fail line');
@@ -82,27 +82,27 @@ describe('renderShell', () => {
       },
     });
 
-    expect(html).toContain('6 clean orbits');
+    expect(html).toContain('5 clean orbits');
     expect(html).not.toContain('7/7 orbits');
-    expect(html).toContain('Browsing unlocked sectors 1-3. Sector 3 asks for 6 clean laps through 5 rotating mines.');
-    expect(html).toContain('6 laps to clear');
-    expect(html).toContain('5 rotating mines');
+    expect(html).toContain('Browsing unlocked sectors 1-3. Sector 3 asks for 5 clean laps through 4 rotating mines.');
+    expect(html).toContain('5 laps to clear');
+    expect(html).toContain('4 rotating mines');
     expect(html).toContain('Safe lane 62-272');
-    expect(html).toContain('Focus: +1 mine · +1 lap');
+    expect(html).toContain('Focus: +1 lap endurance');
     expect(html).toContain('Last run recap');
     expect(html).toContain('Sector cleared');
     expect(html).toContain('New personal best: 420 banked (+60 over 360).');
     expect(html).toContain('20.0s');
-    expect(html).toContain('New best 420 · next goal 6 laps');
+    expect(html).toContain('New best 420 · next goal 5 laps');
     expect(html).toContain('New best locked · +60 over your previous benchmark');
-    expect(html).toContain('Launch Sector 3 next · 6 clean laps through 5 rotating mines.');
+    expect(html).toContain('Launch Sector 3 next · 5 clean laps through 4 rotating mines.');
     expect(html).toContain('Next move: press Enter or click Launch Sector 3 to test the new pressure spike.');
-    expect(html).toContain('Sector 3 is now unlocked with 5 rotating mines waiting.');
+    expect(html).toContain('Sector 3 is now unlocked with 4 rotating mines waiting.');
     expect(html).toContain('Sector 2 win / fail rules');
-    expect(html).toContain('Win: bank 5 clean laps to clear the sector.');
+    expect(html).toContain('Win: bank 4 clean laps to clear the sector.');
     expect(html).toContain('Fail: any of the 4 rotating mines can break the hull on contact.');
-    expect(html).toContain('Sector 3 is live: 6 clean laps and 5 rotating mines.');
-    expect(html).toContain('+1 mine · +1 lap');
+    expect(html).toContain('Sector 3 is live: 5 clean laps and 4 rotating mines.');
+    expect(html).toContain('+1 lap');
     expect(html).toContain('Sector clear');
     expect(html).toContain('Sector clear at radius 180: 118 above the core fail line and 92 before drift-out.');
     expect(html).toContain('Current 180');
