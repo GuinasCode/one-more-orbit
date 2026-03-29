@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createRunState, getNearestHazardGap, toRunSnapshot, updateRunState } from '../../src/game/core/runModel';
+import { createRunState, getLaunchTutorialStep, getNearestHazardGap, toRunSnapshot, updateRunState } from '../../src/game/core/runModel';
 
 const getPolarDistance = (radiusA: number, angleA: number, radiusB: number, angleB: number): number => {
   const xA = Math.cos(angleA) * radiusA;
@@ -136,6 +136,47 @@ describe('runModel', () => {
     expect(snapshot.targetOrbits).toBeGreaterThan(0);
     expect(snapshot.hazardCount).toBeGreaterThan(0);
     expect(snapshot.nearestHazardGap).not.toBeNull();
+    expect(snapshot.launchTutorialStep).toBe('boost-out');
+  });
+
+  it('guides the player through the opening tutorial states', () => {
+    const base = createRunState(1);
+
+    expect(getLaunchTutorialStep(base)).toBe('boost-out');
+
+    expect(
+      getLaunchTutorialStep({
+        ...base,
+        elapsedMs: 2400,
+        radius: base.balance.startRadius + 24,
+        boostActive: true,
+      }),
+    ).toBe('settle-in');
+
+    expect(
+      getLaunchTutorialStep({
+        ...base,
+        elapsedMs: 3200,
+        radius: base.balance.startRadius + 20,
+        displayedAngle: base.displayedAngle,
+        boostActive: false,
+        hazards: [
+          {
+            ...base.hazards[0],
+            radius: base.balance.startRadius + 20,
+            angle: base.displayedAngle,
+          },
+          ...base.hazards.slice(1),
+        ],
+      }),
+    ).toBe('watch-mines');
+
+    expect(
+      getLaunchTutorialStep({
+        ...base,
+        elapsedMs: 7100,
+      }),
+    ).toBeNull();
   });
 
   it('keeps sectors 1-24 solvable by a deterministic input search', { timeout: 60_000 }, () => {

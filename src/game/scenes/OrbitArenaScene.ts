@@ -264,15 +264,29 @@ export class OrbitArenaScene extends Phaser.Scene {
     });
 
     if (state.phase === 'running') {
+      const tutorialStep = toRunSnapshot(state).launchTutorialStep;
+
       this.hudTitle?.setText(
-        `Sector ${state.balance.tier} · ${state.completedOrbits}/${state.balance.targetOrbits} orbits · ${state.score} score`,
+        tutorialStep === 'boost-out'
+          ? `Sector ${state.balance.tier} · Opening move · ${state.score} score`
+          : tutorialStep === 'settle-in'
+            ? `Sector ${state.balance.tier} · Settle orbit · ${state.score} score`
+            : tutorialStep === 'watch-mines'
+              ? `Sector ${state.balance.tier} · Mine timing · ${state.score} score`
+              : `Sector ${state.balance.tier} · ${state.completedOrbits}/${state.balance.targetOrbits} orbits · ${state.score} score`,
       );
       this.hudBody?.setText(
-        nearestHazardGap !== null && nearestHazardGap <= MINE_DANGER_GAP
-          ? `Mine danger close: ${Math.max(0, Math.round(nearestHazardGap))} units of hull clearance. Feather boost and let the nearest mine rotate past.`
-          : state.boostActive
-            ? 'Boost held: orbit widening. Ease off before you slip beyond the safe ring.'
-            : 'Gravity is pulling you inward. Feather boost to line up around the mines.',
+        tutorialStep === 'boost-out'
+          ? 'Step 1: hold boost to open space from the core. Survive first, optimize later.'
+          : tutorialStep === 'settle-in'
+            ? 'Step 2: feather the boost. Short pulses keep you centered between the core and drift ring.'
+            : tutorialStep === 'watch-mines'
+              ? 'Step 3: watch the nearest mine, release a beat, then boost back into the open lane.'
+              : nearestHazardGap !== null && nearestHazardGap <= MINE_DANGER_GAP
+                ? `Mine danger close: ${Math.max(0, Math.round(nearestHazardGap))} units of hull clearance. Feather boost and let the nearest mine rotate past.`
+                : state.boostActive
+                  ? 'Boost held: orbit widening. Ease off before you slip beyond the safe ring.'
+                  : 'Gravity is pulling you inward. Feather boost to line up around the mines.',
       );
       return;
     }

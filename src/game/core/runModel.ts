@@ -34,6 +34,7 @@ export interface RunSnapshot {
   hazardCount: number;
   nearestHazardGap: number | null;
   boostActive: boolean;
+  launchTutorialStep: 'boost-out' | 'settle-in' | 'watch-mines' | null;
   status: string;
   headline: string;
   summary: string;
@@ -160,6 +161,30 @@ const wrapAngle = (angle: number): number => {
   return wrapped >= 0 ? wrapped : wrapped + TAU;
 };
 
+export const getLaunchTutorialStep = (
+  state: Pick<RunState, 'phase' | 'elapsedMs' | 'radius' | 'boostActive' | 'balance' | 'hazards' | 'displayedAngle'>,
+): RunSnapshot['launchTutorialStep'] => {
+  if (state.phase !== 'running' || state.elapsedMs > 7000) {
+    return null;
+  }
+
+  const nearestHazardGap = getNearestHazardGap(state);
+
+  if (state.elapsedMs <= 1800 || state.radius <= state.balance.startRadius + 10) {
+    return 'boost-out';
+  }
+
+  if (nearestHazardGap !== null && nearestHazardGap <= 34) {
+    return 'watch-mines';
+  }
+
+  if (state.boostActive || state.radius >= state.balance.startRadius + 18) {
+    return 'settle-in';
+  }
+
+  return 'boost-out';
+};
+
 const createStatus = (state: RunState): Pick<RunSnapshot, 'status' | 'headline' | 'summary'> => {
   if (state.phase === 'won') {
     return {
@@ -174,6 +199,32 @@ const createStatus = (state: RunState): Pick<RunSnapshot, 'status' | 'headline' 
       status: `Run collapsed: ${state.endReason ?? 'the orbit broke down'}.`,
       headline: 'Run Lost',
       summary: `Fast restart ready. Sector ${state.balance.tier} still wants ${state.balance.targetOrbits} clean orbits.`,
+    };
+  }
+
+  const tutorialStep = getLaunchTutorialStep(state);
+
+  if (tutorialStep === 'boost-out') {
+    return {
+      status: 'Opening move: hold boost to push out from the core before you worry about lap speed.',
+      headline: `Sector ${state.balance.tier} · Opening move`,
+      summary: 'Create space first, then settle into the lane. The first seconds are about survival, not speed.',
+    };
+  }
+
+  if (tutorialStep === 'settle-in') {
+    return {
+      status: 'Good. Now feather the boost instead of holding it forever so you stay off the red drift ring.',
+      headline: `Sector ${state.balance.tier} · Settle the orbit`,
+      summary: 'Pulse the boost to hold a safe lane between the core and the outer ring.',
+    };
+  }
+
+  if (tutorialStep === 'watch-mines') {
+    return {
+      status: 'Mine pressure incoming. Ease off and let the nearest mine rotate past before you push again.',
+      headline: `Sector ${state.balance.tier} · Mine timing`,
+      summary: 'You do not need perfect speed — you need clean spacing through the next mine lane.',
     };
   }
 
@@ -196,6 +247,7 @@ export const toRunSnapshot = (state: RunState): RunSnapshot => ({
   hazardCount: state.hazards.length,
   nearestHazardGap: getNearestHazardGap(state),
   boostActive: state.boostActive,
+  launchTutorialStep: getLaunchTutorialStep(state),
   ...createStatus(state),
   endReason: state.endReason,
 });
