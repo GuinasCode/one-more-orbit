@@ -2,12 +2,6 @@
 
 Web-first arcade survival game built for fast restarts, readable action, and a publishable browser MVP.
 
-## Chrome DevTools MCP
-
-Este projeto agora inclui uma configuração local em `.mcp.json` para usar o servidor oficial **Chrome DevTools MCP**.
-
-Detalhes de uso: `docs/chrome-devtools-mcp.md`
-
 ## Current MVP Slice
 
 - auto-orbit survival around a collapsing gravity well
